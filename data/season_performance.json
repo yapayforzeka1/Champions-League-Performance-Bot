@@ -1,1 +1,81 @@
-{}
+{
+  "season": "2026/27",
+  "finalized_matchdays": [
+    "1"
+  ],
+  "models": {
+    "Gemini 3.6 Flash": {
+      "matchdays": 1,
+      "points": 27,
+      "successful_predictions": 10,
+      "failed_predictions": 6,
+      "exact": 3,
+      "outcome": 7,
+      "avg": 2.7,
+      "week_points": {
+        "1": 27
+      }
+    },
+    "Mistral Small Latest": {
+      "matchdays": 1,
+      "points": 0,
+      "successful_predictions": 0,
+      "failed_predictions": 16,
+      "exact": 0,
+      "outcome": 0,
+      "avg": 0,
+      "week_points": {
+        "1": 0
+      }
+    },
+    "Groq Qwen 3.6 27B": {
+      "matchdays": 1,
+      "points": 39,
+      "successful_predictions": 16,
+      "failed_predictions": 0,
+      "exact": 3,
+      "outcome": 11,
+      "avg": 2.44,
+      "week_points": {
+        "1": 39
+      }
+    },
+    "Cohere Command A+": {
+      "matchdays": 1,
+      "points": 31,
+      "successful_predictions": 15,
+      "failed_predictions": 1,
+      "exact": 2,
+      "outcome": 9,
+      "avg": 2.07,
+      "week_points": {
+        "1": 31
+      }
+    },
+    "Groq GPT-OSS 120B": {
+      "matchdays": 1,
+      "points": 37,
+      "successful_predictions": 16,
+      "failed_predictions": 0,
+      "exact": 2,
+      "outcome": 11,
+      "avg": 2.31,
+      "week_points": {
+        "1": 37
+      }
+    }
+  },
+  "consensus": {
+    "matchdays": 1,
+    "matches": 13,
+    "points": 31,
+    "exact": 2,
+    "outcome": 9,
+    "no_consensus": 3,
+    "score_split": 5,
+    "avg": 2.38,
+    "week_points": {
+      "1": 31
+    }
+  }
+}

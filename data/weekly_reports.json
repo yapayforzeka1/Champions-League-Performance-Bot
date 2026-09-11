@@ -1,1 +1,223 @@
-{}
+{
+  "1": {
+    "season": "2026/27",
+    "matchday": 1,
+    "status": "FINAL",
+    "finalized_at": "2026-09-11T08:37:27.888440+00:00",
+    "planned_matches": 18,
+    "evaluated_matches": 16,
+    "unavailable_matches": 2,
+    "postponed_matches": 0,
+    "pending_matches": 0,
+    "matches": [
+      {
+        "match_id": "575323",
+        "home": "Club Brugge KV",
+        "away": "Aston Villa FC",
+        "utcDate": "2026-09-08T16:45:00Z",
+        "status": "UNAVAILABLE",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575324",
+        "home": "PAE AEK",
+        "away": "LASK Linz",
+        "utcDate": "2026-09-08T16:45:00Z",
+        "status": "UNAVAILABLE",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575325",
+        "home": "Real Madrid CF",
+        "away": "FC Internazionale Milano",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575326",
+        "home": "FC Porto",
+        "away": "Manchester City FC",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575327",
+        "home": "Borussia Dortmund",
+        "away": "Villarreal CF",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575328",
+        "home": "Lille OSC",
+        "away": "Real Betis Balompié",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575329",
+        "home": "FC Barcelona",
+        "away": "Feyenoord Rotterdam",
+        "utcDate": "2026-09-09T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575330",
+        "home": "VfB Stuttgart",
+        "away": "Viking FK",
+        "utcDate": "2026-09-09T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575331",
+        "home": "Liverpool FC",
+        "away": "Club Atlético de Madrid",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575332",
+        "home": "Paris Saint-Germain FC",
+        "away": "ŠK Slovan Bratislava",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575333",
+        "home": "SSC Napoli",
+        "away": "Arsenal FC",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575334",
+        "home": "Sporting Clube de Portugal",
+        "away": "Galatasaray SK",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575335",
+        "home": "Fenerbahçe SK",
+        "away": "AS Roma",
+        "utcDate": "2026-09-10T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575336",
+        "home": "PSV",
+        "away": "FK Shakhtar Donetsk",
+        "utcDate": "2026-09-10T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575337",
+        "home": "FC Bayern München",
+        "away": "FK Bodø/Glimt",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575338",
+        "home": "Manchester United FC",
+        "away": "Sabah FK",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575339",
+        "home": "Como 1907",
+        "away": "RB Leipzig",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      },
+      {
+        "match_id": "575340",
+        "home": "SK Slavia Praha",
+        "away": "Racing Club de Lens",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED"
+      }
+    ],
+    "stats": {
+      "models": {
+        "Gemini 3.6 Flash": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 10,
+          "failed_predictions": 6,
+          "points": 27,
+          "exact": 3,
+          "outcome": 7,
+          "avg": 2.7,
+          "coverage_pct": 62.5
+        },
+        "Mistral Small Latest": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 0,
+          "failed_predictions": 16,
+          "points": 0,
+          "exact": 0,
+          "outcome": 0,
+          "avg": 0,
+          "coverage_pct": 0.0
+        },
+        "Groq Qwen 3.6 27B": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 16,
+          "failed_predictions": 0,
+          "points": 39,
+          "exact": 3,
+          "outcome": 11,
+          "avg": 2.44,
+          "coverage_pct": 100.0
+        },
+        "Cohere Command A+": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 15,
+          "failed_predictions": 1,
+          "points": 31,
+          "exact": 2,
+          "outcome": 9,
+          "avg": 2.07,
+          "coverage_pct": 93.8
+        },
+        "Groq GPT-OSS 120B": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 16,
+          "failed_predictions": 0,
+          "points": 37,
+          "exact": 2,
+          "outcome": 11,
+          "avg": 2.31,
+          "coverage_pct": 100.0
+        }
+      },
+      "consensus": {
+        "evaluated_matches": 16,
+        "matches": 13,
+        "points": 31,
+        "exact": 2,
+        "outcome": 9,
+        "no_consensus": 3,
+        "score_split": 5,
+        "avg": 2.38
+      }
+    }
+  }
+}
