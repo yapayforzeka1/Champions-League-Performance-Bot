@@ -2,7 +2,7 @@ name: Champions League Performance Bot
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 21 * * 4"
   workflow_dispatch:
 
 permissions:
