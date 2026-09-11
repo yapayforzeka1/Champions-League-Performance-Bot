@@ -1,0 +1,52 @@
+name: Champions League Performance Bot
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Run performance bot
+        env:
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
+          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: "true"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+        run: python performance_bot.py
+
+      - name: Save performance archives
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/weekly_reports.json data/season_performance.json
+          git diff --cached --quiet || git commit -m "Update performance archives"
+          git push
