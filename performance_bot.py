@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from config import DATA_DIR, SEASON_PERFORMANCE_FILE, WEEKLY_REPORTS_FILE
-from performance_engine import build_season_snapshot, build_weekly_snapshot, matchday_resolution, merge_latest_results
+from performance_engine import build_season_snapshot, build_weekly_snapshot, matchday_report_due, matchday_resolution, merge_latest_results
 from result_provider import FootballDataResultProvider, ResultProviderError
 from source_loader import SourceLoadError, load_prediction_archive
 from telegram_report import send_photo
@@ -60,12 +60,21 @@ def main() -> int:
     for matchday, fixtures in sorted(by_matchday.items()):
         if not fixtures:
             continue
-        resolution = matchday_resolution(fixtures, graded)
         key = str(matchday)
+        if key not in weekly_reports and not matchday_report_due(fixtures):
+            print(f"🕒 Matchday {matchday}: rapor zamanı henüz gelmedi (son planlanan başlangıç + 60 dk).")
+            continue
+        resolution = matchday_resolution(fixtures, graded)
         if not resolution["final"]:
             print(f"⏳ Matchday {matchday}: PENDING ({resolution['pending_matches']} maç çözülmedi).")
             continue
         if key in weekly_reports and weekly_reports[key].get("status") == "FINAL":
+            # Yeni puanlama/coverage kuralları eski FINAL Matchday istatistiklerine de
+            # uygulanır; eski Telegram raporu yeniden gönderilmez.
+            refreshed = build_weekly_snapshot(graded, matchday, resolution)
+            refreshed["finalized_at"] = weekly_reports[key].get("finalized_at", refreshed["finalized_at"])
+            weekly_reports[key] = refreshed
+            _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
             continue
 
         snapshot = build_weekly_snapshot(graded, matchday, resolution)

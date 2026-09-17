@@ -1,71 +1,46 @@
 # Champions League Performance Bot
 
-UEFA Champions League 2026/27 haftalık maç tahmin sisteminin ürettiği AI tahminlerini **bağımsız ve yeniden hesaplanabilir** biçimde değerlendiren performans sistemi.
+UEFA Champions League 2026/27 tahmin arşivini bağımsız biçimde değerlendirir, haftalık ve sezon geneli performans görsellerini Telegram'a gönderir.
 
-## Mimari
+## Temel kurallar
 
-```text
-Prediction Repo
-    │
-    └── match_predictions.json  (salt okunur kaynak)
-              │
-              ▼
-Champions-League-Performance-Bot
-    ├── source_loader.py        → tahmin arşivini GitHub'dan okur
-    ├── result_provider.py      → güncel CL maç durumlarını alır
-    ├── consensus_engine.py     → strict-majority consensus
-    ├── performance_engine.py   → 5/3/0 puanlama + Matchday finalizasyonu
-    ├── weekly_report.py        → haftalık/sezon görselleri
-    ├── telegram_report.py      → Telegram gönderimi
-    └── performance_bot.py      → ana orkestrasyon
-```
+- Puanlama: tam skor **6P**, kazanan + doğru gol farkı **5P**, farklı skorlu beraberlik **3P**, yalnız kazanan **2P**, yanlış sonuç **0P**.
+- Başarılı her AI tahmini consensus oluşup oluşmamasından bağımsız puanlanır.
+- API/model hatası veya üretilemeyen tahmin **0 puan değildir**; yalnızca coverage oranını düşürür.
+- Consensus için en az **3 başarılı AI tahmini** gerekir. Ardından benzersiz strict-majority kuralı uygulanır.
+- Consensus performansı bireysel AI performansından ayrı tutulur ve aynı 6/5/3/2/0 sistemiyle değerlendirilir.
+- Tahmin kaydı olmayan bitmiş maç `UNAVAILABLE` olarak tutulur; AI başarısızlığına 0 puan yazılmaz.
+- Ertelenen/iptal edilen terminal maçlar Matchday'i süresiz kilitlemez.
+- FINAL rapor bir Matchday için yalnızca bir kez Telegram'a gönderilir.
 
-## Önemli kurallar
+## Rapor zamanı
 
-- Winner consensus yalnızca **benzersiz strict majority** ile oluşur.
-- Exact-score consensus da bağımsız olarak **strict majority** ister.
-- Tam skor = **5 puan**.
-- Doğru sonuç, yanlış skor = **3 puan**.
-- Doğru beraberlik tahmini = **5 puan**.
-- Yanlış = **0 puan**.
-- Consensus yoksa consensus puanı verilmez.
-- Tahmin arşivinde kaydı olmayan maç **0 puan değildir**; `UNAVAILABLE` olarak raporlanır.
-- Matchday raporu ilk uygun saatte kilitlenmez. Tüm planlanan maçlar `EVALUATED`, `UNAVAILABLE` veya terminal ertelenme/iptal durumuna geldiğinde **FINAL** olur.
-- Final rapor bir Matchday için yalnızca bir kez Telegram'a gönderilir.
-- Model puanı yanında `coverage_pct` ve başarısız çağrı sayısı da tutulur; API 429 yaşayan modelin düşük puanı tek başına performans sonucu sayılmaz.
+GitHub Actions Salı-Perşembe 18:05-23:05 UTC arasında saatlik hafif kontrol yapar. Bot fixture verisindeki ilgili Matchday'in **son planlanan maç başlangıcından 60 dakika geçmeden** rapor oluşturmaz. Sonuçlar henüz tamamlanmamışsa FINAL rapor için sonraki kontrolde tekrar bakılır.
 
-## GitHub Secrets
+Bu performans botu tahmin AI'larını yeniden çağırmaz; prediction repo'daki arşivlenmiş tahminleri okur. Bu nedenle performans kontrolü Gemini/Qwen/Cohere/Mistral/GPT-OSS tahmin tokenı tüketmez.
 
-Performance repo'da aşağıdaki Actions secrets tanımlanmalıdır:
+## Telegram çıktısı
+
+FINAL Matchday'de iki PNG gönderilir:
+
+1. Haftalık AI performansı: toplam puan, ortalama /6, 6P/5P/3P/2P/0P dağılımı ve coverage; ayrıca consensus performansı.
+2. Sezon geneli AI performansı: aynı metriklerin tüm FINAL Matchday'ler üzerinden toplamı.
+
+## Mistral
+
+Bu repo Mistral dahil modelleri çağırmaz; prediction repo'nun ürettiği `match_predictions.json` verisini değerlendirir. Mistral API/entegrasyon hatası burada 0 puan sayılmaz ve coverage ile görünür hale gelir. Mistral çağrısının düzeltilmesi veya alternatif modelle değiştirilmesi prediction repo tarafında yapılmalıdır.
+
+## Secrets
 
 - `FOOTBALL_DATA_API_KEY`
 - `ANALYSIS_TELEGRAM_BOT_TOKEN`
 - `ANALYSIS_TELEGRAM_CHAT_ID`
-- `PREDICTION_REPO_TOKEN` — yalnızca prediction repo private ise gerekli. Token'ın prediction repo için en az Contents: Read erişimi olmalıdır.
+- `PREDICTION_REPO_TOKEN` — prediction repo private ise Contents: Read erişimi gerekir.
 
-İsterseniz repository variable olarak `PREDICTION_REPO` değerini değiştirebilirsiniz. Varsayılan:
-
-`yapayforzeka1/Haftalik-Mac-Tahmini`
-
-## Çalışma döngüsü
-
-GitHub Actions her 5 dakikada bir çalışır:
-
-1. Prediction repo'daki ham `match_predictions.json` okunur.
-2. football-data.org üzerinden güncel CL maç durumları alınır.
-3. Arşivlenmiş tahminler yeniden puanlanır.
-4. Her Matchday için `PENDING` / `FINAL` durumu belirlenir.
-5. FINAL Matchday için haftalık rapor oluşturulur.
-6. Sezon toplamı yeniden hesaplanır.
-7. Haftalık ve sezon görselleri Telegram'a gönderilir.
-8. JSON arşivleri Performance repo'ya commit edilir.
+Varsayılan prediction repo: `yapayforzeka1/Haftalik-Mac-Tahmini`.
 
 ## Test
 
 ```bash
 python -m unittest discover -s tests -v
 ```
-
-## Not
-
-Bu repo prediction botunun `weekly_reports.json` dosyasına güvenmez. Böylece önceki sistemde görülen, ilk rapor snapshot'ının erken oluşturulup sonradan gelen maç sonuçlarını içermemesi problemi burada tekrar oluşmaz.
