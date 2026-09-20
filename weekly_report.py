@@ -1,4 +1,4 @@
-"""Modern dark performance report images for Telegram."""
+"""Modern AI performance tables for weekly and season Telegram reports."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -8,7 +8,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 from config import MODEL_ORDER, MODEL_SHORT, REPORT_DIR, SEASON
 
-# Palette aligned with prediction-bot cards
 BG = (11, 21, 38)
 HEADER = (15, 28, 52)
 CARD = (18, 32, 51)
@@ -19,15 +18,8 @@ CYAN = (45, 212, 191)
 GOLD = (251, 191, 36)
 MUTED = (139, 155, 176)
 GREEN = (34, 197, 94)
-RED = (239, 68, 68)
-
-POINT_COLORS = {
-    "6": (22, 163, 74),
-    "5": (37, 99, 235),
-    "3": (202, 138, 4),
-    "2": (234, 88, 12),
-    "0": (185, 28, 28),
-}
+BLUE = (59, 130, 246)
+PURPLE = (168, 85, 247)
 
 
 def _font(size: int, bold: bool = False):
@@ -50,240 +42,269 @@ def _text(draw, xy, text, size=18, bold=False, fill=WHITE):
     draw.text(xy, str(text), font=_font(size, bold), fill=fill)
 
 
-def _center(draw, box, text, size=18, bold=False, fill=WHITE):
-    f = _font(size, bold)
-    bb = draw.textbbox((0, 0), str(text), font=f)
-    x1, y1, x2, y2 = box
-    draw.text(
-        ((x1 + x2 - (bb[2] - bb[0])) / 2, (y1 + y2 - (bb[3] - bb[1])) / 2 - 1),
-        str(text),
-        font=f,
-        fill=fill,
-    )
+def _wrap(draw, text: str, font, max_width: float) -> list[str]:
+    words = str(text).split()
+    lines: list[str] = []
+    cur = ""
+    for word in words:
+        test = (cur + " " + word).strip()
+        if cur and _tw(draw, test, font) > max_width:
+            lines.append(cur)
+            cur = word
+        else:
+            cur = test
+    if cur:
+        lines.append(cur)
+    return lines or [""]
 
 
-def _panel(draw, box, fill=CARD, radius=14):
-    draw.rounded_rectangle(box, radius=radius, fill=fill, outline=BORDER, width=1)
+def _model_row(name: str, stats: dict[str, Any]) -> dict[str, Any]:
+    dist = stats.get("point_distribution") or {}
+    exact = int(stats.get("exact") or dist.get("6") or 0)
+    outcome = int(stats.get("outcome") or 0)
+    if not outcome:
+        outcome = int(dist.get("6", 0)) + int(dist.get("5", 0)) + int(dist.get("3", 0)) + int(dist.get("2", 0))
+    kazanan = int(dist.get("6", 0)) + int(dist.get("5", 0)) + int(dist.get("2", 0))
+    if kazanan == 0 and outcome:
+        kazanan = outcome
+    return {
+        "name": name,
+        "short": MODEL_SHORT.get(name, name),
+        "points": int(stats.get("points") or 0),
+        "kazanan": kazanan,
+        "skor": exact,
+        "sonuc": outcome,
+        "avg": float(stats.get("avg") or 0),
+        "uret": int(stats.get("successful_predictions") or 0),
+        "firs": int(stats.get("prediction_opportunities") or 0),
+        "week_points": stats.get("week_points") or {},
+    }
 
 
-def _pill(draw, x, y, text, fill, text_fill=WHITE, pad_x=12, pad_y=5, size=13, bold=True):
-    f = _font(size, bold)
-    w = _tw(draw, text, f) + pad_x * 2
-    h = size + pad_y * 2 + 2
-    draw.rounded_rectangle((x, y, x + w, y + h), radius=h // 2, fill=fill)
-    draw.text((x + pad_x, y + pad_y - 1), str(text), font=f, fill=text_fill)
-    return w
-
-
-def _distribution_row(draw, x, y, dist: dict | None, cell_w=56, gap=8):
-    """Compact 6P..0P chips with counts underneath."""
-    dist = dist or {}
-    for i, p in enumerate(("6", "5", "3", "2", "0")):
-        cx = x + i * (cell_w + gap)
-        draw.rounded_rectangle((cx, y, cx + cell_w, y + 28), radius=8, fill=POINT_COLORS[p])
-        _center(draw, (cx, y, cx + cell_w, y + 28), f"{p}P", 13, True, WHITE)
-        _center(draw, (cx, y + 30, cx + cell_w, y + 52), str(dist.get(p, 0)), 15, True, MUTED)
-
-
-def _rank_models(stats_models: dict) -> list[tuple[str, dict]]:
-    rows = [(m, stats_models[m]) for m in MODEL_ORDER if m in stats_models]
-    rows.sort(key=lambda x: (-x[1].get("points", 0), -x[1].get("coverage_pct", 0), x[0]))
+def _ranked(models_stats: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = [_model_row(m, models_stats[m]) for m in MODEL_ORDER if m in models_stats]
+    rows.sort(key=lambda r: (-r["points"], -r["skor"], -r["uret"], r["short"]))
     return rows
+
+
+def _leaders(rows: list[dict[str, Any]]) -> tuple[dict, dict, dict]:
+    if not rows:
+        empty = {"short": "—", "points": 0, "skor": 0, "uret": 0, "firs": 0}
+        return empty, empty, empty
+    by_points = max(rows, key=lambda r: (r["points"], r["skor"], r["uret"]))
+    by_skor = max(rows, key=lambda r: (r["skor"], r["points"], r["uret"]))
+    by_uret = max(rows, key=lambda r: (r["uret"], r["points"], r["skor"]))
+    return by_points, by_skor, by_uret
+
+
+def _comment_weekly(rows: list[dict[str, Any]], matchday: Any) -> str:
+    if not rows:
+        return "Bu matchday için değerlendirilebilir AI performansı yok."
+    top, skor, uret = _leaders(rows)
+    parts = [f"Matchday {matchday} sonunda {top['short']} {top['points']} puanla lider."]
+    if skor["short"] != top["short"] and skor["skor"] > 0:
+        parts.append(f"Tam skorda {skor['short']} önde ({skor['skor']}).")
+    elif top["skor"] > 0:
+        parts.append(f"Tam skor liderliği de {top['short']} tarafında ({top['skor']}).")
+    zero = [r for r in rows if r["uret"] == 0]
+    low = [r for r in rows if 0 < r["uret"] < r["firs"] * 0.7]
+    if zero:
+        parts.append(f"{', '.join(r['short'] for r in zero)} hiç yanıt üretemedi.")
+    elif low:
+        parts.append(
+            f"{', '.join(r['short'] for r in low)} üretim eksiği nedeniyle toplam puanda geride kaldı."
+        )
+    if uret["short"] == top["short"]:
+        parts.append("Lider aynı zamanda en fazla tahmin üreten model.")
+    return " ".join(parts)
+
+
+def _comment_season(rows: list[dict[str, Any]], weeks: list) -> str:
+    if not rows:
+        return "Sezon için FINAL matchday verisi yok."
+    top, skor, uret = _leaders(rows)
+    n = len(weeks)
+    parts = [f"{n} matchday sonunda {top['short']} sezon lideri ({top['points']} puan)."]
+    if skor["short"] != top["short"] and skor["skor"] > 0:
+        parts.append(f"Tam skorda {skor['short']} önde ({skor['skor']}).")
+    if uret["uret"] > 0:
+        parts.append(f"En fazla tahmin üreten: {uret['short']} ({uret['uret']}/{uret['firs']}).")
+    weak = [r for r in rows if r["points"] == 0 or r["uret"] == 0]
+    if weak:
+        parts.append(f"{', '.join(r['short'] for r in weak)} henüz etkili katkı veremedi.")
+    return " ".join(parts)
+
+
+def _draw_header(draw, w: int, title: str, subtitle: str, right_top: str, right_bottom: str) -> None:
+    draw.rectangle((0, 0, w, 115), fill=HEADER)
+    _text(draw, (32, 26), title, 26, True, WHITE)
+    _text(draw, (32, 64), subtitle, 17, True, CYAN)
+    rt = _font(14, True)
+    rb = _font(13, True)
+    _text(draw, (w - 32 - _tw(draw, right_top, rt), 36), right_top, 14, True, GOLD)
+    _text(draw, (w - 32 - _tw(draw, right_bottom, rb), 66), right_bottom, 13, True, MUTED)
+
+
+def _draw_leaders(draw, y: int, w: int, rows: list[dict[str, Any]]) -> int:
+    by_points, by_skor, by_uret = _leaders(rows)
+    leaders = [
+        ("EN FAZLA PUAN", by_points["short"], f"{by_points['points']} P", GOLD),
+        ("EN FAZLA SKOR BİLEN", by_skor["short"], f"{by_skor['skor']} tam skor", GREEN),
+        ("EN FAZLA TAHMİN ÜRETEN", by_uret["short"], f"{by_uret['uret']}/{by_uret['firs']}", BLUE),
+    ]
+    gap = 14
+    cw = (w - 64 - gap * 2) // 3
+    for i, (title, name, val, color) in enumerate(leaders):
+        x = 32 + i * (cw + gap)
+        draw.rounded_rectangle((x, y, x + cw, y + 100), radius=14, fill=CARD2, outline=BORDER)
+        _text(draw, (x + 16, y + 14), title, 12, True, MUTED)
+        _text(draw, (x + 16, y + 42), name, 22, True, color)
+        _text(draw, (x + 16, y + 74), val, 14, True, WHITE)
+    return y + 116
+
+
+def _draw_comment(draw, y: int, w: int, comment: str) -> int:
+    font = _font(13, False)
+    lines = _wrap(draw, comment, font, w - 70)
+    box_h = 36 + 18 * min(len(lines), 4)
+    draw.rounded_rectangle((20, y, w - 20, y + box_h), radius=12, fill=CARD2, outline=BORDER)
+    _text(draw, (36, y + 10), "GENEL YORUM", 12, True, GOLD)
+    for i, line in enumerate(lines[:4]):
+        draw.text((36, y + 32 + i * 18), line, font=font, fill=MUTED)
+    return y + box_h + 16
 
 
 def render_weekly_image(snapshot: dict[str, Any]) -> Path:
     stats = snapshot["stats"]
-    c = stats["consensus"]
-    ranked = _rank_models(stats["models"])
+    rows = _ranked(stats.get("models") or {})
+    matchday = snapshot.get("matchday", "?")
+    comment = _comment_weekly(rows, matchday)
 
-    # dynamic height
-    w = 1000
-    top = 160
-    summary_h = 100
-    model_h = 88
-    consensus_h = 120
-    footer_h = 50
-    h = top + summary_h + 40 + 36 + len(ranked) * (model_h + 12) + 40 + consensus_h + footer_h + 30
+    w = 1100
+    top = 135
+    leaders_h = 116
+    header_h = 54
+    row_h = 56
+    comment_h = 110
+    h = top + leaders_h + header_h + max(len(rows), 1) * row_h + comment_h + 40
 
     im = Image.new("RGB", (w, h), BG)
     d = ImageDraw.Draw(im)
+    _draw_header(
+        d, w,
+        "ŞAMPİYONLAR LİGİ",
+        "AI PERFORMANS TABLOSU",
+        f"MATCHDAY {matchday}",
+        str(snapshot.get("status") or "FINAL"),
+    )
+    y = _draw_leaders(d, top, w, rows)
 
-    # header bar
-    d.rectangle((0, 0, w, top - 20), fill=HEADER)
-    _text(d, (32, 28), "ŞAMPİYONLAR LİGİ", 26, True, WHITE)
-    _text(d, (32, 64), "HAFTALIK AI PERFORMANS", 18, True, CYAN)
-    md = f"MATCHDAY {snapshot['matchday']}"
-    fw = _tw(d, md, _font(16, True))
-    _pill(d, w - 32 - fw - 24, 36, md, GOLD, (11, 21, 38), pad_x=12, pad_y=6, size=14)
-    status = snapshot.get("status", "FINAL")
-    _text(d, (w - 32 - fw - 24, 78), status, 13, True, MUTED)
-
-    # summary cards
-    y = top
-    cards = [
-        (str(snapshot.get("evaluated_matches", 0)), "DEĞERLENDİRİLEN"),
-        (f"{c.get('matches', 0)}/{c.get('evaluated_matches', 0)}", "ORTAK KARAR"),
-        (str(len(MODEL_ORDER)), "AI MODELİ"),
+    d.rounded_rectangle((20, y, w - 20, y + 46), radius=12, fill=CARD2)
+    headers = [
+        (36, "#"),
+        (70, "MODEL"),
+        (210, "KAZANAN"),
+        (340, "SKOR"),
+        (450, "DOĞRU SONUÇ"),
+        (620, "TOPLAM PUAN"),
+        (780, "BAŞARI"),
+        (920, "ÜRETİLEN"),
     ]
-    gap = 14
-    card_w = (w - 64 - gap * 2) // 3
-    for i, (val, label) in enumerate(cards):
-        x = 32 + i * (card_w + gap)
-        _panel(d, (x, y, x + card_w, y + summary_h - 10), CARD2)
-        _text(d, (x + 18, y + 18), val, 28, True, CYAN if i != 1 else GOLD)
-        _text(d, (x + 18, y + 58), label, 13, True, MUTED)
+    for x, label in headers:
+        _text(d, (x, y + 13), label, 12, True, MUTED)
+    y += 54
 
-    y += summary_h + 20
-    _text(d, (32, y), "BİREYSEL SIRALAMA", 16, True, GOLD)
-    y += 32
+    for i, r in enumerate(rows):
+        bg = CARD if i % 2 == 0 else (16, 28, 46)
+        d.rounded_rectangle((20, y, w - 20, y + 52), radius=10, fill=bg)
+        _text(d, (42, y + 14), str(i + 1), 15, True, CYAN)
+        _text(d, (70, y + 14), r["short"], 15, True, WHITE)
+        _text(d, (230, y + 14), str(r["kazanan"]), 16, True, WHITE)
+        _text(d, (355, y + 14), str(r["skor"]), 16, True, GREEN)
+        _text(d, (490, y + 14), str(r["sonuc"]), 16, True, BLUE)
+        _text(d, (650, y + 14), str(r["points"]), 17, True, CYAN)
+        _text(d, (790, y + 14), f"{r['avg']:.2f}/6", 15, True, PURPLE)
+        _text(d, (930, y + 14), f"{r['uret']}/{r['firs']}", 14, False, MUTED)
+        y += row_h
 
-    for rank, (model, s) in enumerate(ranked, 1):
-        short = MODEL_SHORT.get(model, model)
-        _panel(d, (32, y, w - 32, y + model_h))
-        # rank circle
-        d.ellipse((48, y + 28, 76, y + 56), fill=CARD2, outline=BORDER)
-        _center(d, (48, y + 28, 76, y + 56), str(rank), 14, True, CYAN)
-        _text(d, (92, y + 16), short, 18, True, WHITE)
-        _text(d, (92, y + 44), f"Ort. {s.get('avg', 0)} / 6", 13, False, MUTED)
-
-        pts = f"{s.get('points', 0)} PUAN"
-        _text(d, (260, y + 18), pts, 20, True, CYAN)
-
-        _distribution_row(d, 420, y + 16, s.get("point_distribution"))
-
-        cov = f"{s.get('successful_predictions', 0)}/{s.get('prediction_opportunities', 0)}"
-        _text(d, (820, y + 18), cov, 16, True, WHITE)
-        _text(d, (820, y + 46), f"%{s.get('coverage_pct', 0)}", 13, False, MUTED)
-        y += model_h + 12
-
-    y += 8
-    _text(d, (32, y), "ORTAK KARAR", 16, True, GOLD)
-    y += 28
-    _panel(d, (32, y, w - 32, y + consensus_h), CARD2)
-    _text(d, (52, y + 18), f"{c.get('points', 0)} PUAN", 22, True, GOLD)
-    _text(d, (52, y + 50), f"Ort. {c.get('avg', 0)} / 6", 14, False, MUTED)
-    _text(
-        d,
-        (52, y + 78),
-        f"Ortak: {c.get('matches', 0)}/{c.get('evaluated_matches', 0)}  ·  %{c.get('coverage_pct', 0)}",
-        13,
-        True,
-        MUTED,
-    )
-    _distribution_row(d, 420, y + 24, c.get("point_distribution"))
-    _text(d, (820, y + 28), f"Ortak yok: {c.get('no_consensus', 0)}", 13, True, MUTED)
-    _text(d, (820, y + 54), f"Skor bölünmesi: {c.get('score_split', 0)}", 13, False, MUTED)
-
-    y = h - 40
-    _text(
-        d,
-        (32, y),
-        "6P Tam skor  ·  5P Kazanan+fark  ·  3P Beraberlik  ·  2P Kazanan  ·  0P Yanlış",
-        12,
-        False,
-        MUTED,
-    )
+    y += 12
+    _draw_comment(d, y, w, comment)
 
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
-    path = REPORT_DIR / f"matchday_{snapshot['matchday']}_weekly.png"
+    path = REPORT_DIR / f"matchday_{matchday}_weekly.png"
     im.save(path, quality=95)
     return path
 
 
 def render_season_image(season: dict[str, Any]) -> Path:
     weeks = list(season.get("finalized_matchdays") or [])
-    c = season["consensus"]
-    ranked = _rank_models(season["models"])
+    rows = _ranked(season.get("models") or {})
+    comment = _comment_season(rows, weeks)
 
-    w = 1000
-    # columns: rank | model | each MD | total | avg | coverage
-    col_md = max(1, len(weeks))
-    top = 150
+    w = 1200 if len(weeks) <= 4 else min(1600, 1000 + len(weeks) * 70)
+    top = 135
+    leaders_h = 116
+    header_h = 54
     row_h = 56
-    header_h = 44
-    summary_h = 90
-    consensus_h = 110
-    h = top + summary_h + 36 + header_h + len(ranked) * row_h + 36 + consensus_h + 50
+    comment_h = 120
+    h = top + leaders_h + header_h + max(len(rows), 1) * row_h + comment_h + 50
 
     im = Image.new("RGB", (w, h), BG)
     d = ImageDraw.Draw(im)
-
-    d.rectangle((0, 0, w, top - 20), fill=HEADER)
-    _text(d, (32, 28), "ŞAMPİYONLAR LİGİ", 26, True, WHITE)
-    _text(d, (32, 64), "SEZON GENELİ AI PERFORMANS", 18, True, CYAN)
-    _text(d, (w - 32 - _tw(d, SEASON, _font(16, True)), 40), SEASON, 16, True, GOLD)
-
-    y = top
-    total_matches = max(
-        (season["models"][m].get("prediction_opportunities", 0) for m in MODEL_ORDER if m in season["models"]),
-        default=0,
+    week_label = " + ".join(f"MD{md}" for md in weeks) if weeks else "—"
+    _draw_header(
+        d, w,
+        "ŞAMPİYONLAR LİGİ",
+        "SEZON AI PERFORMANS TABLOSU",
+        SEASON,
+        week_label if len(week_label) < 28 else f"{len(weeks)} MATCHDAY",
     )
-    cards = [
-        (str(total_matches), "TOPLAM MAÇ"),
-        (str(len(weeks)), "FINAL MATCHDAY"),
-        (f"{c.get('matches', 0)}/{c.get('evaluated_matches', 0)}", "ORTAK KARAR"),
-    ]
-    gap = 14
-    card_w = (w - 64 - gap * 2) // 3
-    for i, (val, label) in enumerate(cards):
-        x = 32 + i * (card_w + gap)
-        _panel(d, (x, y, x + card_w, y + summary_h - 10), CARD2)
-        _text(d, (x + 18, y + 16), val, 26, True, CYAN if i < 2 else GOLD)
-        _text(d, (x + 18, y + 52), label, 13, True, MUTED)
+    y = _draw_leaders(d, top, w, rows)
 
-    y += summary_h + 16
-    _text(d, (32, y), "MODEL SIRALAMASI", 16, True, GOLD)
-    y += 28
+    md_w = min(70, max(48, 280 // max(len(weeks), 1))) if weeks else 0
+    base_md = 170
+    after_md = base_md + len(weeks) * md_w + 10
 
-    # table header
-    _panel(d, (32, y, w - 32, y + header_h), CARD2, radius=10)
-    _text(d, (48, y + 12), "#", 13, True, MUTED)
-    _text(d, (80, y + 12), "MODEL", 13, True, MUTED)
-    # week columns
-    base_x = 280
-    md_w = min(70, max(48, (420 // max(col_md, 1))))
+    d.rounded_rectangle((16, y, w - 16, y + 46), radius=12, fill=CARD2)
+    _text(d, (28, y + 13), "#", 12, True, MUTED)
+    _text(d, (60, y + 13), "MODEL", 12, True, MUTED)
     for i, md in enumerate(weeks):
-        _text(d, (base_x + i * md_w, y + 12), f"MD{md}", 12, True, MUTED)
-    _text(d, (base_x + col_md * md_w + 10, y + 12), "TOPLAM", 13, True, MUTED)
-    _text(d, (base_x + col_md * md_w + 100, y + 12), "ORT.", 13, True, MUTED)
-    _text(d, (base_x + col_md * md_w + 170, y + 12), "COV.", 13, True, MUTED)
-    y += header_h + 4
+        _text(d, (base_md + i * md_w, y + 13), f"MD{md}", 12, True, MUTED)
+    col_x = {
+        "kazanan": after_md,
+        "skor": after_md + 100,
+        "sonuc": after_md + 180,
+        "puan": after_md + 320,
+        "basari": after_md + 460,
+        "uret": after_md + 570,
+    }
+    _text(d, (col_x["kazanan"], y + 13), "KAZANAN", 12, True, MUTED)
+    _text(d, (col_x["skor"], y + 13), "SKOR", 12, True, MUTED)
+    _text(d, (col_x["sonuc"], y + 13), "DOĞRU SONUÇ", 12, True, MUTED)
+    _text(d, (col_x["puan"], y + 13), "TOPLAM PUAN", 12, True, MUTED)
+    _text(d, (col_x["basari"], y + 13), "BAŞARI", 12, True, MUTED)
+    _text(d, (col_x["uret"], y + 13), "ÜRETİLEN", 12, True, MUTED)
+    y += 54
 
-    for rank, (model, s) in enumerate(ranked, 1):
-        short = MODEL_SHORT.get(model, model)
-        bg = CARD if rank % 2 else (16, 28, 46)
-        d.rounded_rectangle((32, y, w - 32, y + row_h - 4), radius=8, fill=bg)
-        _text(d, (52, y + 16), str(rank), 15, True, CYAN)
-        _text(d, (80, y + 16), short, 15, True, WHITE)
-
-        week_points = s.get("week_points") or {}
-        for i, md in enumerate(weeks):
-            pts = week_points.get(str(md), week_points.get(md, "—"))
-            _text(d, (base_x + i * md_w, y + 16), str(pts), 14, False, MUTED)
-
-        _text(d, (base_x + col_md * md_w + 10, y + 16), str(s.get("points", 0)), 15, True, CYAN)
-        _text(d, (base_x + col_md * md_w + 100, y + 16), str(s.get("avg", 0)), 14, False, MUTED)
-        _text(d, (base_x + col_md * md_w + 170, y + 16), f"%{s.get('coverage_pct', 0)}", 14, False, MUTED)
+    for i, r in enumerate(rows):
+        bg = CARD if i % 2 == 0 else (16, 28, 46)
+        d.rounded_rectangle((16, y, w - 16, y + 52), radius=10, fill=bg)
+        _text(d, (34, y + 14), str(i + 1), 15, True, CYAN)
+        _text(d, (60, y + 14), r["short"], 15, True, WHITE)
+        wp = r.get("week_points") or {}
+        for j, md in enumerate(weeks):
+            pts = wp.get(str(md), wp.get(md, "—"))
+            _text(d, (base_md + j * md_w, y + 14), str(pts), 14, False, MUTED)
+        _text(d, (col_x["kazanan"] + 10, y + 14), str(r["kazanan"]), 16, True, WHITE)
+        _text(d, (col_x["skor"] + 10, y + 14), str(r["skor"]), 16, True, GREEN)
+        _text(d, (col_x["sonuc"] + 20, y + 14), str(r["sonuc"]), 16, True, BLUE)
+        _text(d, (col_x["puan"] + 20, y + 14), str(r["points"]), 17, True, CYAN)
+        _text(d, (col_x["basari"], y + 14), f"{r['avg']:.2f}/6", 15, True, PURPLE)
+        _text(d, (col_x["uret"], y + 14), f"{r['uret']}/{r['firs']}", 14, False, MUTED)
         y += row_h
 
-    y += 16
-    _text(d, (32, y), "ORTAK KARAR — SEZON", 16, True, GOLD)
-    y += 28
-    _panel(d, (32, y, w - 32, y + consensus_h), CARD2)
-    _text(d, (52, y + 18), f"{c.get('points', 0)} PUAN", 22, True, GOLD)
-    _text(d, (52, y + 50), f"Ort. {c.get('avg', 0)} / 6  ·  Ortak {c.get('matches', 0)}/{c.get('evaluated_matches', 0)}", 14, False, MUTED)
-    _text(d, (52, y + 78), f"Ortak yok: {c.get('no_consensus', 0)}  ·  Tam skor: {c.get('exact', 0)}", 13, False, MUTED)
-    _distribution_row(d, 520, y + 28, c.get("point_distribution"))
-
-    y = h - 36
-    _text(
-        d,
-        (32, y),
-        "Coverage = API erişimi  ·  Puan = yalnızca başarılı tahminlerin futbol skoru",
-        12,
-        False,
-        MUTED,
-    )
+    y += 12
+    _draw_comment(d, y, w, comment)
 
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     path = REPORT_DIR / "season_performance.png"
