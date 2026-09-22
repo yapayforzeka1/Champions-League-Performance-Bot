@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -44,6 +45,10 @@ def _prepare_render_records(snapshot: dict, predictions: dict) -> dict:
 def main() -> int:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     weekly_reports = _load_json(WEEKLY_REPORTS_FILE, {})
+    run_mode = os.getenv("PERFORMANCE_RUN_MODE", "normal").strip().lower()
+    matchday_1_real_test = run_mode == "matchday_1_real_test"
+    if matchday_1_real_test:
+        print("🧪 MATCHDAY 1 GERÇEK VERİ TESTİ — arşiv/state değiştirilmeyecek, LLM çağrısı yapılmayacak.")
 
     try:
         predictions = load_prediction_archive()
@@ -60,15 +65,17 @@ def main() -> int:
     for matchday, fixtures in sorted(by_matchday.items()):
         if not fixtures:
             continue
+        if matchday_1_real_test and int(matchday) != 1:
+            continue
         key = str(matchday)
-        if key not in weekly_reports and not matchday_report_due(fixtures):
+        if not matchday_1_real_test and key not in weekly_reports and not matchday_report_due(fixtures):
             print(f"🕒 Matchday {matchday}: rapor zamanı henüz gelmedi (son planlanan başlangıç + 60 dk).")
             continue
         resolution = matchday_resolution(fixtures, graded)
         if not resolution["final"]:
             print(f"⏳ Matchday {matchday}: PENDING ({resolution['pending_matches']} maç çözülmedi).")
             continue
-        if key in weekly_reports and weekly_reports[key].get("status") == "FINAL":
+        if not matchday_1_real_test and key in weekly_reports and weekly_reports[key].get("status") == "FINAL":
             # Yeni puanlama/coverage kuralları eski FINAL Matchday istatistiklerine de
             # uygulanır; eski Telegram raporu yeniden gönderilmez.
             refreshed = build_weekly_snapshot(graded, matchday, resolution)
@@ -81,7 +88,8 @@ def main() -> int:
         render_snapshot = _prepare_render_records(snapshot, graded)
         weekly_image = render_weekly_image(render_snapshot)
         weekly_reports[key] = snapshot
-        _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
+        if not matchday_1_real_test:
+            _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
 
         season = build_season_snapshot(weekly_reports)
         # Keep per-matchday points in season image data for visual weekly columns.
@@ -94,13 +102,20 @@ def main() -> int:
             str(md): int(weekly_reports[str(md)]["stats"]["consensus"]["points"])
             for md in season["finalized_matchdays"]
         }
-        _save_json(SEASON_PERFORMANCE_FILE, season)
+        if not matchday_1_real_test:
+            _save_json(SEASON_PERFORMANCE_FILE, season)
         season_image = render_season_image(season)
 
         send_photo(weekly_image, f"🏆 Şampiyonlar Ligi — Matchday {matchday} FINAL Performans")
         send_photo(season_image, "📊 Şampiyonlar Ligi — Sezon Genel Performans")
         finalized_any = True
         print(f"✅ Matchday {matchday} FINAL raporu hazırlandı ve gönderildi.")
+
+    if matchday_1_real_test:
+        if not finalized_any:
+            print("⚠️ Matchday 1 gerçek veri testi için FINAL rapor üretilemedi.")
+        print("🏁 Matchday 1 gerçek veri testi tamamlandı; production arşiv/state değiştirilmedi.")
+        return 0
 
     # Rebuild season file even when no new matchday finalized, so the local archive is consistent.
     season = build_season_snapshot(weekly_reports)
