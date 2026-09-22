@@ -15,6 +15,7 @@ on:
         options:
           - normal
           - offline_visual_test
+          - matchday_1_real_test
       send_preview_to_telegram:
         description: "Tokensız görsel testi Telegram'a gönder"
         required: true
@@ -50,6 +51,24 @@ jobs:
           PREVIEW_SEND_TELEGRAM: ${{ inputs.send_preview_to_telegram }}
           SEASON: "2026/27"
         run: python render_preview.py
+
+      - name: Matchday 1 gerçek veri testi (LLM tokensız)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_mode == 'matchday_1_real_test' }}
+        env:
+          PERFORMANCE_RUN_MODE: "matchday_1_real_test"
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
+          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: "true"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+          MIN_CONSENSUS_AI: "3"
+          REPORT_DELAY_MINUTES: "60"
+        run: python performance_bot.py
 
       - name: Run performance bot
         if: ${{ github.event_name == 'schedule' || inputs.run_mode == 'normal' }}
