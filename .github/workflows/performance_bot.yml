@@ -6,6 +6,20 @@ on:
     # son planlanan başlangıç + 60 dakika sonrasında raporlamaya izin verir.
     - cron: "5 18-23 * * 2,3,4"
   workflow_dispatch:
+    inputs:
+      run_mode:
+        description: "Çalıştırma modu"
+        required: true
+        default: "normal"
+        type: choice
+        options:
+          - normal
+          - offline_visual_test
+      send_preview_to_telegram:
+        description: "Tokensız görsel testi Telegram'a gönder"
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -26,7 +40,19 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Run tests
         run: python -m unittest discover -s tests -v
+
+      - name: Tokensız performans görsel testi
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_mode == 'offline_visual_test' }}
+        env:
+          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
+          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: ${{ inputs.send_preview_to_telegram }}
+          PREVIEW_SEND_TELEGRAM: ${{ inputs.send_preview_to_telegram }}
+          SEASON: "2026/27"
+        run: python render_preview.py
+
       - name: Run performance bot
+        if: ${{ github.event_name == 'schedule' || inputs.run_mode == 'normal' }}
         env:
           PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
           PREDICTION_BRANCH: main
@@ -41,7 +67,9 @@ jobs:
           MIN_CONSENSUS_AI: "3"
           REPORT_DELAY_MINUTES: "60"
         run: python performance_bot.py
+
       - name: Save performance archives
+        if: ${{ github.event_name == 'schedule' || inputs.run_mode == 'normal' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
