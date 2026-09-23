@@ -2,76 +2,38 @@ name: Champions League Performance Bot
 
 on:
   schedule:
-    # CL maç günlerinde saatlik kontrol. Bot, fixture verisine göre yalnızca
-    # son planlanan başlangıç + 60 dakika sonrasında raporlamaya izin verir.
-    - cron: "5 18-23 * * 2,3,4"
+    - cron: "30 1 * * *"   # Her gün 04:30 Türkiye; yalnızca sonuç kontrolü, AI çağrısı yok
   workflow_dispatch:
-    inputs:
-      run_mode:
-        description: "Çalıştırma modu"
-        required: true
-        default: "normal"
-        type: choice
-        options:
-          - normal
-          - offline_visual_test
-          - matchday_1_real_test
-      send_preview_to_telegram:
-        description: "Tokensız görsel testi Telegram'a gönder"
-        required: true
-        default: true
-        type: boolean
 
 permissions:
   contents: write
+
+concurrency:
+  group: performance-reports
+  cancel-in-progress: false
 
 jobs:
   performance:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
       - name: Repository checkout
         uses: actions/checkout@v6
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
+
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
+
       - name: Run tests
         run: python -m unittest discover -s tests -v
 
-      - name: Tokensız performans görsel testi
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_mode == 'offline_visual_test' }}
-        env:
-          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
-          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
-          TELEGRAM_ENABLED: ${{ inputs.send_preview_to_telegram }}
-          PREVIEW_SEND_TELEGRAM: ${{ inputs.send_preview_to_telegram }}
-          SEASON: "2026/27"
-        run: python render_preview.py
-
-      - name: Matchday 1 gerçek veri testi (LLM tokensız)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_mode == 'matchday_1_real_test' }}
-        env:
-          PERFORMANCE_RUN_MODE: "matchday_1_real_test"
-          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
-          PREDICTION_BRANCH: main
-          PREDICTION_FILE: match_predictions.json
-          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
-          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
-          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
-          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
-          TELEGRAM_ENABLED: "true"
-          SEASON: "2026/27"
-          COMPETITION_CODE: "CL"
-          MIN_CONSENSUS_AI: "3"
-          REPORT_DELAY_MINUTES: "60"
-        run: python performance_bot.py
-
       - name: Run performance bot
-        if: ${{ github.event_name == 'schedule' || inputs.run_mode == 'normal' }}
         env:
           PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
           PREDICTION_BRANCH: main
@@ -83,15 +45,19 @@ jobs:
           TELEGRAM_ENABLED: "true"
           SEASON: "2026/27"
           COMPETITION_CODE: "CL"
-          MIN_CONSENSUS_AI: "3"
-          REPORT_DELAY_MINUTES: "60"
         run: python performance_bot.py
 
       - name: Save performance archives
-        if: ${{ github.event_name == 'schedule' || inputs.run_mode == 'normal' }}
+        if: ${{ always() }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/weekly_reports.json data/season_performance.json
           git diff --cached --quiet || git commit -m "Update performance archives"
           git push
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: performance-recovery
+          path: data/
