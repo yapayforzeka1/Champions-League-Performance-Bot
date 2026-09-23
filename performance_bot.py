@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import copy
 import json
-import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-from config import DATA_DIR, SEASON_PERFORMANCE_FILE, WEEKLY_REPORTS_FILE
-from performance_engine import build_season_snapshot, build_weekly_snapshot, matchday_report_due, matchday_resolution, merge_latest_results
+from config import SEASON, TELEGRAM_ENABLED, DATA_DIR, SEASON_PERFORMANCE_FILE, WEEKLY_REPORTS_FILE
+from performance_engine import build_season_snapshot, build_weekly_snapshot, matchday_resolution, merge_latest_results
 from result_provider import FootballDataResultProvider, ResultProviderError
 from source_loader import SourceLoadError, load_prediction_archive
 from telegram_report import send_photo
@@ -18,8 +18,8 @@ def _load_json(path: Path, default):
         return default
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return default
+    except (ValueError, OSError) as exc:
+        raise RuntimeError(f"Archive unreadable; preserved: {path}") from exc
 
 
 def _save_json(path: Path, data) -> None:
@@ -37,7 +37,11 @@ def _prepare_render_records(snapshot: dict, predictions: dict) -> dict:
             continue
         record = predictions.get(str(row["match_id"]))
         if record:
-            rows.append(record)
+            display_record = copy.deepcopy(record)
+            for vote in display_record.get('ai_votes', []):
+                if vote.get('model') == 'Groq Qwen 3.8 27B':
+                    vote['model'] = 'Groq Qwen 3.6 27B'  # Existing QWEN display column; source model_id stays intact.
+            rows.append(display_record)
     snapshot["render_records"] = rows
     return snapshot
 
@@ -45,10 +49,8 @@ def _prepare_render_records(snapshot: dict, predictions: dict) -> dict:
 def main() -> int:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     weekly_reports = _load_json(WEEKLY_REPORTS_FILE, {})
-    run_mode = os.getenv("PERFORMANCE_RUN_MODE", "normal").strip().lower()
-    matchday_1_real_test = run_mode == "matchday_1_real_test"
-    if matchday_1_real_test:
-        print("🧪 MATCHDAY 1 GERÇEK VERİ TESTİ — arşiv/state değiştirilmeyecek, LLM çağrısı yapılmayacak.")
+    if any(v.get('season') not in {None, SEASON} for v in weekly_reports.values()):
+        raise RuntimeError('Season mismatch: archive existing data and use a new DATA_DIR; no history overwritten.')
 
     try:
         predictions = load_prediction_archive()
@@ -65,31 +67,27 @@ def main() -> int:
     for matchday, fixtures in sorted(by_matchday.items()):
         if not fixtures:
             continue
-        if matchday_1_real_test and int(matchday) != 1:
-            continue
-        key = str(matchday)
-        if not matchday_1_real_test and key not in weekly_reports and not matchday_report_due(fixtures):
-            print(f"🕒 Matchday {matchday}: rapor zamanı henüz gelmedi (son planlanan başlangıç + 60 dk).")
-            continue
         resolution = matchday_resolution(fixtures, graded)
+        key = str(matchday)
         if not resolution["final"]:
             print(f"⏳ Matchday {matchday}: PENDING ({resolution['pending_matches']} maç çözülmedi).")
             continue
-        if not matchday_1_real_test and key in weekly_reports and weekly_reports[key].get("status") == "FINAL":
-            # Yeni puanlama/coverage kuralları eski FINAL Matchday istatistiklerine de
-            # uygulanır; eski Telegram raporu yeniden gönderilmez.
-            refreshed = build_weekly_snapshot(graded, matchday, resolution)
-            refreshed["finalized_at"] = weekly_reports[key].get("finalized_at", refreshed["finalized_at"])
-            weekly_reports[key] = refreshed
-            _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
-            continue
+        previous = weekly_reports.get(key)
+        if previous and previous.get('status') == 'FINAL':
+            # Legacy FINAL receipts are preserved without automatic resending.
+            delivery = previous.get('delivery')
+            if delivery is None or all(delivery.get(k) == 'SENT' for k in ('weekly','season')):
+                continue
+            if any(value == 'UNCERTAIN' for value in delivery.values()):
+                print(f'Matchday {matchday}: ambiguous delivery; manual review needed.')
+                continue
 
-        snapshot = build_weekly_snapshot(graded, matchday, resolution)
+        snapshot = previous or build_weekly_snapshot(graded, matchday, resolution)
+        snapshot.setdefault('delivery', {'weekly':'PENDING','season':'PENDING'})
         render_snapshot = _prepare_render_records(snapshot, graded)
         weekly_image = render_weekly_image(render_snapshot)
         weekly_reports[key] = snapshot
-        if not matchday_1_real_test:
-            _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
+        _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
 
         season = build_season_snapshot(weekly_reports)
         # Keep per-matchday points in season image data for visual weekly columns.
@@ -102,20 +100,21 @@ def main() -> int:
             str(md): int(weekly_reports[str(md)]["stats"]["consensus"]["points"])
             for md in season["finalized_matchdays"]
         }
-        if not matchday_1_real_test:
-            _save_json(SEASON_PERFORMANCE_FILE, season)
+        _save_json(SEASON_PERFORMANCE_FILE, season)
         season_image = render_season_image(season)
 
-        send_photo(weekly_image, f"🏆 Şampiyonlar Ligi — Matchday {matchday} FINAL Performans")
-        send_photo(season_image, "📊 Şampiyonlar Ligi — Sezon Genel Performans")
+        for part, image, caption in [
+            ('weekly', weekly_image, f'🏆 Şampiyonlar Ligi — Matchday {matchday} FINAL Performans · 5/5/3/0'),
+            ('season', season_image, '📊 Şampiyonlar Ligi — Sezon Genel Performans · 5/5/3/0')]:
+            if snapshot['delivery'][part] == 'SENT' or not TELEGRAM_ENABLED:
+                continue
+            snapshot['delivery'][part] = 'UNCERTAIN'
+            _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
+            send_photo(image, caption)
+            snapshot['delivery'][part] = 'SENT'
+            _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
         finalized_any = True
         print(f"✅ Matchday {matchday} FINAL raporu hazırlandı ve gönderildi.")
-
-    if matchday_1_real_test:
-        if not finalized_any:
-            print("⚠️ Matchday 1 gerçek veri testi için FINAL rapor üretilemedi.")
-        print("🏁 Matchday 1 gerçek veri testi tamamlandı; production arşiv/state değiştirilmedi.")
-        return 0
 
     # Rebuild season file even when no new matchday finalized, so the local archive is consistent.
     season = build_season_snapshot(weekly_reports)

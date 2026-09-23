@@ -30,7 +30,7 @@ def _decode_github_contents(payload: dict[str, Any]) -> dict[str, Any]:
 def load_prediction_archive() -> dict[str, Any]:
     url = f"https://api.github.com/repos/{PREDICTION_REPO}/contents/{PREDICTION_FILE}"
     params = {"ref": PREDICTION_BRANCH}
-    headers = {"Accept": "application/vnd.github+json"}
+    headers = {"Accept": "application/vnd.github.raw+json"}
     if PREDICTION_REPO_TOKEN:
         headers["Authorization"] = f"Bearer {PREDICTION_REPO_TOKEN}"
 
@@ -46,4 +46,11 @@ def load_prediction_archive() -> dict[str, Any]:
             "Private repo için Contents: Read yetkili PREDICTION_REPO_TOKEN kullanın."
         )
     response.raise_for_status()
-    return _decode_github_contents(response.json())
+    try:
+        archive = response.json()
+    except ValueError:
+        raise SourceLoadError('Prediction archive is not valid JSON.') from None
+    if not isinstance(archive, dict):
+        raise SourceLoadError('Prediction archive must be a JSON object.')
+    # Raw media type avoids the base64 Contents API size limit.
+    return archive

@@ -20,11 +20,13 @@ def send_photo(path: Path, caption: str) -> None:
         print(f"ℹ️ Telegram kapalı; gönderim atlandı: {path}")
         return
     _check()
-    with path.open("rb") as photo:
-        response = requests.post(
-            f"https://api.telegram.org/bot{ANALYSIS_TELEGRAM_BOT_TOKEN}/sendPhoto",
-            data={"chat_id": ANALYSIS_TELEGRAM_CHAT_ID, "caption": caption},
-            files={"photo": photo},
-            timeout=REQUEST_TIMEOUT,
-        )
-    response.raise_for_status()
+    try:
+        with path.open("rb") as photo:
+            response = requests.post(
+                f"https://api.telegram.org/bot{ANALYSIS_TELEGRAM_BOT_TOKEN}/sendPhoto",
+                data={"chat_id": ANALYSIS_TELEGRAM_CHAT_ID, "caption": caption},
+                files={"photo": photo}, timeout=REQUEST_TIMEOUT)
+        if not response.ok or not response.json().get('ok'):
+            raise RuntimeError('Telegram report delivery failed; credential redacted.')
+    except (requests.RequestException, ValueError):
+        raise RuntimeError('Telegram connection failed; credential redacted.') from None
