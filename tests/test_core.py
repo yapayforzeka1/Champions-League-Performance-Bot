@@ -1,8 +1,6 @@
 import unittest
-from datetime import datetime, timezone
-
 from consensus_engine import build_consensus
-from performance_engine import grade_record, matchday_report_due, matchday_resolution, score_points
+from performance_engine import grade_record, matchday_resolution, score_points
 
 
 def vote(model, score, success=True):
@@ -21,25 +19,26 @@ class CoreTests(unittest.TestCase):
         c = build_consensus([vote("a", "2-1"), vote("b", "2-1"), vote("c", "1-1"), vote("d", "1-2"), vote("e", "2-0")])
         self.assertEqual(c["consensus_mode"], "OUTCOME_COMMON_SCORE_SPLIT"); self.assertEqual(c["outcome"], "HOME"); self.assertIsNone(c["score"])
 
-    def test_new_scoring(self):
-        self.assertEqual(score_points("3-1", "HOME", 3, 1)[0], 6)
-        self.assertEqual(score_points("2-0", "HOME", 3, 1)[0], 5)
-        self.assertEqual(score_points("1-0", "HOME", 3, 1)[0], 2)
-        self.assertEqual(score_points("0-0", "DRAW", 2, 2)[0], 3)
+    def test_performance_scoring(self):
+        self.assertEqual(score_points("3-1", "HOME", 3, 1)[0], 5)
+        self.assertEqual(score_points("2-0", "HOME", 3, 1)[0], 3)
+        self.assertEqual(score_points("1-0", "HOME", 3, 1)[0], 3)
+        self.assertEqual(score_points("0-0", "DRAW", 2, 2)[0], 5)
         self.assertEqual(score_points("1-1", "DRAW", 3, 1)[0], 0)
 
     def test_individual_scored_without_consensus(self):
         r={"match_id":"1","matchday":1,"ai_votes":[vote("a","3-1"),vote("b","1-1"),vote("c","0-1",False)]}
-        g=grade_record(r,3,1); self.assertEqual(g["ai_votes"][0]["points"],6); self.assertEqual(g["ai_votes"][1]["points"],0); self.assertIsNone(g["consensus_points"])
+        g=grade_record(r,3,1); self.assertEqual(g["ai_votes"][0]["points"],5); self.assertEqual(g["ai_votes"][1]["points"],0); self.assertIsNone(g["consensus_points"])
 
     def test_no_prediction_is_unavailable_not_zero(self):
         fixtures=[{"id":1,"status":"FINISHED","homeTeam":{"name":"A"},"awayTeam":{"name":"B"}},{"id":2,"status":"SCHEDULED","homeTeam":{"name":"C"},"awayTeam":{"name":"D"}}]
         r=matchday_resolution(fixtures,{"1":{"actual":{"home":1,"away":0}}}); self.assertFalse(r["final"]); self.assertEqual(r["evaluated_matches"],1); self.assertEqual(r["pending_matches"],1)
 
-    def test_report_due_one_hour_after_last_planned_kickoff(self):
-        fixtures=[{"utcDate":"2026-09-16T19:00:00Z"},{"utcDate":"2026-09-16T20:00:00Z"}]
-        self.assertFalse(matchday_report_due(fixtures,datetime(2026,9,16,20,59,tzinfo=timezone.utc)))
-        self.assertTrue(matchday_report_due(fixtures,datetime(2026,9,16,21,0,tzinfo=timezone.utc)))
+    def test_matchday_final_when_all_resolved(self):
+        fixtures=[{"id":1,"status":"FINISHED","homeTeam":{"name":"A"},"awayTeam":{"name":"B"}}]
+        result=matchday_resolution(fixtures,{"1":{"actual":{"home":1,"away":0}}})
+        self.assertTrue(result["final"])
+        self.assertEqual(result["evaluated_matches"],1)
 
 
 if __name__ == "__main__": unittest.main()
