@@ -38,9 +38,6 @@ def _prepare_render_records(snapshot: dict, predictions: dict) -> dict:
         record = predictions.get(str(row["match_id"]))
         if record:
             display_record = copy.deepcopy(record)
-            for vote in display_record.get('ai_votes', []):
-                if vote.get('model') == 'Groq Qwen 3.8 27B':
-                    vote['model'] = 'Groq Qwen 3.6 27B'  # Existing QWEN display column; source model_id stays intact.
             rows.append(display_record)
     snapshot["render_records"] = rows
     return snapshot
@@ -93,7 +90,7 @@ def main() -> int:
         # Keep per-matchday points in season image data for visual weekly columns.
         for model in season["models"]:
             season["models"][model]["week_points"] = {
-                str(md): int(weekly_reports[str(md)]["stats"]["models"][model]["points"])
+                str(md): int(weekly_reports[str(md)]["stats"]["models"].get(model, {}).get("points", 0))
                 for md in season["finalized_matchdays"]
             }
         season["consensus"]["week_points"] = {
@@ -120,7 +117,7 @@ def main() -> int:
     season = build_season_snapshot(weekly_reports)
     for model in season["models"]:
         season["models"][model]["week_points"] = {
-            str(md): int(weekly_reports[str(md)]["stats"]["models"][model]["points"])
+            str(md): int(weekly_reports[str(md)]["stats"]["models"].get(model, {}).get("points", 0))
             for md in season["finalized_matchdays"]
         }
     season["consensus"]["week_points"] = {

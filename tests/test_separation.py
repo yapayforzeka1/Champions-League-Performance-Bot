@@ -12,8 +12,10 @@ class SeparationTests(unittest.TestCase):
         self.assertEqual(records,original)
         self.assertEqual(graded['1']['ai_votes'][0]['points'],5)
         stats=build_weekly_stats(graded,1)['models']
-        self.assertEqual(stats['Groq Qwen 3.6 27B']['successful_predictions'],1)
-        self.assertEqual(stats['Groq Qwen 3.6 27B']['points'],5)
+        self.assertEqual(stats['Groq Qwen 3.6 27B']['successful_predictions'],0)
+        self.assertEqual(stats['Groq Qwen 3.8 27B']['successful_predictions'],1)
+        self.assertEqual(stats['Groq Qwen 3.6 27B']['points'],0)
+        self.assertEqual(stats['Groq Qwen 3.8 27B']['points'],5)
     def test_extra_time_not_graded_as_regular(self):
         records={'1':{'matchday':1,'ai_votes':[]}}
         graded=merge_latest_results(records,{'1':{'status':'FINISHED','score':{'duration':'EXTRA_TIME','fullTime':{'home':3,'away':2}}}})
@@ -65,3 +67,49 @@ class SourceTests(unittest.TestCase):
         with patch.object(source_loader.requests,'get',return_value=response) as get:
             self.assertEqual(source_loader.load_prediction_archive(),data)
             self.assertEqual(get.call_args.kwargs['headers']['Accept'],'application/vnd.github.raw+json')
+
+
+class ModelVersionTests(unittest.TestCase):
+    def test_qwen_versions_and_cloudflare_are_separate(self):
+        from performance_engine import grade_record, build_weekly_stats, build_season_snapshot
+        names=['Groq Qwen 3.6 27B','Groq Qwen 3.8 27B','Cloudflare Clef-omni','Mistral Small Latest']
+        rec={'matchday':2,'ai_votes':[{'model':m,'success':True,'result':{'score':'2-1','outcome':'HOME'}} for m in names]}
+        graded=grade_record(rec,2,1)
+        stats=build_weekly_stats({'x':graded},2)['models']
+        for name in names:
+            self.assertEqual(stats[name]['points'],5)
+            self.assertEqual(stats[name]['point_distribution']['5'],1)
+        self.assertEqual(len({name for name in names if stats[name]['points']==5}),4)
+        old={'status':'FINAL','stats':{'models':{'Groq Qwen 3.6 27B':{'points':12,'successful_predictions':3}},'consensus':{}}}
+        new={'status':'FINAL','stats':{'models':stats,'consensus':{}}}
+        season=build_season_snapshot({'1':old,'2':new})
+        self.assertEqual(season['models']['Groq Qwen 3.6 27B']['points'],17)
+        self.assertEqual(season['models']['Groq Qwen 3.8 27B']['points'],5)
+        self.assertEqual(season['models']['Cloudflare Clef-omni']['points'],5)
+
+    def test_report_percent_uses_five_point_maximum(self):
+        from weekly_report import _model_row
+        self.assertEqual(_model_row('Groq Qwen 3.8 27B',{'points':5,'successful_predictions':1})['pct'],100)
+
+class CurrentReportVisibilityTests(unittest.TestCase):
+    def test_retired_models_not_in_new_report_tables(self):
+        from weekly_report import _display_models, _summary_rows
+        record = {'ai_votes': [
+            {'model': 'Mistral Small Latest', 'success': True},
+            {'model': 'Groq Qwen 3.6 27B', 'success': True},
+            {'model': 'Groq Qwen 3.8 27B', 'success': True},
+            {'model': 'Cloudflare Clef-omni', 'success': False},
+        ]}
+        displayed = _display_models([record])
+        self.assertIn('Groq Qwen 3.8 27B', displayed)
+        self.assertIn('Cloudflare Clef-omni', displayed)
+        self.assertNotIn('Groq Qwen 3.6 27B', displayed)
+        self.assertNotIn('Mistral Small Latest', displayed)
+        stats = {'models': {
+            name: {'successful_predictions': 1, 'points': 5}
+            for name in ['Mistral Small Latest', 'Groq Qwen 3.6 27B', 'Groq Qwen 3.8 27B']
+        }, 'consensus': {}}
+        names = [row['name'] for row in _summary_rows(stats)]
+        self.assertNotIn('Mistral Small Latest', names)
+        self.assertNotIn('Groq Qwen 3.6 27B', names)
+        self.assertIn('Groq Qwen 3.8 27B', names)

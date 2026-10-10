@@ -81,6 +81,7 @@ def merge_latest_results(predictions: dict[str, Any], status_map: dict[str, dict
     for key, record in predictions.items():
         item = copy.deepcopy(record)
         match = status_map.get(str(key))
+        graded_from_provider = False
         if match:
             status = str(match.get("status", "")).upper()
             raw_score = match.get('score') or {}
@@ -91,9 +92,10 @@ def merge_latest_results(predictions: dict[str, Any], status_map: dict[str, dict
             away = score.get("away")
             if status == "FINISHED" and home is not None and away is not None:
                 item = grade_record(item, int(home), int(away), status)
+                graded_from_provider = True
         # Re-evaluate a private copy under this project's unchanged 5/5/3/0 rules.
         # Never mix source 6/5/3/2/0 grades into a Performance report.
-        if item.get('actual'):
+        if not graded_from_provider and item.get('actual'):
             actual = item['actual']
             if actual.get('scope') == 'REGULAR_90' and actual.get('home') is not None and actual.get('away') is not None:
                 item = grade_record(item, int(actual['home']), int(actual['away']), 'FINISHED')
@@ -140,6 +142,21 @@ def matchday_resolution(fixtures: list[dict[str, Any]], predictions: dict[str, A
     }
 
 
+def _model_identity(vote: dict[str, Any]) -> str | None:
+    """Keep Qwen API versions distinct, even if a display label is stale.
+
+    Older archived votes lack model_id, so their historical display name is
+    deliberately retained instead of inferring a newer version.
+    """
+    result = vote.get("result")
+    model_id = str(result.get("model_id") or "") if isinstance(result, dict) else ""
+    if model_id == "qwen/qwen3.8-27b":
+        return "Groq Qwen 3.8 27B"
+    if model_id == "qwen/qwen3.6-27b":
+        return "Groq Qwen 3.6 27B"
+    return vote.get("model")
+
+
 def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, Any]:
     model_stats = {
         model: {
@@ -151,6 +168,7 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
             "outcome": 0,
             "avg": 0,
             "coverage_pct": 0,
+            "point_distribution": {"5": 0, "3": 0, "0": 0},
         }
         for model in MODEL_ORDER
     }
@@ -183,17 +201,19 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
 
         for model in MODEL_ORDER:
             item = model_stats[model]
-            item["prediction_opportunities"] += 1
-            votes = [v for v in record.get("ai_votes", []) if ("Groq Qwen 3.6 27B" if v.get("model") == "Groq Qwen 3.8 27B" else v.get("model")) == model]
+            votes = [v for v in record.get("ai_votes", []) if _model_identity(v) == model]
+            # A model absent from this matchday's active pool had no opportunity.
+            # A recorded unsuccessful vote still counts as a failed attempt.
             if not votes:
-                item["failed_predictions"] += 1
                 continue
+            item["prediction_opportunities"] += 1
             vote = votes[0]
             if not vote.get("success") or vote.get("points") is None:
                 item["failed_predictions"] += 1
                 continue
             item["successful_predictions"] += 1
             item["points"] += int(vote.get("points") or 0)
+            item["point_distribution"][str(int(vote.get("points") or 0))] += 1
             item["exact"] += int(bool(vote.get("exact_score_correct")))
             item["outcome"] += int(bool(vote.get("outcome_correct")))
 
@@ -236,6 +256,7 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
             "exact": 0,
             "outcome": 0,
             "avg": 0,
+            "point_distribution": {"5": 0, "3": 0, "0": 0},
         }
         for model in MODEL_ORDER
     }
@@ -248,9 +269,12 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
         for model in MODEL_ORDER:
             src = stats.get("models", {}).get(model, {})
             dst = totals[model]
-            dst["matchdays"] += 1
+            if src and (int(src.get("successful_predictions") or 0) + int(src.get("failed_predictions") or 0)) > 0:
+                dst["matchdays"] += 1
             for field in ("points", "successful_predictions", "failed_predictions", "exact", "outcome"):
                 dst[field] += int(src.get(field, 0))
+            for points in ("5", "3", "0"):
+                dst["point_distribution"][points] += int(src.get("point_distribution", {}).get(points, 0))
         c = stats.get("consensus", {})
         consensus["matchdays"] += 1
         for field in ("matches", "points", "exact", "outcome", "no_consensus", "score_split"):
