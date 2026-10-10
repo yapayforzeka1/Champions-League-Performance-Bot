@@ -75,6 +75,43 @@ def grade_record(record: dict[str, Any], actual_home: int, actual_away: int, act
     return evaluated
 
 
+def _provider_regular_score(match: dict[str, Any]) -> tuple[int, int] | None:
+    """Use only an available, verified 90-minute score from the result provider."""
+    if str(match.get("status", "")).upper() != "FINISHED":
+        return None
+    raw = match.get("score") or {}
+    if not isinstance(raw, dict):
+        return None
+    score = raw.get("regularTime") or {}
+    if not score and str(raw.get("duration", "")).upper() == "REGULAR":
+        score = raw.get("fullTime") or {}
+    if not isinstance(score, dict):
+        return None
+    home, away = score.get("home"), score.get("away")
+    if home is None or away is None:
+        return None
+    try:
+        home, away = int(home), int(away)
+    except (TypeError, ValueError):
+        return None
+    if home < 0 or away < 0:
+        return None
+    return home, away
+
+
+def _has_usable_prediction(record: dict[str, Any] | None) -> bool:
+    """A missing/failed AL vote is not a result still waiting to be graded."""
+    if not isinstance(record, dict):
+        return False
+    for vote in record.get("ai_votes") or []:
+        if not isinstance(vote, dict) or not vote.get("success"):
+            continue
+        result = vote.get("result")
+        if isinstance(result, dict) and (result.get("score") or result.get("outcome")):
+            return True
+    return False
+
+
 def merge_latest_results(predictions: dict[str, Any], status_map: dict[str, dict[str, Any]]) -> dict[str, Any]:
     """Grade every archived prediction that has a terminal real result."""
     result: dict[str, Any] = {}
@@ -83,15 +120,9 @@ def merge_latest_results(predictions: dict[str, Any], status_map: dict[str, dict
         match = status_map.get(str(key))
         graded_from_provider = False
         if match:
-            status = str(match.get("status", "")).upper()
-            raw_score = match.get('score') or {}
-            score = raw_score.get('regularTime') or {}
-            if not score and raw_score.get('duration') == 'REGULAR':
-                score = raw_score.get('fullTime') or {}
-            home = score.get("home")
-            away = score.get("away")
-            if status == "FINISHED" and home is not None and away is not None:
-                item = grade_record(item, int(home), int(away), status)
+            official_score = _provider_regular_score(match)
+            if official_score is not None:
+                item = grade_record(item, *official_score, "FINISHED")
                 graded_from_provider = True
         # Re-evaluate a private copy under this project's unchanged 5/5/3/0 rules.
         # Never mix source 6/5/3/2/0 grades into a Performance report.
@@ -105,10 +136,14 @@ def merge_latest_results(predictions: dict[str, Any], status_map: dict[str, dict
 
 def _resolved_fixture_status(match: dict[str, Any], prediction: dict[str, Any] | None) -> str:
     status = str(match.get("status", "")).upper()
-    if status == "FINISHED" and prediction and prediction.get("actual"):
-        return "EVALUATED"
     if status == "FINISHED":
-        return "UNAVAILABLE"
+        if not _has_usable_prediction(prediction):
+            return "UNAVAILABLE"
+        # An archived `actual` may come from the prediction repository. It is
+        # not proof that the result provider has supplied a 90-minute score.
+        if _provider_regular_score(match) is None or not prediction.get("actual"):
+            return "PENDING"
+        return "EVALUATED"
     if status in TERMINAL_STATUSES:
         return status
     return "PENDING"
@@ -122,14 +157,20 @@ def matchday_resolution(fixtures: list[dict[str, Any]], predictions: dict[str, A
         prediction = predictions.get(mid)
         status = _resolved_fixture_status(match, prediction)
         counts[status] += 1
-        rows.append({
+        row = {
             "match_id": mid,
             "home": (match.get("homeTeam") or {}).get("name", "?"),
             "away": (match.get("awayTeam") or {}).get("name", "?"),
             "utcDate": match.get("utcDate"),
             "status": status,
             "provider_status": match.get("status"),
-        })
+        }
+        # New snapshots retain official scores for *future* read-only drift
+        # checks. Previously finalized reports are never backfilled or edited.
+        if status == "EVALUATED":
+            home, away = _provider_regular_score(match)
+            row["verified_score"] = {"home": home, "away": away}
+        rows.append(row)
     pending = counts["PENDING"]
     return {
         "final": pending == 0,

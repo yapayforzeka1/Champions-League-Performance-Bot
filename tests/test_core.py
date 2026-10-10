@@ -31,12 +31,16 @@ class CoreTests(unittest.TestCase):
         g=grade_record(r,3,1); self.assertEqual(g["ai_votes"][0]["points"],5); self.assertEqual(g["ai_votes"][1]["points"],0); self.assertIsNone(g["consensus_points"])
 
     def test_no_prediction_is_unavailable_not_zero(self):
-        fixtures=[{"id":1,"status":"FINISHED","homeTeam":{"name":"A"},"awayTeam":{"name":"B"}},{"id":2,"status":"SCHEDULED","homeTeam":{"name":"C"},"awayTeam":{"name":"D"}}]
-        r=matchday_resolution(fixtures,{"1":{"actual":{"home":1,"away":0}}}); self.assertFalse(r["final"]); self.assertEqual(r["evaluated_matches"],1); self.assertEqual(r["pending_matches"],1)
+        fixtures=[{"id":1,"status":"FINISHED","homeTeam":{"name":"A"},"awayTeam":{"name":"B"},
+                   "score":{"duration":"REGULAR","fullTime":{"home":1,"away":0}}},
+                  {"id":2,"status":"SCHEDULED","homeTeam":{"name":"C"},"awayTeam":{"name":"D"}}]
+        r=matchday_resolution(fixtures,{"1":{"actual":{"home":1,"away":0},"ai_votes":[vote("a","1-0")]}})
+        self.assertFalse(r["final"]); self.assertEqual(r["evaluated_matches"],1); self.assertEqual(r["pending_matches"],1)
 
     def test_matchday_final_when_all_resolved(self):
-        fixtures=[{"id":1,"status":"FINISHED","homeTeam":{"name":"A"},"awayTeam":{"name":"B"}}]
-        result=matchday_resolution(fixtures,{"1":{"actual":{"home":1,"away":0}}})
+        fixtures=[{"id":1,"status":"FINISHED","homeTeam":{"name":"A"},"awayTeam":{"name":"B"},
+                   "score":{"duration":"REGULAR","fullTime":{"home":1,"away":0}}}]
+        result=matchday_resolution(fixtures,{"1":{"actual":{"home":1,"away":0},"ai_votes":[vote("a","1-0")]}})
         self.assertTrue(result["final"])
         self.assertEqual(result["evaluated_matches"],1)
 

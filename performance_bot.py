@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from config import SEASON, TELEGRAM_ENABLED, DATA_DIR, SEASON_PERFORMANCE_FILE, WEEKLY_REPORTS_FILE
-from performance_engine import build_season_snapshot, build_weekly_snapshot, matchday_resolution, merge_latest_results
+from performance_engine import _provider_regular_score, build_season_snapshot, build_weekly_snapshot, matchday_resolution, merge_latest_results
 from result_provider import FootballDataResultProvider, ResultProviderError
 from source_loader import SourceLoadError, load_prediction_archive
 from telegram_report import send_photo
@@ -43,6 +43,41 @@ def _prepare_render_records(snapshot: dict, predictions: dict) -> dict:
     return snapshot
 
 
+def _warn_if_final_changed(previous: dict, fixtures: list[dict], resolution: dict) -> None:
+    """Diagnose changes without modifying or re-sending any FINAL report.
+
+    Old snapshots did not store match scores, so score changes in those
+    snapshots cannot be reliably reconstructed. Their status changes can
+    still be reported. New snapshots store `verified_score` per graded match.
+    """
+    current_rows = {str(row["match_id"]): row for row in resolution.get("matches", [])}
+    provider_rows = {str(match.get("id")): match for match in fixtures}
+    differences = []
+    for old in previous.get("matches") or []:
+        mid = str(old.get("match_id"))
+        latest = current_rows.get(mid)
+        if latest is None:
+            differences.append(f"{mid}: fixture missing")
+            continue
+        if old.get("status") != latest.get("status"):
+            differences.append(f"{mid}: status {old.get('status')} -> {latest.get('status')}")
+        saved_score = old.get("verified_score")
+        if saved_score is not None:
+            current_score = _provider_regular_score(provider_rows[mid])
+            if current_score is None or (
+                saved_score.get("home"), saved_score.get("away")
+            ) != current_score:
+                differences.append(f"{mid}: official 90-minute score changed or missing")
+    old_ids = {str(row.get("match_id")) for row in previous.get("matches") or []}
+    for mid in current_rows.keys() - old_ids:
+        differences.append(f"{mid}: new fixture")
+    if differences:
+        md = previous.get("matchday", "?")
+        print(f"⚠️ Matchday {md}: existing FINAL differs from current provider data; "
+              f"manual review required ({'; '.join(sorted(set(differences)))}). "
+              "Archive preserved; Telegram not resent.")
+
+
 def main() -> int:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     weekly_reports = _load_json(WEEKLY_REPORTS_FILE, {})
@@ -60,24 +95,26 @@ def main() -> int:
     status_map = {str(m.get("id")): m for rows in by_matchday.values() for m in rows if m.get("id") is not None}
     graded = merge_latest_results(predictions, status_map)
 
-    finalized_any = False
     for matchday, fixtures in sorted(by_matchday.items()):
         if not fixtures:
             continue
         resolution = matchday_resolution(fixtures, graded)
         key = str(matchday)
+        previous = weekly_reports.get(key)
+        if previous and previous.get("status") == "FINAL":
+            # Never revise historic FINAL receipts, scores, or delivery state.
+            # Diagnostics are read-only and cannot trigger a second Telegram.
+            _warn_if_final_changed(previous, fixtures, resolution)
+            delivery = previous.get("delivery")
+            if isinstance(delivery, dict) and any(
+                delivery.get(part) != "SENT" for part in ("weekly", "season")
+            ):
+                print(f"⚠️ Matchday {matchday}: incomplete/uncertain prior FINAL delivery; "
+                      "manual review required; no automatic resend.")
+            continue
         if not resolution["final"]:
             print(f"⏳ Matchday {matchday}: PENDING ({resolution['pending_matches']} maç çözülmedi).")
             continue
-        previous = weekly_reports.get(key)
-        if previous and previous.get('status') == 'FINAL':
-            # Legacy FINAL receipts are preserved without automatic resending.
-            delivery = previous.get('delivery')
-            if delivery is None or all(delivery.get(k) == 'SENT' for k in ('weekly','season')):
-                continue
-            if any(value == 'UNCERTAIN' for value in delivery.values()):
-                print(f'Matchday {matchday}: ambiguous delivery; manual review needed.')
-                continue
 
         snapshot = previous or build_weekly_snapshot(graded, matchday, resolution)
         snapshot.setdefault('delivery', {'weekly':'PENDING','season':'PENDING'})
@@ -110,21 +147,7 @@ def main() -> int:
             send_photo(image, caption)
             snapshot['delivery'][part] = 'SENT'
             _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
-        finalized_any = True
         print(f"✅ Matchday {matchday} FINAL raporu hazırlandı ve gönderildi.")
-
-    # Rebuild season file even when no new matchday finalized, so the local archive is consistent.
-    season = build_season_snapshot(weekly_reports)
-    for model in season["models"]:
-        season["models"][model]["week_points"] = {
-            str(md): int(weekly_reports[str(md)]["stats"]["models"].get(model, {}).get("points", 0))
-            for md in season["finalized_matchdays"]
-        }
-    season["consensus"]["week_points"] = {
-        str(md): int(weekly_reports[str(md)]["stats"]["consensus"]["points"])
-        for md in season["finalized_matchdays"]
-    }
-    _save_json(SEASON_PERFORMANCE_FILE, season)
 
     print("🏁 Performance Bot tamamlandı.")
     return 0
