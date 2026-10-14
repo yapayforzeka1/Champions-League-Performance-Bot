@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 from typing import Any
 
 from config import MODEL_ORDER, SEASON, TERMINAL_STATUSES
-from consensus_engine import build_consensus
 
 
 def actual_outcome(home: int, away: int) -> str:
@@ -41,11 +40,29 @@ def score_points(predicted_score: str | None, predicted_outcome: str | None,
     return (4, False, True) if outcome == actual else (0, False, False)
 
 
+def archived_consensus(record: dict[str, Any]) -> dict[str, Any]:
+    """Use the already recorded pre-match decision; never re-vote after kickoff.
+
+    A sent prediction has a separate frozen published receipt. When present it
+    is authoritative if a later evaluation has drifted the mutable consensus.
+    Missing consensus is genuinely missing, not permission to infer one.
+    """
+    published = record.get("published_consensus")
+    stored = record.get("consensus")
+    if record.get("final_sent") and isinstance(published, dict):
+        return published
+    if isinstance(stored, dict):
+        return stored
+    if isinstance(published, dict):
+        return published
+    return {}
+
+
 def grade_record(record: dict[str, Any], actual_home: int, actual_away: int, actual_status: str = "FINISHED") -> dict[str, Any]:
     record = copy.deepcopy(record)
     actual = {"home": actual_home, "away": actual_away, "status": actual_status}
     votes = record.get("ai_votes", []) or []
-    consensus = build_consensus(votes)
+    consensus = archived_consensus(record)
 
     for vote in votes:
         vote["points"] = None
@@ -71,7 +88,7 @@ def grade_record(record: dict[str, Any], actual_home: int, actual_away: int, act
     c_points = None
     c_exact = False
     c_outcome = False
-    if consensus.get("winner_consensus"):
+    if consensus.get("winner_consensus") and consensus.get("outcome") in ("HOME", "AWAY", "DRAW"):
         c_points, c_exact, c_outcome = score_points(
             consensus.get("score") if consensus.get("score_consensus") else None,
             consensus.get("outcome"),
@@ -81,7 +98,8 @@ def grade_record(record: dict[str, Any], actual_home: int, actual_away: int, act
 
     evaluated = dict(record)
     evaluated["actual"] = actual
-    evaluated["consensus"] = consensus
+    # Never rewrite archived pre-match predictions or consensus metadata.
+    # Report statistics read the authoritative frozen decision separately.
     evaluated["consensus_points"] = c_points
     evaluated["consensus_exact_score_correct"] = c_exact
     evaluated["consensus_outcome_correct"] = c_outcome
@@ -242,8 +260,8 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
     records = [r for r in predictions.values() if int(r.get("matchday") or 0) == int(matchday) and r.get("actual")]
     for record in records:
         consensus["evaluated_matches"] += 1
-        c = record.get("consensus") or build_consensus(record.get("ai_votes", []))
-        if c.get("winner_consensus"):
+        c = archived_consensus(record)
+        if c.get("winner_consensus") and record.get("consensus_points") is not None:
             consensus["matches"] += 1
             if record.get("consensus_points") is not None:
                 consensus["points"] += int(record["consensus_points"])

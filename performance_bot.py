@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from config import SEASON, TELEGRAM_ENABLED, DATA_DIR, SEASON_PERFORMANCE_FILE, WEEKLY_REPORTS_FILE
-from performance_engine import _provider_regular_score, build_season_snapshot, build_weekly_snapshot, matchday_resolution, merge_latest_results
+from performance_engine import _provider_regular_score, archived_consensus, build_season_snapshot, build_weekly_snapshot, matchday_resolution, merge_latest_results
 from result_provider import FootballDataResultProvider, ResultProviderError
 from source_loader import SourceLoadError, load_prediction_archive
 from telegram_report import send_photo
@@ -38,6 +38,8 @@ def _prepare_render_records(snapshot: dict, predictions: dict) -> dict:
         record = predictions.get(str(row["match_id"]))
         if record:
             display_record = copy.deepcopy(record)
+            # Render the original published pre-match decision, never a post-hoc vote.
+            display_record["consensus"] = copy.deepcopy(archived_consensus(record))
             rows.append(display_record)
     snapshot["render_records"] = rows
     return snapshot
