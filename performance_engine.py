@@ -17,18 +17,28 @@ def actual_outcome(home: int, away: int) -> str:
     return "DRAW"
 
 
-def score_points(predicted_score: str | None, predicted_outcome: str | None, actual_home: int, actual_away: int) -> tuple[int, bool, bool]:
+SCORING_RULE = "kicktipp:8-6-4-0:REGULAR_90:v1"
+POINT_DISTRIBUTION = {"8": 0, "6": 0, "4": 0, "0": 0}
+
+
+def score_points(predicted_score: str | None, predicted_outcome: str | None,
+                 actual_home: int, actual_away: int) -> tuple[int, bool, bool]:
+    """Kicktipp match points; no common score means outcome-only (max 4)."""
+    import re
+    match = re.fullmatch(r"\s*(\d{1,2})\s*-\s*(\d{1,2})\s*", str(predicted_score or ""))
     actual = actual_outcome(actual_home, actual_away)
-    score = str(predicted_score or "").replace(" ", "")
-    exact = score == f"{actual_home}-{actual_away}"
-    if exact:
-        return 5, True, True
+    if match:
+        ph, pa = map(int, match.groups())
+        predicted = actual_outcome(ph, pa)
+        exact = (ph, pa) == (actual_home, actual_away)
+        if exact:
+            return 8, True, True
+        if predicted != actual:
+            return 0, False, False
+        return (6 if ph - pa == actual_home - actual_away else 4), False, True
+    # Only consensus may legitimately have an outcome without an agreed score.
     outcome = str(predicted_outcome or "").upper()
-    if outcome == "DRAW" and actual == "DRAW":
-        return 5, False, True
-    if outcome == actual:
-        return 3, False, True
-    return 0, False, False
+    return (4, False, True) if outcome == actual else (0, False, False)
 
 
 def grade_record(record: dict[str, Any], actual_home: int, actual_away: int, actual_status: str = "FINISHED") -> dict[str, Any]:
@@ -42,6 +52,11 @@ def grade_record(record: dict[str, Any], actual_home: int, actual_away: int, act
         vote["exact_score_correct"] = False
         vote["outcome_correct"] = False
         if not vote.get("success") or not isinstance(vote.get("result"), dict):
+            continue
+        # A valid individual score is required; no-score/failed responses
+        # reduce coverage rather than being counted as incorrect predictions.
+        import re
+        if not re.fullmatch(r"\s*\d{1,2}\s*-\s*\d{1,2}\s*", str(vote["result"].get("score") or "")):
             continue
         points, exact, outcome_correct = score_points(
             vote["result"].get("score"),
@@ -124,8 +139,8 @@ def merge_latest_results(predictions: dict[str, Any], status_map: dict[str, dict
             if official_score is not None:
                 item = grade_record(item, *official_score, "FINISHED")
                 graded_from_provider = True
-        # Re-evaluate a private copy under this project's unchanged 5/5/3/0 rules.
-        # Never mix source 6/5/3/2/0 grades into a Performance report.
+        # Re-evaluate a private copy under the same Kicktipp rules as the source.
+        # Never trust stored old-version points from a prediction archive.
         if not graded_from_provider and item.get('actual'):
             actual = item['actual']
             if actual.get('scope') == 'REGULAR_90' and actual.get('home') is not None and actual.get('away') is not None:
@@ -209,7 +224,7 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
             "outcome": 0,
             "avg": 0,
             "coverage_pct": 0,
-            "point_distribution": {"5": 0, "3": 0, "0": 0},
+            "point_distribution": dict(POINT_DISTRIBUTION),
         }
         for model in MODEL_ORDER
     }
@@ -272,7 +287,7 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
 def build_weekly_snapshot(predictions: dict[str, Any], matchday: int, resolution: dict[str, Any]) -> dict[str, Any]:
     now = datetime.now(timezone.utc).isoformat()
     return {
-        "scoring_rule": "performance:5-5-3-0",
+        "scoring_rule": SCORING_RULE,
         "season": SEASON,
         "matchday": int(matchday),
         "status": "FINAL",
@@ -283,7 +298,12 @@ def build_weekly_snapshot(predictions: dict[str, Any], matchday: int, resolution
         "postponed_matches": int(resolution["postponed_matches"]),
         "pending_matches": int(resolution["pending_matches"]),
         "matches": resolution["matches"],
-        "stats": build_weekly_stats(predictions, matchday),
+        # Only fixture IDs whose 90-minute scores were verified by the
+        # independent result provider may contribute to the FINAL statistics.
+        "stats": build_weekly_stats({mid: predictions[mid]
+                                     for mid in (str(row["match_id"]) for row in resolution["matches"]
+                                                 if row["status"] == "EVALUATED")
+                                     if mid in predictions}, matchday),
     }
 
 
@@ -297,7 +317,7 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
             "exact": 0,
             "outcome": 0,
             "avg": 0,
-            "point_distribution": {"5": 0, "3": 0, "0": 0},
+            "point_distribution": dict(POINT_DISTRIBUTION),
         }
         for model in MODEL_ORDER
     }
@@ -306,6 +326,8 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
     for key, report in sorted(weekly_reports.items(), key=lambda kv: int(kv[0])):
         if report.get("status") != "FINAL":
             continue
+        if report.get("scoring_rule") != SCORING_RULE:
+            raise ValueError(f"Mixed scoring versions prohibited for matchday {key}")
         stats = report.get("stats", {})
         for model in MODEL_ORDER:
             src = stats.get("models", {}).get(model, {})
@@ -314,7 +336,7 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
                 dst["matchdays"] += 1
             for field in ("points", "successful_predictions", "failed_predictions", "exact", "outcome"):
                 dst[field] += int(src.get(field, 0))
-            for points in ("5", "3", "0"):
+            for points in POINT_DISTRIBUTION:
                 dst["point_distribution"][points] += int(src.get("point_distribution", {}).get(points, 0))
         c = stats.get("consensus", {})
         consensus["matchdays"] += 1

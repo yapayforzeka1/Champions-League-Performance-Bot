@@ -21,8 +21,8 @@ TELEGRAM_ENABLED = os.getenv("TELEGRAM_ENABLED", "true").lower() in {"1", "true"
 
 DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
 REPORT_DIR = Path(os.getenv("REPORT_DIR", "reports"))
-WEEKLY_REPORTS_FILE = DATA_DIR / "weekly_reports.json"
-SEASON_PERFORMANCE_FILE = DATA_DIR / "season_performance.json"
+WEEKLY_REPORTS_FILE = DATA_DIR / "kicktipp_weekly_reports.json"
+SEASON_PERFORMANCE_FILE = DATA_DIR / "kicktipp_season_performance.json"
 PERFORMANCE_STATE_FILE = DATA_DIR / "performance_state.json"
 
 TERMINAL_STATUSES = {

@@ -81,6 +81,7 @@ def _warn_if_final_changed(previous: dict, fixtures: list[dict], resolution: dic
 def main() -> int:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     weekly_reports = _load_json(WEEKLY_REPORTS_FILE, {})
+    legacy_reports = _load_json(DATA_DIR / "weekly_reports.json", {})
     if any(v.get('season') not in {None, SEASON} for v in weekly_reports.values()):
         raise RuntimeError('Season mismatch: archive existing data and use a new DATA_DIR; no history overwritten.')
 
@@ -101,7 +102,11 @@ def main() -> int:
         resolution = matchday_resolution(fixtures, graded)
         key = str(matchday)
         previous = weekly_reports.get(key)
+        legacy_final = legacy_reports.get(key) if legacy_reports.get(key, {}).get("status") == "FINAL" else None
         if previous and previous.get("status") == "FINAL":
+            from performance_engine import SCORING_RULE
+            if previous.get("scoring_rule") not in (None, SCORING_RULE):
+                raise RuntimeError(f"Matchday {matchday}: active FINAL scoring version mismatch; manual review required")
             # Never revise historic FINAL receipts, scores, or delivery state.
             # Diagnostics are read-only and cannot trigger a second Telegram.
             _warn_if_final_changed(previous, fixtures, resolution)
@@ -116,7 +121,22 @@ def main() -> int:
             print(f"⏳ Matchday {matchday}: PENDING ({resolution['pending_matches']} maç çözülmedi).")
             continue
 
+        # An earlier FINAL belongs to the legacy 5/5/3/0 reporting system.
+        # Build the current view afresh from verified results and original votes,
+        # but NEVER overwrite/resent its historic Telegram FINAL receipt.
+        if legacy_final:
+            _warn_if_final_changed(legacy_final, fixtures, resolution)
+            old_scores = {str(m.get('match_id')): m.get('verified_score')
+                          for m in legacy_final.get('matches', []) if m.get('verified_score') is not None}
+            new_scores = {str(m.get('match_id')): m.get('verified_score')
+                          for m in resolution.get('matches', [])}
+            if any(new_scores.get(mid) != score for mid, score in old_scores.items()):
+                print(f"⚠️ Matchday {matchday}: eski FINAL ile doğrulanmış skor farkı var; manuel kontrol gerekli.")
+                continue
         snapshot = previous or build_weekly_snapshot(graded, matchday, resolution)
+        if legacy_final:
+            snapshot['migrated_from_legacy_final'] = True
+            snapshot['delivery'] = {'weekly': 'SENT', 'season': 'SENT'}
         snapshot.setdefault('delivery', {'weekly':'PENDING','season':'PENDING'})
         render_snapshot = _prepare_render_records(snapshot, graded)
         weekly_image = render_weekly_image(render_snapshot)
@@ -138,8 +158,8 @@ def main() -> int:
         season_image = render_season_image(season)
 
         for part, image, caption in [
-            ('weekly', weekly_image, f'🏆 Şampiyonlar Ligi — Matchday {matchday} FINAL Performans · 5/5/3/0'),
-            ('season', season_image, '📊 Şampiyonlar Ligi — Sezon Genel Performans · 5/5/3/0')]:
+            ('weekly', weekly_image, f'🏆 Şampiyonlar Ligi — Matchday {matchday} FINAL Performans · 8/6/4/0'),
+            ('season', season_image, '📊 Şampiyonlar Ligi — Sezon Genel Performans · 8/6/4/0')]:
             if snapshot['delivery'][part] == 'SENT' or not TELEGRAM_ENABLED:
                 continue
             snapshot['delivery'][part] = 'UNCERTAIN'
@@ -147,7 +167,10 @@ def main() -> int:
             send_photo(image, caption)
             snapshot['delivery'][part] = 'SENT'
             _save_json(WEEKLY_REPORTS_FILE, weekly_reports)
-        print(f"✅ Matchday {matchday} FINAL raporu hazırlandı ve gönderildi.")
+        if legacy_final:
+            print(f"✅ Matchday {matchday} Kicktipp puanlarına taşındı; eski FINAL yeniden gönderilmedi.")
+        else:
+            print(f"✅ Matchday {matchday} FINAL raporu hazırlandı.")
 
     print("🏁 Performance Bot tamamlandı.")
     return 0

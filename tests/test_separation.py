@@ -10,12 +10,12 @@ class SeparationTests(unittest.TestCase):
         original=copy.deepcopy(records)
         graded=merge_latest_results(records,{})
         self.assertEqual(records,original)
-        self.assertEqual(graded['1']['ai_votes'][0]['points'],5)
+        self.assertEqual(graded['1']['ai_votes'][0]['points'],8)
         stats=build_weekly_stats(graded,1)['models']
         self.assertEqual(stats['Groq Qwen 3.6 27B']['successful_predictions'],0)
         self.assertEqual(stats['Groq Qwen 3.8 27B']['successful_predictions'],1)
         self.assertEqual(stats['Groq Qwen 3.6 27B']['points'],0)
-        self.assertEqual(stats['Groq Qwen 3.8 27B']['points'],5)
+        self.assertEqual(stats['Groq Qwen 3.8 27B']['points'],8)
     def test_extra_time_not_graded_as_regular(self):
         records={'1':{'matchday':1,'ai_votes':[]}}
         graded=merge_latest_results(records,{'1':{'status':'FINISHED','score':{'duration':'EXTRA_TIME','fullTime':{'home':3,'away':2}}}})
@@ -58,6 +58,12 @@ class DeliveryTests(unittest.TestCase):
             self.assertEqual(path.read_text(),'{broken')
 
 
+class KicktippVersionTests(unittest.TestCase):
+    def test_season_rejects_legacy_scores(self):
+        from performance_engine import build_season_snapshot
+        with self.assertRaisesRegex(ValueError, 'Mixed scoring'):
+            build_season_snapshot({'1': {'status':'FINAL', 'scoring_rule':'performance:5-5-3-0', 'stats':{}}})
+
 class SourceTests(unittest.TestCase):
     def test_raw_archive_loading(self):
         from unittest.mock import patch, Mock
@@ -77,19 +83,19 @@ class ModelVersionTests(unittest.TestCase):
         graded=grade_record(rec,2,1)
         stats=build_weekly_stats({'x':graded},2)['models']
         for name in names:
-            self.assertEqual(stats[name]['points'],5)
-            self.assertEqual(stats[name]['point_distribution']['5'],1)
-        self.assertEqual(len({name for name in names if stats[name]['points']==5}),4)
-        old={'status':'FINAL','stats':{'models':{'Groq Qwen 3.6 27B':{'points':12,'successful_predictions':3}},'consensus':{}}}
-        new={'status':'FINAL','stats':{'models':stats,'consensus':{}}}
+            self.assertEqual(stats[name]['points'],8)
+            self.assertEqual(stats[name]['point_distribution']['8'],1)
+        self.assertEqual(len({name for name in names if stats[name]['points']==8}),4)
+        old={'status':'FINAL','scoring_rule':'kicktipp:8-6-4-0:REGULAR_90:v1','stats':{'models':{'Groq Qwen 3.6 27B':{'points':12,'successful_predictions':3}},'consensus':{}}}
+        new={'status':'FINAL','scoring_rule':'kicktipp:8-6-4-0:REGULAR_90:v1','stats':{'models':stats,'consensus':{}}}
         season=build_season_snapshot({'1':old,'2':new})
-        self.assertEqual(season['models']['Groq Qwen 3.6 27B']['points'],17)
-        self.assertEqual(season['models']['Groq Qwen 3.8 27B']['points'],5)
-        self.assertEqual(season['models']['Cloudflare Clef-omni']['points'],5)
+        self.assertEqual(season['models']['Groq Qwen 3.6 27B']['points'],20)
+        self.assertEqual(season['models']['Groq Qwen 3.8 27B']['points'],8)
+        self.assertEqual(season['models']['Cloudflare Clef-omni']['points'],8)
 
-    def test_report_percent_uses_five_point_maximum(self):
+    def test_report_percent_uses_eight_point_maximum(self):
         from weekly_report import _model_row
-        self.assertEqual(_model_row('Groq Qwen 3.8 27B',{'points':5,'successful_predictions':1})['pct'],100)
+        self.assertEqual(_model_row('Groq Qwen 3.8 27B',{'points':8,'successful_predictions':1})['pct'],100)
 
 class CurrentReportVisibilityTests(unittest.TestCase):
     def test_retired_models_not_in_new_report_tables(self):

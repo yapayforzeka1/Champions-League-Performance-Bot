@@ -5,12 +5,12 @@ GitHub yapayforzeka1/Champions-League-Performance-Bot erişimi 404 döndüğünd
 canlı deponun aynı sürümde olduğu doğrulanamadı. Canlı sürüm farklıysa bu yamayı
 üzerine yazmadan güncel kaynakla karşılaştırın.
 
-Kendi puanlama kuralı aynen korunur: tam skor 5; farklı skorla doğru beraberlik 5;
-diğer doğru sonuç 3; yanlış 0. Yanıtsız model puanı None, kapsama ayrı hesaplanır.
-Tahmin deposunun 6/5/3/2/0 puanları rapora karıştırılmaz; özel kopyada yeniden hesaplanır.
+Aktif ortak Kicktipp kuralı: tam skor 8; doğru 1-X-2 ve gol farkı 6
+(beraberlik dahil); diğer doğru 1-X-2 4; yanlış 0. Yanıtsız model puanı None, kapsama ayrı hesaplanır.
+Tahmin deposundaki eski sürüm puanlar kullanılmaz; orijinal tahminlerin özel kopyasından 8/6/4/0 hesaplanır.
 Kaynak tahminler ve puanlar değiştirilmez, AI çağrısı yapılmaz.
 Yeni Qwen 3.8 verisi mevcut QWEN sütununa dahil edilir; kaynak model kimliği korunur.
-weekly_report.py görsel dosyası birebir korunmuştur.
+weekly_report.py yeni 8/6/4/0 sütunlarını görselleştirir.
 
 Haftalık/season görselleri ayrı gönderim durumlarıyla izlenir. Önceden FINAL olan
 eski raporlar otomatik yeniden gönderilmez. Gönderim sonucu belirsizse UNCERTAIN
@@ -35,3 +35,5 @@ Mevcut bot ve yeni Telegram Bağlantı Kontrolü yalnızca bu projenin bot secre
 
 Yeni testler: kaynağı değiştirmeden bağımsız puanlama, Qwen eşleme, uzatmayı 90 dakika
 saymama, haftalık/sezon gönderimi, ikinci çalışmada tekrar etmeme ve bozuk arşivi koruma.
+
+Eski FINAL dosyaları değiştirilmez; yeni aktif rapor dosyaları `kicktipp_*` ile başlar. Eski FINAL haftaları doğrulanmış sonuçlarla sadece yeni aktif sisteme taşınır, Telegram yeniden gönderilmez.
