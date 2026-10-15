@@ -23,7 +23,7 @@ class SeparationTests(unittest.TestCase):
 
 
 class DeliveryTests(unittest.TestCase):
-    def test_weekly_season_delivery_and_no_repeat(self):
+    def test_weekly_season_preparation_is_send_free_and_idempotent(self):
         import tempfile
         from pathlib import Path
         from unittest.mock import patch
@@ -43,11 +43,11 @@ class DeliveryTests(unittest.TestCase):
                  patch.object(bot,'send_photo') as send:
                 provider.return_value.get_matches_by_matchday.return_value=fixtures
                 self.assertEqual(bot.main(),0)
-                self.assertEqual(send.call_count,2)
+                self.assertEqual(send.call_count,0)
                 self.assertEqual(bot.main(),0)
-                self.assertEqual(send.call_count,2)
+                self.assertEqual(send.call_count,0)
                 state=bot._load_json(root/'weekly.json',{})
-                self.assertEqual(state['1']['delivery'],{'weekly':'SENT','season':'SENT'})
+                self.assertEqual(state['1']['delivery'],{'weekly':'PENDING','season':'PENDING'})
     def test_corrupt_archive_does_not_become_empty(self):
         import tempfile
         from pathlib import Path

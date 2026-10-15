@@ -42,11 +42,12 @@ class KicktippMigrationIntegration(unittest.TestCase):
                 self.assertEqual(current['1']['scoring_rule'],SCORING_RULE)
                 self.assertTrue(current['1']['migrated_from_legacy_final'])
                 self.assertEqual(current['1']['delivery'],{'weekly':'SENT','season':'SENT'})
-                self.assertEqual(len(sent),2)  # Only matchday 2, weekly + season.
+                self.assertEqual(current['2']['delivery'],{'weekly':'PENDING','season':'PENDING'})
+                self.assertEqual(len(sent),0)  # Preparation never sends Telegram.
                 season=json.loads((root/'kicktipp_season_performance.json').read_text())
                 self.assertEqual(season['models']['Gemini 3.6 Flash']['points'],16)
                 self.assertEqual(bot.main(),0)
-                self.assertEqual(len(sent),2)
+                self.assertEqual(len(sent),0)
             self.assertEqual((root/'weekly_reports.json').read_text(),before)
 
 
@@ -58,7 +59,7 @@ class ProviderVerifiedOnly(unittest.TestCase):
         stale = grade_record({'matchday':1,'ai_votes':votes},2,1)
         snapshot = build_weekly_snapshot({'1':verified,'2':stale},1,{
             'planned_matches':2,'evaluated_matches':1,'unavailable_matches':0,'postponed_matches':1,
-            'pending_matches':0,'matches':[{'match_id':'1','status':'EVALUATED'},
+            'pending_matches':0,'matches':[{'match_id':'1','status':'EVALUATED','verified_score': {'home':2,'away':1}},
                                           {'match_id':'2','status':'POSTPONED'}]})
         self.assertEqual(snapshot['stats']['models']['Gemini 3.6 Flash']['points'],8)
         self.assertEqual(snapshot['stats']['models']['Gemini 3.6 Flash']['successful_predictions'],1)

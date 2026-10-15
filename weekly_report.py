@@ -104,24 +104,47 @@ def _display_models(records):
     )]
 
 
-def _model_row(name,stats):
-    dist=stats.get("point_distribution") or {}
-    successful=int(stats.get("successful_predictions") or 0); points=int(stats.get("points") or 0)
-    max_points=successful*8
-    return {"name":name,"short":MODEL_SHORT.get(name,name),"dist":dist,"points":points,
-            "successful":successful,"opportunities":int(stats.get("prediction_opportunities") or 0),
-            "pct":round(points/max_points*100) if max_points else 0}
+def _model_row(name, stats):
+    dist = stats.get("point_distribution") or {}
+    n = int(stats.get("successful_predictions") or 0)
+    failed = int(stats.get("failed_predictions") or 0)
+    points = int(stats.get("points") or 0)
+    opportunities = int(stats.get("prediction_opportunities") or (n + failed))
+    correct = int(stats.get("outcome") or 0)
+    return {"name": name, "short": MODEL_SHORT.get(name, name),
+            "dist": dist, "points": points, "successful": n,
+            "opportunities": opportunities,
+            "pct": round(points / (8 * n) * 100) if n else 0,
+            "outcome_pct": round(correct / n * 100) if n else None,
+            "coverage_pct": round(n / opportunities * 100) if opportunities else None,
+            "avg": round(points / n, 2) if n else None}
+
+
+def _consensus_row(stats):
+    c = stats.get("consensus") or {}
+    n = int(c.get("matches") or 0)
+    pts = int(c.get("points") or 0)
+    opportunities = int(c.get("evaluated_matches") or (n + int(c.get("no_consensus") or 0)))
+    return {"name": "Konsensüs", "short": "KONSENSÜS",
+            "dist": c.get("point_distribution") or {}, "points": pts,
+            "successful": n, "opportunities": opportunities,
+            "pct": round(pts / (n * 8) * 100) if n else 0,
+            "outcome_pct": round(int(c.get("outcome") or 0) / n * 100) if n else None,
+            "coverage_pct": round(n / opportunities * 100) if opportunities else None,
+            "avg": round(pts / n, 2) if n else None}
 
 
 def _summary_rows(stats):
-    rows=[_model_row(m, (stats.get("models") or {})[m]) for m in ACTIVE_MODEL_ORDER
-          if m in (stats.get("models") or {}) and
-          int((stats["models"][m].get("successful_predictions") or 0)) +
-          int((stats["models"][m].get("failed_predictions") or 0)) > 0]
-    c=stats.get("consensus") or {}; n=int(c.get("matches") or 0); pts=int(c.get("points") or 0)
-    rows.append({"name":"Konsensüs","short":"KONSENSÜS","dist":c.get("point_distribution") or {},"points":pts,
-                 "successful":n,"opportunities":int(c.get("evaluated_matches") or 0),"pct":round(pts/(n*8)*100) if n else 0})
+    rows = [_model_row(m, (stats.get("models") or {})[m]) for m in ACTIVE_MODEL_ORDER
+            if m in (stats.get("models") or {}) and
+            (int(stats["models"][m].get("successful_predictions") or 0) +
+             int(stats["models"][m].get("failed_predictions") or 0)) > 0]
+    rows.append(_consensus_row(stats))
     return rows
+
+
+def _pct_text(value):
+    return "—" if value is None else f"%{value}"
 
 
 def _consensus_cell(record):
@@ -137,10 +160,10 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
     groups=models+["__CONSENSUS__"]
     base_cols=[110,230,230,105] # date, home, away, actual
     group_w=190
-    w=sum(base_cols)+group_w*len(groups)+32
+    w=max(1500, sum(base_cols)+group_w*len(groups)+32)
     header_h=225; table_head=76; row_h=62
     summary_rows=_summary_rows(snapshot.get("stats") or {})
-    summary_h=64+52*len(summary_rows)
+    summary_h=104+52*len(summary_rows)
     bottom_h=245
     h=header_h+table_head+max(1,len(records))*row_h+18+summary_h+18+bottom_h+30
     im=Image.new("RGB",(w,h),BG); d=ImageDraw.Draw(im)
@@ -158,7 +181,7 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
 
     y=header_h
     _text(d,(20,y-4),"MAÇ BAZLI AI TAHMİN SONUÇLARI",21,True,WHITE)
-    _text(d,(w-20,y+1),"✓ Doğru    × Yanlış    TS Tam Skor (5)    DB Doğru Beraberlik (5)    DS Doğru Sonuç (3)",11,False,MUTED,"ra")
+    _text(d,(w-20,y+1),"8 Tam skor  •  6 Doğru gol farkı  •  4 Doğru 1-X-2  •  0 Yanlış 1-X-2",11,False,MUTED,"ra")
     y+=34
 
     # Table header
@@ -211,7 +234,11 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
     # Summary
     d.rounded_rectangle((16,y,w-16,y+summary_h),radius=12,fill=PANEL,outline=LINE,width=2)
     _text(d,(32,y+12),"HAFTALIK PERFORMANS ÖZETİ",20,True,WHITE); y0=y+48
-    cols=[(32,140,"MODEL"),(172,108,"8P\nTAM"),(280,108,"6P\nFARK"),(388,108,"4P\nSONUÇ"),(496,108,"0P\nYANLIŞ"),(604,114,"KAPSAMA"),(718,94,"TAHMİN"),(812,116,"TOPLAM\nPUAN"),(928,w-960,"BAŞARI")]
+    cols=[(32,140,"MODEL"),(172,108,"8P\nTAM"),(280,108,"6P\nFARK"),
+          (388,108,"4P\nSONUÇ"),(496,108,"0P\nYANLIŞ"),
+          (604,114,"BAŞARILI/\nDENEME"),(718,94,"GEÇERLİ"),(812,116,"TOPLAM\nPUAN"),
+          (928,115,"1-X-2"),(1043,120,"PUAN/8"),(1163,110,"ORT. P."),
+          (1273,150,"KAPSAMA") ]
     for cx,cw,label in cols: _center(d,(cx,y0,cx+cw,y0+42),label,9,True,MUTED)
     yy=y0+42
     for i,r in enumerate(summary_rows):
@@ -221,8 +248,10 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
         dist=r["dist"]; values=[dist.get("8",0),dist.get("6",0),dist.get("4",0),dist.get("0",0),f"{r['successful']}/{r['opportunities']}",r["successful"],r["points"]]
         centers=[226,334,442,550,661,765,870]
         for cx,val in zip(centers,values): _text(d,(cx,yy+24),str(val),12,True,WHITE,"mm")
-        pct=r["pct"]; _text(d,(958,yy+24),f"%{pct}",12,True,WHITE,"lm")
-        bx=1010; bw=max(10,int((w-1045)*min(100,pct)/100)); d.rounded_rectangle((bx,yy+16,w-35,yy+32),radius=8,fill=(15,48,83)); d.rounded_rectangle((bx,yy+16,bx+bw,yy+32),radius=8,fill=color)
+        _text(d,(985,yy+24),_pct_text(r["outcome_pct"]),12,True,WHITE,"mm")
+        _text(d,(1103,yy+24),_pct_text(r["pct"] if r["successful"] else None),12,True,WHITE,"mm")
+        _text(d,(1218,yy+24),"—" if r["avg"] is None else f"{r['avg']:.2f}",12,True,WHITE,"mm")
+        _text(d,(1344,yy+24),_pct_text(r["coverage_pct"]),12,True,color,"mm")
         yy+=52
     y+=summary_h+18
 
@@ -232,15 +261,16 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
     for px,title in panels:
         d.rounded_rectangle((px,y,px+pw,y+bottom_h),radius=12,fill=PANEL,outline=LINE,width=2); _text(d,(px+18,y+16),title,16,True,CYAN)
     # Highlights from real stats only
-    best=max(summary_rows,key=lambda r:(r["points"],r["pct"])) if summary_rows else None
+    eligible_models = [r for r in summary_rows if r["short"] != "KONSENSÜS" and r["successful"] > 0]
+    best = max(eligible_models, key=lambda r: (r["points"], r["pct"])) if eligible_models else None
     highlights=[]
     if best: highlights.append(f"{best['short']} {best['points']} puan ile haftanın puan lideri.")
     exact_models = [(m, s) for m, s in (snapshot.get("stats") or {}).get("models", {}).items()
                     if m in models]
-    if exact_models:
+    if any(int(stats.get("exact") or 0) > 0 for _, stats in exact_models):
         exact_name, exact_stats = max(exact_models, key=lambda pair: int(pair[1].get("exact") or 0))
         highlights.append(f"En fazla tam skor: {MODEL_SHORT.get(exact_name, exact_name)} ({int(exact_stats.get('exact') or 0)} maç).")
-    highlights.append(f"Değerlendirilen maç: {snapshot.get('evaluated_matches',len(records))} / Planlanan: {snapshot.get('planned_matches',len(records))}.")
+    highlights.append(f"Puanlanan maç: {snapshot.get('evaluated_matches',len(records))}/{snapshot.get('planned_matches',len(records))}; tahminsiz: {snapshot.get('unavailable_matches',0)}.")
     fy=y+54
     for line in highlights[:4]:
         _tick(d,left+28,fy+7,True); font=_font(11); wrapped=_wrap(d,line,font,pw-70)
@@ -262,28 +292,51 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
     REPORT_DIR.mkdir(parents=True,exist_ok=True); path=REPORT_DIR/f"kicktipp_matchday_{md}_weekly.png"; im.save(path,quality=95); return path
 
 
-def render_season_image(season:dict[str,Any])->Path:
-    """Compact season report, keeping the same visual identity/signature."""
-    rows=[]
-    for m in ACTIVE_MODEL_ORDER:
-        s=(season.get("models") or {}).get(m)
-        if s and int(s.get("successful_predictions") or 0) + int(s.get("failed_predictions") or 0) > 0:
-            rows.append(_model_row(m,s))
-    c=season.get("consensus") or {}; n=int(c.get("matches") or 0); pts=int(c.get("points") or 0)
-    rows.append({"short":"KONSENSÜS","points":pts,"pct":round(pts/(n*8)*100) if n else 0,"dist":c.get("point_distribution") or {},"successful":n,"opportunities":int(c.get("evaluated_matches") or 0)})
-    w=1200; h=560+len(rows)*60; im=Image.new("RGB",(w,h),BG); d=ImageDraw.Draw(im)
-    _ucl_mark(d,90,65); _seal(d,235,82,64)
-    _text(d,(w//2,40),"SEZON AI PERFORMANS RAPORU",32,True,WHITE,"ma"); _text(d,(w//2,86),season.get("season") or SEASON,22,True,CYAN,"ma")
-    mds=season.get("finalized_matchdays") or []; _text(d,(w//2,122),f"{len(mds)} MATCHDAY FINAL",16,True,MUTED,"ma")
-    y=180; d.rounded_rectangle((30,y,w-30,y+58),radius=12,fill=PANEL2,outline=LINE)
-    heads=[(55,"MODEL"),(335,"TOPLAM PUAN"),(545,"8P / 6P / 4P / 0P"),(860,"BAŞARI"),(1000,"ÜRETİLEN")]
-    for x,t in heads:_text(d,(x,y+20),t,12,True,MUTED)
-    y+=68
-    for i,r in enumerate(rows):
-        d.rounded_rectangle((30,y,w-30,y+52),radius=10,fill=PANEL if i%2==0 else PANEL2)
-        color=GREEN if r["short"]=="KONSENSÜS" else MODEL_COLORS[i%len(MODEL_COLORS)]
-        _text(d,(55,y+17),r["short"],14,True,color); _text(d,(355,y+17),r["points"],14,True,WHITE)
-        _text(d,(565,y+17)," / ".join(str(r["dist"].get(k,0)) for k in ("8","6","4","0")),14,True,WHITE); _text(d,(865,y+17),f"%{r['pct']}",14,True,WHITE); _text(d,(1000,y+17),f"{r['successful']}/{r['opportunities']}",14,False,MUTED); y+=60
-    _text(d,(30,h-72),"Not: Geçmiş AL sürümlerinin istatistikleri arşivde korunur; güncel sıralamaya dahil edilmez.",10,False,MUTED)
-    _text(d,(30,h-42),"DESIGNED BY SERCAN • FUTBOL • VERİ • ANALİZ • TAHMİN",11,True,GOLD)
-    REPORT_DIR.mkdir(parents=True,exist_ok=True); path=REPORT_DIR/"kicktipp_season_performance.png"; im.save(path,quality=95); return path
+def render_season_image(season: dict[str, Any]) -> Path:
+    """Season image: outcome accuracy is NOT the same as point efficiency."""
+    rows = []
+    for model in ACTIVE_MODEL_ORDER:
+        stats = (season.get("models") or {}).get(model)
+        if stats and int(stats.get("successful_predictions") or 0) + int(stats.get("failed_predictions") or 0) > 0:
+            rows.append(_model_row(model, stats))
+    rows.append(_consensus_row(season))
+
+    w = 1430
+    h = 560 + len(rows) * 60
+    im = Image.new("RGB", (w, h), BG)
+    d = ImageDraw.Draw(im)
+    _ucl_mark(d, 90, 65)
+    _seal(d, 235, 82, 64)
+    _text(d, (w // 2, 40), "SEZON AI PERFORMANS RAPORU", 32, True, WHITE, "ma")
+    _text(d, (w // 2, 86), season.get("season") or SEASON, 22, True, CYAN, "ma")
+    matchdays = season.get("finalized_matchdays") or []
+    _text(d, (w // 2, 122), f"{len(matchdays)} MATCHDAY FINAL", 16, True, MUTED, "ma")
+
+    y = 180
+    d.rounded_rectangle((30, y, w - 30, y + 58), radius=12, fill=PANEL2, outline=LINE)
+    heads = [(55, "MODEL"), (315, "TOPLAM PUAN"), (490, "8P / 6P / 4P / 0P"),
+             (782, "1-X-2"), (890, "PUAN/8"), (1005, "ORT. PUAN"),
+             (1125, "KAPSAMA"), (1248, "GEÇERLİ/DENEME")]
+    for x, label in heads:
+        _text(d, (x, y + 20), label, 12, True, MUTED)
+    y += 68
+
+    for i, row in enumerate(rows):
+        d.rounded_rectangle((30, y, w - 30, y + 52), radius=10,
+                            fill=PANEL if i % 2 == 0 else PANEL2)
+        color = GREEN if row["short"] == "KONSENSÜS" else MODEL_COLORS[i % len(MODEL_COLORS)]
+        _text(d, (55, y + 17), row["short"], 14, True, color)
+        _text(d, (334, y + 17), row["points"], 14, True, WHITE)
+        _text(d, (505, y + 17), " / ".join(str(row["dist"].get(k, 0)) for k in ("8", "6", "4", "0")), 14, True, WHITE)
+        _text(d, (793, y + 17), _pct_text(row["outcome_pct"]), 14, True, WHITE)
+        _text(d, (901, y + 17), _pct_text(row["pct"] if row["successful"] else None), 14, True, WHITE)
+        _text(d, (1015, y + 17), "—" if row["avg"] is None else f"{row['avg']:.2f}", 14, True, WHITE)
+        _text(d, (1139, y + 17), _pct_text(row["coverage_pct"]), 14, True, WHITE)
+        _text(d, (1264, y + 17), f"{row['successful']}/{row['opportunities']}", 14, False, MUTED)
+        y += 60
+    _text(d, (30, h - 72), "1-X-2: doğru sonuç / geçerli tahmin. PUAN/8: kazanılan puan / azami puan. Eski AL sürümleri arşivde korunur.", 11, False, MUTED)
+    _text(d, (30, h - 42), "DESIGNED BY SERCAN • FUTBOL • VERİ • ANALİZ • TAHMİN", 11, True, GOLD)
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    path = REPORT_DIR / "kicktipp_season_performance.png"
+    im.save(path, quality=95)
+    return path

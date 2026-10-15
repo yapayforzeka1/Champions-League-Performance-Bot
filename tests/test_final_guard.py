@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import performance_bot as bot
-from performance_engine import matchday_resolution, merge_latest_results
+from performance_engine import SCORING_RULE, matchday_resolution, merge_latest_results
 
 
 def fixture(match_id, score=None, status="FINISHED"):
@@ -55,7 +55,7 @@ class FinalResolutionTests(unittest.TestCase):
         self.assertEqual(records, records_before)
 
     def test_no_prediction_or_failed_attempt_does_not_block_final(self):
-        games = [fixture(1), fixture(2), fixture(3)]
+        games = [fixture(i, regular(1, 0)) for i in (1, 2, 3)]
         records = {"1": prediction(1, success=False), "2": prediction(2, with_result=False)}
         result = matchday_resolution(games, merge_latest_results(records, {str(m["id"]): m for m in games}))
         self.assertTrue(result["final"])
@@ -63,14 +63,14 @@ class FinalResolutionTests(unittest.TestCase):
         self.assertEqual(result["pending_matches"], 0)
 
     def test_mixed_scored_and_unpredicted_finished_games_finalize(self):
-        games = [fixture(1, regular(2, 1)), fixture(2)]
+        games = [fixture(1, regular(2, 1)), fixture(2, regular(0, 0))]
         graded = merge_latest_results({"1": prediction(1)}, {str(m["id"]): m for m in games})
         result = matchday_resolution(games, graded)
         self.assertTrue(result["final"])
         self.assertEqual(result["evaluated_matches"], 1)
         self.assertEqual(result["unavailable_matches"], 1)
         self.assertEqual(result["matches"][0]["verified_score"], {"home": 2, "away": 1})
-        self.assertNotIn("verified_score", result["matches"][1])
+        self.assertEqual(result["matches"][1]["verified_score"], {"home": 0, "away": 0})
 
     def test_wrong_or_extra_time_score_does_not_finalize(self):
         games = [
@@ -129,7 +129,7 @@ class WorkflowFinalSafetyTests(unittest.TestCase):
             root = Path(tmp)
             previous = {
                 "2": {
-                    "season": "2026/27", "matchday": 2, "status": "FINAL",
+                    "season": "2026/27", "matchday": 2, "status": "FINAL", "scoring_rule": SCORING_RULE,
                     "delivery": {"weekly": "PENDING", "season": "SENT"},
                     "matches": [{"match_id": "1", "status": "EVALUATED", "verified_score": {"home": 2, "away": 1}}],
                     "stats": {"models": {}, "consensus": {}},
@@ -150,7 +150,7 @@ class WorkflowFinalSafetyTests(unittest.TestCase):
     def test_old_final_without_stored_scores_is_preserved(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            previous = {"2": {"season": "2026/27", "matchday": 2, "status": "FINAL",
+            previous = {"2": {"season": "2026/27", "matchday": 2, "status": "FINAL", "scoring_rule": SCORING_RULE,
                               "matches": [{"match_id": "1", "status": "EVALUATED"}]}}
             path = root / "weekly.json"
             path.write_text(json.dumps(previous), encoding="utf-8")
@@ -162,17 +162,18 @@ class WorkflowFinalSafetyTests(unittest.TestCase):
             # Old FINAL lacks saved scores: do not misreport a verified score change.
             self.assertNotIn("official 90-minute score changed", logs)
 
-    def test_new_final_stores_score_and_sends_once(self):
+    def test_new_final_prepares_verified_score_without_telegram(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             pred = {"1": prediction(1)}
-            games = [fixture(1, regular(2, 1)), fixture(2)]
+            games = [fixture(1, regular(2, 1)), fixture(2, regular(0, 0))]
             code, logs, sent = self.run_bot(root, pred, games)
             self.assertEqual(code, 0)
-            self.assertEqual(len(sent), 2)
+            self.assertEqual(len(sent), 0)  # Prepare is intentionally send-free
             report = json.loads((root / "weekly.json").read_text(encoding="utf-8"))["2"]
             self.assertEqual(report["matches"][0]["verified_score"], {"home": 2, "away": 1})
             self.assertEqual(report["unavailable_matches"], 1)
+            self.assertEqual(report["delivery"], {"weekly": "PENDING", "season": "PENDING"})
             self.assertTrue((root / "season.json").exists())
             code, logs, sent = self.run_bot(root, pred, games)
             self.assertEqual(code, 0)

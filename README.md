@@ -10,14 +10,26 @@ UEFA Champions League 2026/27 tahmin arşivini bağımsız biçimde değerlendir
 - Consensus için en az **3 başarılı AI tahmini** gerekir. Ardından benzersiz strict-majority kuralı uygulanır.
 - Consensus performansı bireysel AI performansından ayrı tutulur ve aynı 8/6/4/0 sistemiyle değerlendirilir.
 - Tahmin kaydı olmayan bitmiş maç `UNAVAILABLE` olarak tutulur; AI başarısızlığına 0 puan yazılmaz.
-- Ertelenen/iptal edilen terminal maçlar Matchday'i süresiz kilitlemez.
+- Ertelenen/iptal edilen veya doğrulanmış 90 dakika skoru bulunmayan maçlar, manuel inceleme olmadan FINAL kabul edilmez.
 - FINAL rapor bir Matchday için yalnızca bir kez Telegram'a gönderilir.
 
-## Rapor zamanı
+## Rapor zamanı ve gönderim güvenliği
 
-GitHub Actions Salı-Perşembe 18:05-23:05 UTC arasında saatlik hafif kontrol yapar. Bot fixture verisindeki ilgili Matchday'in **son planlanan maç başlangıcından 60 dakika geçmeden** rapor oluşturmaz. Sonuçlar henüz tamamlanmamışsa FINAL rapor için sonraki kontrolde tekrar bakılır.
+GitHub Actions her gün 01:30 UTC (Türkiye 04:30) zamanlanmış kontrol yapar ve elle tetiklenebilir. Yapay zekâ tahmin API'leri yeniden çağrılmaz; kaynak tahminler okunur, football-data.org üzerinden resmi 90 dakika sonuçları kontrol edilir. Şampiyonlar Ligi'nin ilk sekiz lig maç haftası için üretim workflow'u **18 maçlık fikstürü** bekler.
 
-Bu performans botu tahmin AI'larını yeniden çağırmaz; prediction repo'daki arşivlenmiş tahminleri okur. Bu nedenle performans kontrolü Gemini/Qwen/Cohere/Mistral/GPT-OSS tahmin tokenı tüketmez.
+Telegram gönderimi üç ayrı komuta ayrılmıştır:
+
+1. `python performance_bot.py prepare` — puanları, haftalık/sezon arşivini ve görselleri hazırlar; **Telegram göndermez**. Workflow bu değişiklikleri önce GitHub'a kaydeder.
+2. `python performance_bot.py reserve` — **yalnız o çalışmada yeni hazırlanmış** raporlar için `UNCERTAIN` teslim durumunu kalıcılaştırır. Workflow bu durumu Telegram'dan **önce** GitHub'a kaydeder.
+3. `python performance_bot.py deliver` — yalnız geçerli çalışmanın kalıcı rezervasyonlarını gönderir; başarılı gönderimlerin `SENT` durumunu kaydeder.
+
+GitHub'a rezervasyon kaydı yazılamazsa Telegram gönderimine geçilmez. Telegram veya son GitHub kaydı hata verirse `UNCERTAIN` durumundaki raporlar **otomatik yeniden gönderilmez**, manuel inceleme gerekir. Bu, bazı iletilerin teknik hata nedeniyle hiç gitmemiş olmasına rağmen otomatik yeniden gönderilememesi anlamına gelebilir; mükerrer gönderimi önlemek için bilinçli güvenlik tercihidir.
+
+`data/kicktipp_delivery_locks.json` dosyası, kullanıcının daha önce Telegram'da aldığını doğruladığı **1. ve 2. hafta raporları** için tek seferlik tekrar-gönderim kilididir. Bu dosya mutlaka kodla birlikte GitHub'a yüklenmelidir. Geçmiş FINAl'ler, yayımlanmış ortak kararlar, AI tahminleri ve önceki PNG raporları değişmez. Yeni rapor için ayrıca açık onay ve veri doğrulaması gerekir.
+
+## Görsellerin kaydı
+
+`.gitignore` eski genel rapor görsellerini yok sayar. Workflow yalnızca `reports/kicktipp_*.png` dosyalarını `git add -f` ile arşive ekler; geçmiş `reports/matchday_1_weekly.png` gibi görsellere dokunmaz.
 
 ## Telegram çıktısı
 

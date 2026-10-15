@@ -170,11 +170,14 @@ def merge_latest_results(predictions: dict[str, Any], status_map: dict[str, dict
 def _resolved_fixture_status(match: dict[str, Any], prediction: dict[str, Any] | None) -> str:
     status = str(match.get("status", "")).upper()
     if status == "FINISHED":
+        # An official FINISHED label without a verifiable regular-time score
+        # is *not* evidence for FINAL, even if nobody predicted the match.
+        if _provider_regular_score(match) is None:
+            return "PENDING"
         if not _has_usable_prediction(prediction):
             return "UNAVAILABLE"
-        # An archived `actual` may come from the prediction repository. It is
-        # not proof that the result provider has supplied a 90-minute score.
-        if _provider_regular_score(match) is None or not prediction.get("actual"):
+        # Archived `actual` alone is not a verified provider score.
+        if not prediction.get("actual"):
             return "PENDING"
         return "EVALUATED"
     if status in TERMINAL_STATUSES:
@@ -200,17 +203,34 @@ def matchday_resolution(fixtures: list[dict[str, Any]], predictions: dict[str, A
         }
         # New snapshots retain official scores for *future* read-only drift
         # checks. Previously finalized reports are never backfilled or edited.
-        if status == "EVALUATED":
+        if status in ("EVALUATED", "UNAVAILABLE"):
             home, away = _provider_regular_score(match)
             row["verified_score"] = {"home": home, "away": away}
         rows.append(row)
     pending = counts["PENDING"]
+    postponed = sum(counts[s] for s in ("POSTPONED", "CANCELLED", "SUSPENDED", "ABANDONED"))
+    # For UCL league-phase rounds all 18 fixtures must be present, even if a
+    # provider temporarily omits one. Knockout rounds have different sizes.
+    matchday_ids = {m.get("matchday") for m in fixtures if m.get("matchday") is not None}
+    expected_count = 0
+    import os
+    if os.getenv("EXPECTED_UCL_LEAGUE_MATCHES", "") == "18" and len(matchday_ids) == 1:
+        try:
+            md = int(next(iter(matchday_ids)))
+            from config import COMPETITION_CODE
+            if COMPETITION_CODE == "CL" and 1 <= md <= 8:
+                expected_count = 18
+        except (TypeError, ValueError):
+            pass
+    absent_fixtures = max(0, expected_count - len(fixtures))
+    pending += absent_fixtures
     return {
-        "final": pending == 0,
+        "final": pending == 0 and postponed == 0 and bool(fixtures),
         "planned_matches": len(fixtures),
         "evaluated_matches": counts["EVALUATED"],
         "unavailable_matches": counts["UNAVAILABLE"],
-        "postponed_matches": sum(counts[s] for s in ("POSTPONED", "CANCELLED", "SUSPENDED", "ABANDONED")),
+        "postponed_matches": postponed,
+        "provider_missing_fixtures": absent_fixtures,
         "pending_matches": pending,
         "matches": rows,
     }
@@ -255,6 +275,10 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
         "no_consensus": 0,
         "score_split": 0,
         "avg": 0,
+        "point_distribution": dict(POINT_DISTRIBUTION),
+        "outcome_pct": 0,
+        "point_efficiency_pct": 0,
+        "coverage_pct": 0,
     }
 
     records = [r for r in predictions.values() if int(r.get("matchday") or 0) == int(matchday) and r.get("actual")]
@@ -265,6 +289,7 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
             consensus["matches"] += 1
             if record.get("consensus_points") is not None:
                 consensus["points"] += int(record["consensus_points"])
+            consensus["point_distribution"][str(int(record["consensus_points"]))] += 1
             consensus["outcome"] += int(bool(record.get("consensus_outcome_correct")))
             if c.get("score_consensus"):
                 consensus["exact"] += int(bool(record.get("consensus_exact_score_correct")))
@@ -296,15 +321,21 @@ def build_weekly_stats(predictions: dict[str, Any], matchday: int) -> dict[str, 
         item["avg"] = round(item["points"] / n, 2) if n else 0
         opportunities = int(item["prediction_opportunities"])
         item["coverage_pct"] = round(n / opportunities * 100, 1) if opportunities else 0
+        item["outcome_pct"] = round(item["outcome"] / n * 100, 1) if n else 0
+        item["point_efficiency_pct"] = round(item["points"] / (8 * n) * 100, 1) if n else 0
     if consensus["matches"]:
         consensus["avg"] = round(consensus["points"] / consensus["matches"], 2)
+        consensus["outcome_pct"] = round(consensus["outcome"] / consensus["matches"] * 100, 1)
+        consensus["point_efficiency_pct"] = round(consensus["points"] / (8 * consensus["matches"]) * 100, 1)
+    if consensus["evaluated_matches"]:
+        consensus["coverage_pct"] = round(consensus["matches"] / consensus["evaluated_matches"] * 100, 1)
 
     return {"models": model_stats, "consensus": consensus}
 
 
 def build_weekly_snapshot(predictions: dict[str, Any], matchday: int, resolution: dict[str, Any]) -> dict[str, Any]:
     now = datetime.now(timezone.utc).isoformat()
-    return {
+    snapshot = {
         "scoring_rule": SCORING_RULE,
         "season": SEASON,
         "matchday": int(matchday),
@@ -316,13 +347,23 @@ def build_weekly_snapshot(predictions: dict[str, Any], matchday: int, resolution
         "postponed_matches": int(resolution["postponed_matches"]),
         "pending_matches": int(resolution["pending_matches"]),
         "matches": resolution["matches"],
-        # Only fixture IDs whose 90-minute scores were verified by the
-        # independent result provider may contribute to the FINAL statistics.
+        # Valid provider FINISHED 90min scores are the only scorable results.
+        # Include UNAVAILABLE archived attempts so failed API calls are counted
+        # as failed attempts, never as zero-point predictions.
         "stats": build_weekly_stats({mid: predictions[mid]
                                      for mid in (str(row["match_id"]) for row in resolution["matches"]
-                                                 if row["status"] == "EVALUATED")
+                                                 if row["status"] in ("EVALUATED", "UNAVAILABLE")
+                                                 and row.get("verified_score") is not None)
                                      if mid in predictions}, matchday),
     }
+    # The denominator includes every verified finished fixture, including
+    # teams/models with zero available predictions, not only graded rows.
+    consensus = snapshot["stats"]["consensus"]
+    verified_count = int(resolution["evaluated_matches"]) + int(resolution["unavailable_matches"])
+    consensus["evaluated_matches"] = verified_count
+    consensus["no_consensus"] = max(0, verified_count - consensus["matches"])
+    consensus["coverage_pct"] = round(100 * consensus["matches"] / verified_count, 1) if verified_count else 0
+    return snapshot
 
 
 def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
@@ -332,14 +373,21 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
             "points": 0,
             "successful_predictions": 0,
             "failed_predictions": 0,
+            "prediction_opportunities": 0,
             "exact": 0,
             "outcome": 0,
             "avg": 0,
+            "coverage_pct": 0,
+            "outcome_pct": 0,
+            "point_efficiency_pct": 0,
             "point_distribution": dict(POINT_DISTRIBUTION),
         }
         for model in MODEL_ORDER
     }
-    consensus = {"matchdays": 0, "matches": 0, "points": 0, "exact": 0, "outcome": 0, "no_consensus": 0, "score_split": 0, "avg": 0}
+    consensus = {"matchdays": 0, "evaluated_matches": 0, "matches": 0, "points": 0,
+                 "exact": 0, "outcome": 0, "no_consensus": 0, "score_split": 0,
+                 "avg": 0, "point_distribution": dict(POINT_DISTRIBUTION),
+                 "outcome_pct": 0, "point_efficiency_pct": 0, "coverage_pct": 0}
 
     for key, report in sorted(weekly_reports.items(), key=lambda kv: int(kv[0])):
         if report.get("status") != "FINAL":
@@ -352,17 +400,26 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
             dst = totals[model]
             if src and (int(src.get("successful_predictions") or 0) + int(src.get("failed_predictions") or 0)) > 0:
                 dst["matchdays"] += 1
-            for field in ("points", "successful_predictions", "failed_predictions", "exact", "outcome"):
+            for field in ("points", "successful_predictions", "failed_predictions", "prediction_opportunities", "exact", "outcome"):
                 dst[field] += int(src.get(field, 0))
             for points in POINT_DISTRIBUTION:
                 dst["point_distribution"][points] += int(src.get("point_distribution", {}).get(points, 0))
         c = stats.get("consensus", {})
         consensus["matchdays"] += 1
-        for field in ("matches", "points", "exact", "outcome", "no_consensus", "score_split"):
+        for field in ("evaluated_matches", "matches", "points", "exact", "outcome", "no_consensus", "score_split"):
             consensus[field] += int(c.get(field, 0))
+        for points in POINT_DISTRIBUTION:
+            consensus["point_distribution"][points] += int(c.get("point_distribution", {}).get(points, 0))
 
     for item in totals.values():
         n = item["successful_predictions"]
         item["avg"] = round(item["points"] / n, 2) if n else 0
+        item["outcome_pct"] = round(item["outcome"] / n * 100, 1) if n else 0
+        item["point_efficiency_pct"] = round(item["points"] / (n * 8) * 100, 1) if n else 0
+        opportunities = item["prediction_opportunities"] or (n + item["failed_predictions"])
+        item["coverage_pct"] = round(n / opportunities * 100, 1) if opportunities else 0
     consensus["avg"] = round(consensus["points"] / consensus["matches"], 2) if consensus["matches"] else 0
-    return {"season": SEASON, "finalized_matchdays": sorted(weekly_reports.keys(), key=int), "models": totals, "consensus": consensus}
+    consensus["outcome_pct"] = round(consensus["outcome"] / consensus["matches"] * 100, 1) if consensus["matches"] else 0
+    consensus["point_efficiency_pct"] = round(consensus["points"] / (consensus["matches"] * 8) * 100, 1) if consensus["matches"] else 0
+    consensus["coverage_pct"] = round(consensus["matches"] / consensus["evaluated_matches"] * 100, 1) if consensus["evaluated_matches"] else 0
+    return {"season": SEASON, "finalized_matchdays": sorted((key for key, report in weekly_reports.items() if report.get("status") == "FINAL"), key=int), "models": totals, "consensus": consensus}
