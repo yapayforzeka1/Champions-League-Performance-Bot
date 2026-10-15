@@ -68,6 +68,34 @@ jobs:
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
+      # Read-only comparison, independent of official FINAL and Telegram delivery.
+      # A provenance failure excludes that experimental prediction (never fakes 0 points).
+      - name: Prepare experimental performance (no AI / no Telegram)
+        id: experiments
+        continue-on-error: true
+        env:
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          TELEGRAM_ENABLED: "false"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+          EXPECTED_UCL_LEAGUE_MATCHES: "18"
+        run: python experimental_runner.py
+
+      - name: Save separate experimental analyses
+        if: ${{ steps.experiments.outcome == 'success' }}
+        run: |
+          for f in data/experimental_weekly_reports.json data/experimental_season_performance.json reports/experimental_performance.md; do
+            if [ -f "$f" ]; then git add -- "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive prospective experimental performance separately"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
       # An UNCERTAIN receipt must be committed remotely BEFORE any sendPhoto.
       # If delivery or the final git push fails, later runs never auto-resend.
       - name: Reserve current-run deliveries
