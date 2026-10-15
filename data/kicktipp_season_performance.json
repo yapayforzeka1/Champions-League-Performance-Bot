@@ -1,0 +1,194 @@
+{
+  "season": "2026/27",
+  "finalized_matchdays": [
+    "1",
+    "2"
+  ],
+  "models": {
+    "Gemini 3.6 Flash": {
+      "matchdays": 2,
+      "points": 40,
+      "successful_predictions": 10,
+      "failed_predictions": 23,
+      "prediction_opportunities": 33,
+      "exact": 3,
+      "outcome": 7,
+      "avg": 4.0,
+      "coverage_pct": 30.3,
+      "outcome_pct": 70.0,
+      "point_efficiency_pct": 50.0,
+      "point_distribution": {
+        "8": 3,
+        "6": 0,
+        "4": 4,
+        "0": 3
+      },
+      "week_points": {
+        "1": 40,
+        "2": 0
+      }
+    },
+    "Mistral Small Latest": {
+      "matchdays": 1,
+      "points": 0,
+      "successful_predictions": 0,
+      "failed_predictions": 16,
+      "prediction_opportunities": 16,
+      "exact": 0,
+      "outcome": 0,
+      "avg": 0,
+      "coverage_pct": 0.0,
+      "outcome_pct": 0,
+      "point_efficiency_pct": 0,
+      "point_distribution": {
+        "8": 0,
+        "6": 0,
+        "4": 0,
+        "0": 0
+      },
+      "week_points": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "Groq Qwen 3.6 27B": {
+      "matchdays": 1,
+      "points": 60,
+      "successful_predictions": 16,
+      "failed_predictions": 0,
+      "prediction_opportunities": 16,
+      "exact": 3,
+      "outcome": 11,
+      "avg": 3.75,
+      "coverage_pct": 100.0,
+      "outcome_pct": 68.8,
+      "point_efficiency_pct": 46.9,
+      "point_distribution": {
+        "8": 3,
+        "6": 2,
+        "4": 6,
+        "0": 5
+      },
+      "week_points": {
+        "1": 60,
+        "2": 0
+      }
+    },
+    "Groq Qwen 3.8 27B": {
+      "matchdays": 1,
+      "points": 48,
+      "successful_predictions": 17,
+      "failed_predictions": 0,
+      "prediction_opportunities": 17,
+      "exact": 0,
+      "outcome": 10,
+      "avg": 2.82,
+      "coverage_pct": 100.0,
+      "outcome_pct": 58.8,
+      "point_efficiency_pct": 35.3,
+      "point_distribution": {
+        "8": 0,
+        "6": 4,
+        "4": 6,
+        "0": 7
+      },
+      "week_points": {
+        "1": 0,
+        "2": 48
+      }
+    },
+    "Cloudflare Clef-omni": {
+      "matchdays": 1,
+      "points": 34,
+      "successful_predictions": 17,
+      "failed_predictions": 0,
+      "prediction_opportunities": 17,
+      "exact": 0,
+      "outcome": 7,
+      "avg": 2.0,
+      "coverage_pct": 100.0,
+      "outcome_pct": 41.2,
+      "point_efficiency_pct": 25.0,
+      "point_distribution": {
+        "8": 0,
+        "6": 3,
+        "4": 4,
+        "0": 10
+      },
+      "week_points": {
+        "1": 0,
+        "2": 34
+      }
+    },
+    "Cohere Command A+": {
+      "matchdays": 2,
+      "points": 86,
+      "successful_predictions": 27,
+      "failed_predictions": 6,
+      "prediction_opportunities": 33,
+      "exact": 2,
+      "outcome": 17,
+      "avg": 3.19,
+      "coverage_pct": 81.8,
+      "outcome_pct": 63.0,
+      "point_efficiency_pct": 39.8,
+      "point_distribution": {
+        "8": 2,
+        "6": 5,
+        "4": 10,
+        "0": 10
+      },
+      "week_points": {
+        "1": 48,
+        "2": 38
+      }
+    },
+    "Groq GPT-OSS 120B": {
+      "matchdays": 2,
+      "points": 94,
+      "successful_predictions": 32,
+      "failed_predictions": 1,
+      "prediction_opportunities": 33,
+      "exact": 2,
+      "outcome": 19,
+      "avg": 2.94,
+      "coverage_pct": 97.0,
+      "outcome_pct": 59.4,
+      "point_efficiency_pct": 36.7,
+      "point_distribution": {
+        "8": 2,
+        "6": 5,
+        "4": 12,
+        "0": 13
+      },
+      "week_points": {
+        "1": 58,
+        "2": 36
+      }
+    }
+  },
+  "consensus": {
+    "matchdays": 2,
+    "evaluated_matches": 36,
+    "matches": 26,
+    "points": 82,
+    "exact": 2,
+    "outcome": 17,
+    "no_consensus": 10,
+    "score_split": 10,
+    "avg": 3.15,
+    "point_distribution": {
+      "8": 2,
+      "6": 3,
+      "4": 12,
+      "0": 9
+    },
+    "outcome_pct": 65.4,
+    "point_efficiency_pct": 39.4,
+    "coverage_pct": 72.2,
+    "week_points": {
+      "1": 46,
+      "2": 36
+    }
+  }
+}

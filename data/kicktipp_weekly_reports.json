@@ -1,0 +1,771 @@
+{
+  "1": {
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "season": "2026/27",
+    "matchday": 1,
+    "status": "FINAL",
+    "finalized_at": "2026-10-15T08:07:01.864422+00:00",
+    "planned_matches": 18,
+    "evaluated_matches": 16,
+    "unavailable_matches": 2,
+    "postponed_matches": 0,
+    "pending_matches": 0,
+    "matches": [
+      {
+        "match_id": "575323",
+        "home": "Club Brugge KV",
+        "away": "Aston Villa FC",
+        "utcDate": "2026-09-08T16:45:00Z",
+        "status": "UNAVAILABLE",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 3
+        }
+      },
+      {
+        "match_id": "575324",
+        "home": "PAE AEK",
+        "away": "LASK Linz",
+        "utcDate": "2026-09-08T16:45:00Z",
+        "status": "UNAVAILABLE",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 1,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575325",
+        "home": "Real Madrid CF",
+        "away": "FC Internazionale Milano",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575326",
+        "home": "FC Porto",
+        "away": "Manchester City FC",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 0,
+          "away": 2
+        }
+      },
+      {
+        "match_id": "575327",
+        "home": "Borussia Dortmund",
+        "away": "Villarreal CF",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 2
+        }
+      },
+      {
+        "match_id": "575328",
+        "home": "Lille OSC",
+        "away": "Real Betis Balompié",
+        "utcDate": "2026-09-08T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 3
+        }
+      },
+      {
+        "match_id": "575329",
+        "home": "FC Barcelona",
+        "away": "Feyenoord Rotterdam",
+        "utcDate": "2026-09-09T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 5,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575330",
+        "home": "VfB Stuttgart",
+        "away": "Viking FK",
+        "utcDate": "2026-09-09T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575331",
+        "home": "Liverpool FC",
+        "away": "Club Atlético de Madrid",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575332",
+        "home": "Paris Saint-Germain FC",
+        "away": "ŠK Slovan Bratislava",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 6,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575333",
+        "home": "SSC Napoli",
+        "away": "Arsenal FC",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 0,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575334",
+        "home": "Sporting Clube de Portugal",
+        "away": "Galatasaray SK",
+        "utcDate": "2026-09-09T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575335",
+        "home": "Fenerbahçe SK",
+        "away": "AS Roma",
+        "utcDate": "2026-09-10T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 1,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575336",
+        "home": "PSV",
+        "away": "FK Shakhtar Donetsk",
+        "utcDate": "2026-09-10T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 1,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575337",
+        "home": "FC Bayern München",
+        "away": "FK Bodø/Glimt",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 5,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575338",
+        "home": "Manchester United FC",
+        "away": "Sabah FK",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 4,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575339",
+        "home": "Como 1907",
+        "away": "RB Leipzig",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 4,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575340",
+        "home": "SK Slavia Praha",
+        "away": "Racing Club de Lens",
+        "utcDate": "2026-09-10T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 3
+        }
+      }
+    ],
+    "stats": {
+      "models": {
+        "Gemini 3.6 Flash": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 10,
+          "failed_predictions": 6,
+          "points": 40,
+          "exact": 3,
+          "outcome": 7,
+          "avg": 4.0,
+          "coverage_pct": 62.5,
+          "point_distribution": {
+            "8": 3,
+            "6": 0,
+            "4": 4,
+            "0": 3
+          },
+          "outcome_pct": 70.0,
+          "point_efficiency_pct": 50.0
+        },
+        "Mistral Small Latest": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 0,
+          "failed_predictions": 16,
+          "points": 0,
+          "exact": 0,
+          "outcome": 0,
+          "avg": 0,
+          "coverage_pct": 0.0,
+          "point_distribution": {
+            "8": 0,
+            "6": 0,
+            "4": 0,
+            "0": 0
+          },
+          "outcome_pct": 0,
+          "point_efficiency_pct": 0
+        },
+        "Groq Qwen 3.6 27B": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 16,
+          "failed_predictions": 0,
+          "points": 60,
+          "exact": 3,
+          "outcome": 11,
+          "avg": 3.75,
+          "coverage_pct": 100.0,
+          "point_distribution": {
+            "8": 3,
+            "6": 2,
+            "4": 6,
+            "0": 5
+          },
+          "outcome_pct": 68.8,
+          "point_efficiency_pct": 46.9
+        },
+        "Groq Qwen 3.8 27B": {
+          "prediction_opportunities": 0,
+          "successful_predictions": 0,
+          "failed_predictions": 0,
+          "points": 0,
+          "exact": 0,
+          "outcome": 0,
+          "avg": 0,
+          "coverage_pct": 0,
+          "point_distribution": {
+            "8": 0,
+            "6": 0,
+            "4": 0,
+            "0": 0
+          },
+          "outcome_pct": 0,
+          "point_efficiency_pct": 0
+        },
+        "Cloudflare Clef-omni": {
+          "prediction_opportunities": 0,
+          "successful_predictions": 0,
+          "failed_predictions": 0,
+          "points": 0,
+          "exact": 0,
+          "outcome": 0,
+          "avg": 0,
+          "coverage_pct": 0,
+          "point_distribution": {
+            "8": 0,
+            "6": 0,
+            "4": 0,
+            "0": 0
+          },
+          "outcome_pct": 0,
+          "point_efficiency_pct": 0
+        },
+        "Cohere Command A+": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 15,
+          "failed_predictions": 1,
+          "points": 48,
+          "exact": 2,
+          "outcome": 9,
+          "avg": 3.2,
+          "coverage_pct": 93.8,
+          "point_distribution": {
+            "8": 2,
+            "6": 2,
+            "4": 5,
+            "0": 6
+          },
+          "outcome_pct": 60.0,
+          "point_efficiency_pct": 40.0
+        },
+        "Groq GPT-OSS 120B": {
+          "prediction_opportunities": 16,
+          "successful_predictions": 16,
+          "failed_predictions": 0,
+          "points": 58,
+          "exact": 2,
+          "outcome": 11,
+          "avg": 3.62,
+          "coverage_pct": 100.0,
+          "point_distribution": {
+            "8": 2,
+            "6": 3,
+            "4": 6,
+            "0": 5
+          },
+          "outcome_pct": 68.8,
+          "point_efficiency_pct": 45.3
+        }
+      },
+      "consensus": {
+        "evaluated_matches": 18,
+        "matches": 13,
+        "points": 46,
+        "exact": 2,
+        "outcome": 9,
+        "no_consensus": 5,
+        "score_split": 5,
+        "avg": 3.54,
+        "point_distribution": {
+          "8": 2,
+          "6": 1,
+          "4": 6,
+          "0": 4
+        },
+        "outcome_pct": 69.2,
+        "point_efficiency_pct": 44.2,
+        "coverage_pct": 72.2
+      }
+    },
+    "migrated_from_legacy_final": true,
+    "delivery": {
+      "weekly": "SENT",
+      "season": "SENT"
+    },
+    "delivery_source": "legacy_final"
+  },
+  "2": {
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "season": "2026/27",
+    "matchday": 2,
+    "status": "FINAL",
+    "finalized_at": "2026-10-15T08:07:02.107748+00:00",
+    "planned_matches": 18,
+    "evaluated_matches": 17,
+    "unavailable_matches": 1,
+    "postponed_matches": 0,
+    "pending_matches": 0,
+    "matches": [
+      {
+        "match_id": "575341",
+        "home": "Racing Club de Lens",
+        "away": "Sporting Clube de Portugal",
+        "utcDate": "2026-10-13T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 0,
+          "away": 2
+        }
+      },
+      {
+        "match_id": "575342",
+        "home": "Sabah FK",
+        "away": "SK Slavia Praha",
+        "utcDate": "2026-10-13T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575343",
+        "home": "FC Internazionale Milano",
+        "away": "Club Brugge KV",
+        "utcDate": "2026-10-13T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 4
+        }
+      },
+      {
+        "match_id": "575344",
+        "home": "Galatasaray SK",
+        "away": "FC Barcelona",
+        "utcDate": "2026-10-13T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 1,
+          "away": 4
+        }
+      },
+      {
+        "match_id": "575345",
+        "home": "Club Atlético de Madrid",
+        "away": "Manchester United FC",
+        "utcDate": "2026-10-13T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575346",
+        "home": "Arsenal FC",
+        "away": "Lille OSC",
+        "utcDate": "2026-10-13T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575347",
+        "home": "Viking FK",
+        "away": "FC Bayern München",
+        "utcDate": "2026-10-13T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 3
+        }
+      },
+      {
+        "match_id": "575348",
+        "home": "RB Leipzig",
+        "away": "PSV",
+        "utcDate": "2026-10-13T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 1,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575349",
+        "home": "Villarreal CF",
+        "away": "SSC Napoli",
+        "utcDate": "2026-10-13T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575350",
+        "home": "LASK Linz",
+        "away": "Liverpool FC",
+        "utcDate": "2026-10-14T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 6
+        }
+      },
+      {
+        "match_id": "575351",
+        "home": "Feyenoord Rotterdam",
+        "away": "Como 1907",
+        "utcDate": "2026-10-14T16:45:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 2
+        }
+      },
+      {
+        "match_id": "575352",
+        "home": "AS Roma",
+        "away": "Real Madrid CF",
+        "utcDate": "2026-10-14T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 4
+        }
+      },
+      {
+        "match_id": "575353",
+        "home": "Manchester City FC",
+        "away": "Paris Saint-Germain FC",
+        "utcDate": "2026-10-14T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 2,
+          "away": 4
+        }
+      },
+      {
+        "match_id": "575354",
+        "home": "FK Bodø/Glimt",
+        "away": "Borussia Dortmund",
+        "utcDate": "2026-10-14T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 1,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575355",
+        "home": "Aston Villa FC",
+        "away": "Fenerbahçe SK",
+        "utcDate": "2026-10-14T19:00:00Z",
+        "status": "UNAVAILABLE",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 6,
+          "away": 0
+        }
+      },
+      {
+        "match_id": "575356",
+        "home": "Real Betis Balompié",
+        "away": "FC Porto",
+        "utcDate": "2026-10-14T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 2
+        }
+      },
+      {
+        "match_id": "575357",
+        "home": "FK Shakhtar Donetsk",
+        "away": "PAE AEK",
+        "utcDate": "2026-10-14T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 3,
+          "away": 1
+        }
+      },
+      {
+        "match_id": "575358",
+        "home": "ŠK Slovan Bratislava",
+        "away": "VfB Stuttgart",
+        "utcDate": "2026-10-14T19:00:00Z",
+        "status": "EVALUATED",
+        "provider_status": "FINISHED",
+        "verified_score": {
+          "home": 0,
+          "away": 3
+        }
+      }
+    ],
+    "stats": {
+      "models": {
+        "Gemini 3.6 Flash": {
+          "prediction_opportunities": 17,
+          "successful_predictions": 0,
+          "failed_predictions": 17,
+          "points": 0,
+          "exact": 0,
+          "outcome": 0,
+          "avg": 0,
+          "coverage_pct": 0.0,
+          "point_distribution": {
+            "8": 0,
+            "6": 0,
+            "4": 0,
+            "0": 0
+          },
+          "outcome_pct": 0,
+          "point_efficiency_pct": 0
+        },
+        "Mistral Small Latest": {
+          "prediction_opportunities": 0,
+          "successful_predictions": 0,
+          "failed_predictions": 0,
+          "points": 0,
+          "exact": 0,
+          "outcome": 0,
+          "avg": 0,
+          "coverage_pct": 0,
+          "point_distribution": {
+            "8": 0,
+            "6": 0,
+            "4": 0,
+            "0": 0
+          },
+          "outcome_pct": 0,
+          "point_efficiency_pct": 0
+        },
+        "Groq Qwen 3.6 27B": {
+          "prediction_opportunities": 0,
+          "successful_predictions": 0,
+          "failed_predictions": 0,
+          "points": 0,
+          "exact": 0,
+          "outcome": 0,
+          "avg": 0,
+          "coverage_pct": 0,
+          "point_distribution": {
+            "8": 0,
+            "6": 0,
+            "4": 0,
+            "0": 0
+          },
+          "outcome_pct": 0,
+          "point_efficiency_pct": 0
+        },
+        "Groq Qwen 3.8 27B": {
+          "prediction_opportunities": 17,
+          "successful_predictions": 17,
+          "failed_predictions": 0,
+          "points": 48,
+          "exact": 0,
+          "outcome": 10,
+          "avg": 2.82,
+          "coverage_pct": 100.0,
+          "point_distribution": {
+            "8": 0,
+            "6": 4,
+            "4": 6,
+            "0": 7
+          },
+          "outcome_pct": 58.8,
+          "point_efficiency_pct": 35.3
+        },
+        "Cloudflare Clef-omni": {
+          "prediction_opportunities": 17,
+          "successful_predictions": 17,
+          "failed_predictions": 0,
+          "points": 34,
+          "exact": 0,
+          "outcome": 7,
+          "avg": 2.0,
+          "coverage_pct": 100.0,
+          "point_distribution": {
+            "8": 0,
+            "6": 3,
+            "4": 4,
+            "0": 10
+          },
+          "outcome_pct": 41.2,
+          "point_efficiency_pct": 25.0
+        },
+        "Cohere Command A+": {
+          "prediction_opportunities": 17,
+          "successful_predictions": 12,
+          "failed_predictions": 5,
+          "points": 38,
+          "exact": 0,
+          "outcome": 8,
+          "avg": 3.17,
+          "coverage_pct": 70.6,
+          "point_distribution": {
+            "8": 0,
+            "6": 3,
+            "4": 5,
+            "0": 4
+          },
+          "outcome_pct": 66.7,
+          "point_efficiency_pct": 39.6
+        },
+        "Groq GPT-OSS 120B": {
+          "prediction_opportunities": 17,
+          "successful_predictions": 16,
+          "failed_predictions": 1,
+          "points": 36,
+          "exact": 0,
+          "outcome": 8,
+          "avg": 2.25,
+          "coverage_pct": 94.1,
+          "point_distribution": {
+            "8": 0,
+            "6": 2,
+            "4": 6,
+            "0": 8
+          },
+          "outcome_pct": 50.0,
+          "point_efficiency_pct": 28.1
+        }
+      },
+      "consensus": {
+        "evaluated_matches": 18,
+        "matches": 13,
+        "points": 36,
+        "exact": 0,
+        "outcome": 8,
+        "no_consensus": 5,
+        "score_split": 5,
+        "avg": 2.77,
+        "point_distribution": {
+          "8": 0,
+          "6": 2,
+          "4": 6,
+          "0": 5
+        },
+        "outcome_pct": 61.5,
+        "point_efficiency_pct": 34.6,
+        "coverage_pct": 72.2
+      }
+    },
+    "delivery": {
+      "weekly": "SENT",
+      "season": "SENT"
+    },
+    "delivery_source": "confirmed_telegram_receipt"
+  }
+}
