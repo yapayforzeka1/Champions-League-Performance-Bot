@@ -33,33 +33,82 @@ jobs:
       - name: Run tests
         run: python -m unittest discover -s tests -v
 
-      - name: Run performance bot
+      # Only staged JSON and rendered images are produced here: no Telegram.
+      - name: Prepare verified reports (no Telegram)
+        id: prepare
         env:
           PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
           PREDICTION_BRANCH: main
           PREDICTION_FILE: match_predictions.json
           PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
-          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
-          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
-          TELEGRAM_ENABLED: "true"
+          TELEGRAM_ENABLED: "false"
           SEASON: "2026/27"
           COMPETITION_CODE: "CL"
-        run: python performance_bot.py
+          EXPECTED_UCL_LEAGUE_MATCHES: "18"
+          REQUIRE_DELIVERY_LOCKS: "true"
+          PERFORMANCE_RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: python performance_bot.py prepare
 
-      - name: Save performance archives
-        if: ${{ always() }}
+      - name: Configure archive committer
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for f in data/kicktipp_weekly_reports.json data/kicktipp_season_performance.json reports/kicktipp_*.png; do
+
+      - name: Save verified performance archives BEFORE delivery
+        run: |
+          for f in data/kicktipp_weekly_reports.json data/kicktipp_season_performance.json; do
             if [ -f "$f" ]; then git add -- "$f"; fi
           done
-          git diff --cached --quiet || git commit -m "Update performance archives"
-          git push
+          for f in reports/kicktipp_*.png; do
+            if [ -f "$f" ]; then git add -f -- "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive verified Kicktipp reports before delivery"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      # An UNCERTAIN receipt must be committed remotely BEFORE any sendPhoto.
+      # If delivery or the final git push fails, later runs never auto-resend.
+      - name: Reserve current-run deliveries
+        env:
+          PERFORMANCE_RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: python performance_bot.py reserve
+
+      - name: Persist delivery reservations BEFORE Telegram
+        run: |
+          if [ -f data/kicktipp_weekly_reports.json ]; then git add -- data/kicktipp_weekly_reports.json; fi
+          if [ -f data/kicktipp_delivery_batch.json ]; then
+            git add -- data/kicktipp_delivery_batch.json
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Reserve Telegram receipts before sending"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Deliver only newly reserved Telegram reports
+        id: deliver
+        env:
+          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
+          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: "true"
+          PERFORMANCE_RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: python performance_bot.py deliver
+
+      - name: Save Telegram delivery receipts
+        if: ${{ always() && steps.deliver.outcome != 'skipped' && steps.deliver.outcome != '' }}
+        run: |
+          if [ -f data/kicktipp_weekly_reports.json ]; then git add -- data/kicktipp_weekly_reports.json; fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Save confirmed Telegram receipts"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
 
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: performance-recovery
-          path: data/
+          name: performance-recovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            data/
+            reports/kicktipp_*.png
+          retention-days: 7
