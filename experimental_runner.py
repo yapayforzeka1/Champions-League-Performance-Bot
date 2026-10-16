@@ -78,6 +78,7 @@ def prepare_experimental_reports() -> int:
     graded = merge_latest_results(predictions, status_map)
     checker = GitHubPreKickoffEvidence()
     new = 0
+    pending_weeks = []
     for md, fixtures in sorted(fixtures_by_week.items()):
         key = str(md)
         if key not in due or key in existing:
@@ -90,18 +91,37 @@ def prepare_experimental_reports() -> int:
         report = build_experimental_week(md, fixtures, predictions, checker)
         if report is None:
             continue
+        if report['status'] == 'PENDING':
+            pending_weeks.append(key)
+            for item in report['pending_verifications']:
+                print('::warning title=Experimental provenance pending::'
+                      f'Matchday {md}, match {item["match_id"]}, '
+                      f'{item["method"]}: {item["reason"]}'
+                      + (f' ({item["detail"]})' if item.get('detail') else ''))
+            print(f'⏳ Experimental matchday {md} PENDING; no FINAL or archived changes for this week. '
+                  'Will retry at next scheduled run.')
+            continue
         existing[key] = report
         new += 1
         counts = ', '.join(f'{method}: {report["methods"][method]["valid_predictions"]}' for method in METHODS)
         print(f'🧪 Experimental matchday {md} FINAL staged ({counts}); no Telegram.')
     if not new:
         print('ℹ️ No NEW experimental FINAL; existing experimental archive preserved')
+        if pending_weeks:
+            print('::error title=Experimental verification deferred::'
+                  f'Matchday(s) {", ".join(pending_weeks)} require provenance retry. '
+                  'Official FINAL and Telegram steps remain independent.')
+            return 1
         return 0
     season = build_experimental_season(existing)
     _save_json(EXPERIMENTAL_WEEKLY, existing)
     _save_json(EXPERIMENTAL_SEASON, season)
     EXPERIMENTAL_OVERVIEW.parent.mkdir(parents=True, exist_ok=True)
     EXPERIMENTAL_OVERVIEW.write_text(_summary(season), encoding='utf-8')
+    if pending_weeks:
+        print('::warning title=Experimental weeks awaiting retry::'
+              f'Matchday(s) {", ".join(pending_weeks)} remain PENDING; '
+              'the completed weeks were saved independently.')
     print(f'✅ {new} new experimental FINAL; no official FINAL or Telegram modified')
     return 0
 

@@ -151,7 +151,8 @@ class ExperimentalScoringTests(unittest.TestCase):
         r = record()
         out = build_experimental_week(3, [fixture()], {'101': r}, Proof(valid=False))
         self.assertEqual(out['methods'][METHODS[0]]['valid_predictions'], 0)
-        self.assertEqual(out['methods'][METHODS[0]]['failure_reasons']['NO_PROOF'], 1)
+        self.assertEqual(out['status'], 'PENDING')
+        self.assertEqual(out['pending_verifications'][0]['reason'], 'NO_PROOF')
 
     def test_intentionally_excluded_club_is_not_failure_or_lost_history(self):
         excluded = fixture('102')

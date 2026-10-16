@@ -21,6 +21,15 @@ METHOD_LABELS = {'al_score_average_v1': 'AL Skor Ortalaması',
                  'al_most_frequent_score_v1': 'En Sık AL Skoru'}
 PREDICTION_PATTERN = re.compile(r'([0-9]{1,2})-([0-9]{1,2})\Z')
 
+# Only these results are sufficient to reject an experiment definitively.
+# All other results (API outage, missing token, unexpected response, unknown
+# reason) are unverified and MUST NOT freeze a week into FINAL.
+DEFINITIVE_PROVENANCE_FAILURES = frozenset({
+    'INVALID_KICKOFF', 'NO_PREKICKOFF_COMMIT', 'COMMIT_NOT_PREKICKOFF',
+    'NOT_IN_PREKICKOFF_SNAPSHOT', 'SOURCE_KICKOFF_MISMATCH',
+    'COMMITTED_VOTE_HASH_MISMATCH',
+})
+
 
 def _empty(method: str, opportunities: int) -> dict:
     return {'method': method, 'label': METHOD_LABELS[method], 'version': SCHEMA_VERSION,
@@ -154,6 +163,7 @@ def build_experimental_week(matchday: int, fixtures: list[dict], predictions: di
         else:
             eligible.append(fixture)
     data = {key: _empty(key, len(eligible)) for key in METHODS}
+    pending_verifications = []
     for fixture in eligible:
         mid = str(fixture['id'])
         actual_home, actual_away = _provider_regular_score(fixture)
@@ -181,6 +191,15 @@ def build_experimental_week(matchday: int, fixtures: list[dict], predictions: di
                         proof = evidence.verify(mid, fixture['utcDate'], block)
                         if not proof.get('verified'):
                             reason = proof.get('reason') or 'PROVENANCE_NOT_VERIFIED'
+                            if reason not in DEFINITIVE_PROVENANCE_FAILURES:
+                                # This result is unverified, not definitively invalid.
+                                # Keep the entire week retryable instead of freezing
+                                # a partial success rate into the FINAL archive.
+                                pending_verifications.append({
+                                    'match_id': mid, 'method': method, 'reason': reason,
+                                    'detail': proof.get('detail'),
+                                })
+                                continue
             if reason is not None:
                 reasons = stats['failure_reasons']
                 reasons[reason] = reasons.get(reason, 0) + 1
@@ -248,11 +267,16 @@ def build_experimental_week(matchday: int, fixtures: list[dict], predictions: di
         stats['exact_pct'] = round(100 * stats['exact'] / n, 1) if n else 0
         stats['point_efficiency_pct'] = round(100 * stats['points'] / (8 * n), 1) if n else 0
         stats['avg_valid_ai_count'] = round(stats['used_ai_sum'] / n, 2) if n else 0
-    return {'season': season, 'matchday': int(matchday), 'status': 'FINAL',
-            'scoring_rule': SCORING_RULE, 'schema_version': SCHEMA_VERSION,
-            'scope': 'PROSPECTIVE_ONLY', 'total_fixtures': len(fixtures),
-            'policy_excluded': len(excluded_ids), 'excluded_match_ids': excluded_ids,
-            'opportunities': len(eligible), 'methods': data}
+    report = {'season': season, 'matchday': int(matchday),
+              'status': 'PENDING' if pending_verifications else 'FINAL',
+              'scoring_rule': SCORING_RULE, 'schema_version': SCHEMA_VERSION,
+              'scope': 'PROSPECTIVE_ONLY', 'total_fixtures': len(fixtures),
+              'policy_excluded': len(excluded_ids), 'excluded_match_ids': excluded_ids,
+              'opportunities': len(eligible), 'methods': data}
+    if pending_verifications:
+        # Diagnostic only. The runner will NOT archive this incomplete week.
+        report['pending_verifications'] = pending_verifications
+    return report
 
 
 def build_experimental_season(weeks: dict[str, dict], *, season: str = SEASON) -> dict:
