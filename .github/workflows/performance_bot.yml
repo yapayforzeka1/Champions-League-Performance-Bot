@@ -69,7 +69,8 @@ jobs:
           fi
 
       # Read-only comparison, independent of official FINAL and Telegram delivery.
-      # A provenance failure excludes that experimental prediction (never fakes 0 points).
+      # A temporary provenance failure keeps the experimental week retryable.
+      # Experimental failures must not interrupt official FINAL/Telegram delivery.
       - name: Prepare experimental performance (no AI / no Telegram)
         id: experiments
         continue-on-error: true
@@ -84,6 +85,15 @@ jobs:
           COMPETITION_CODE: "CL"
           EXPECTED_UCL_LEAGUE_MATCHES: "18"
         run: python experimental_runner.py
+
+      # continue-on-error keeps the official report alive. Make the failure
+      # visible as a warning and in the workflow's run summary.
+      - name: Flag experimental evaluation failure
+        if: ${{ steps.experiments.outcome == 'failure' }}
+        run: |
+          echo '::warning title=Experimental performance needs review::Experimental evaluation failed or is waiting for GitHub provenance. Official reporting continues; no experimental FINAL was saved for pending weeks.'
+          echo '### ⚠️ Experimental performance evaluation needs review' >> "$GITHUB_STEP_SUMMARY"
+          echo 'See the **Prepare experimental performance** logs for the affected week, match, and reason. Pending weeks will be retried on the next eligible run. Official FINAL and Telegram delivery are unaffected.' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Save separate experimental analyses
         if: ${{ steps.experiments.outcome == 'success' }}
