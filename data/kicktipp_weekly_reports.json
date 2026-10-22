@@ -1147,8 +1147,8 @@
       }
     },
     "delivery": {
-      "weekly": "PENDING",
-      "season": "PENDING"
+      "weekly": "UNCERTAIN",
+      "season": "UNCERTAIN"
     },
     "prepared_run_key": "39732981629-1"
   }
