@@ -1,0 +1,1058 @@
+{
+  "1": {
+    "season": "2026/27",
+    "matchday": 1,
+    "status": "FINAL",
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "schema_version": 1,
+    "rows": [
+      {
+        "match_id": "575325",
+        "consensus": 8,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": 8,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 8,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 8,
+          "Groq GPT-OSS 120B": 8
+        }
+      },
+      {
+        "match_id": "575326",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 4,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 4,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575327",
+        "consensus": 6,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 6,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 6
+        }
+      },
+      {
+        "match_id": "575328",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": 0,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 0,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575329",
+        "consensus": 4,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 4,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575330",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 4,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 8,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575331",
+        "consensus": 8,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": 8,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 8,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 8,
+          "Groq GPT-OSS 120B": 8
+        }
+      },
+      {
+        "match_id": "575332",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 4,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 4,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575333",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 6,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575334",
+        "consensus": 4,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 4,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 6
+        }
+      },
+      {
+        "match_id": "575335",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 0,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575336",
+        "consensus": 0,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 0,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 0,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575337",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 4,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575338",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 8,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 4,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575339",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 4,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 0,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575340",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": 0,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": 0,
+          "Groq Qwen 3.8 27B": null,
+          "Cloudflare Clef-omni": null,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 6
+        }
+      }
+    ],
+    "matches": 16,
+    "consensus": {
+      "matches": 13,
+      "points": 46,
+      "avg": 3.54,
+      "with_score": {
+        "matches": 8,
+        "points": 30,
+        "avg": 3.75
+      },
+      "outcome_only_max4": {
+        "matches": 5,
+        "points": 16,
+        "avg": 3.2
+      },
+      "no_consensus_matches": 3
+    },
+    "models": {
+      "Gemini 3.6 Flash": {
+        "own": {
+          "matches": 10,
+          "points": 40,
+          "avg": 4.0
+        },
+        "on_no_consensus_matches": {
+          "matches": 2,
+          "points": 8,
+          "avg": 4.0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 8,
+          "model_points": 32,
+          "consensus_points": 28,
+          "model_avg": 4.0,
+          "consensus_avg": 3.5,
+          "model_better": 1,
+          "equal": 7,
+          "consensus_better": 0
+        }
+      },
+      "Groq Qwen 3.6 27B": {
+        "own": {
+          "matches": 16,
+          "points": 60,
+          "avg": 3.75
+        },
+        "on_no_consensus_matches": {
+          "matches": 3,
+          "points": 10,
+          "avg": 3.33
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 13,
+          "model_points": 50,
+          "consensus_points": 46,
+          "model_avg": 3.85,
+          "consensus_avg": 3.54,
+          "model_better": 1,
+          "equal": 12,
+          "consensus_better": 0
+        }
+      },
+      "Cohere Command A+": {
+        "own": {
+          "matches": 15,
+          "points": 48,
+          "avg": 3.2
+        },
+        "on_no_consensus_matches": {
+          "matches": 2,
+          "points": 0,
+          "avg": 0.0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 13,
+          "model_points": 48,
+          "consensus_points": 46,
+          "model_avg": 3.69,
+          "consensus_avg": 3.54,
+          "model_better": 1,
+          "equal": 12,
+          "consensus_better": 0
+        }
+      },
+      "Groq GPT-OSS 120B": {
+        "own": {
+          "matches": 16,
+          "points": 58,
+          "avg": 3.62
+        },
+        "on_no_consensus_matches": {
+          "matches": 3,
+          "points": 4,
+          "avg": 1.33
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 13,
+          "model_points": 54,
+          "consensus_points": 46,
+          "model_avg": 4.15,
+          "consensus_avg": 3.54,
+          "model_better": 2,
+          "equal": 11,
+          "consensus_better": 0
+        }
+      }
+    }
+  },
+  "2": {
+    "season": "2026/27",
+    "matchday": 2,
+    "status": "FINAL",
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "schema_version": 1,
+    "rows": [
+      {
+        "match_id": "575341",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575342",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575343",
+        "consensus": 0,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575344",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 6,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": 6
+        }
+      },
+      {
+        "match_id": "575345",
+        "consensus": 4,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575346",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575347",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": null
+        }
+      },
+      {
+        "match_id": "575348",
+        "consensus": 6,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 6,
+          "Cloudflare Clef-omni": 6,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575349",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575350",
+        "consensus": 4,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575351",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 6,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575352",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 6,
+          "Cloudflare Clef-omni": 6,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575353",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575354",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575356",
+        "consensus": 6,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 6,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 6
+        }
+      },
+      {
+        "match_id": "575357",
+        "consensus": 0,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575358",
+        "consensus": 4,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": 4
+        }
+      }
+    ],
+    "matches": 17,
+    "consensus": {
+      "matches": 13,
+      "points": 36,
+      "avg": 2.77,
+      "with_score": {
+        "matches": 8,
+        "points": 24,
+        "avg": 3.0
+      },
+      "outcome_only_max4": {
+        "matches": 5,
+        "points": 12,
+        "avg": 2.4
+      },
+      "no_consensus_matches": 4
+    },
+    "models": {
+      "Groq Qwen 3.8 27B": {
+        "own": {
+          "matches": 17,
+          "points": 48,
+          "avg": 2.82
+        },
+        "on_no_consensus_matches": {
+          "matches": 4,
+          "points": 10,
+          "avg": 2.5
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 13,
+          "model_points": 38,
+          "consensus_points": 36,
+          "model_avg": 2.92,
+          "consensus_avg": 2.77,
+          "model_better": 1,
+          "equal": 12,
+          "consensus_better": 0
+        }
+      },
+      "Cloudflare Clef-omni": {
+        "own": {
+          "matches": 17,
+          "points": 34,
+          "avg": 2.0
+        },
+        "on_no_consensus_matches": {
+          "matches": 4,
+          "points": 10,
+          "avg": 2.5
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 13,
+          "model_points": 24,
+          "consensus_points": 36,
+          "model_avg": 1.85,
+          "consensus_avg": 2.77,
+          "model_better": 1,
+          "equal": 9,
+          "consensus_better": 3
+        }
+      },
+      "Cohere Command A+": {
+        "own": {
+          "matches": 12,
+          "points": 38,
+          "avg": 3.17
+        },
+        "on_no_consensus_matches": {
+          "matches": 3,
+          "points": 4,
+          "avg": 1.33
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 9,
+          "model_points": 34,
+          "consensus_points": 24,
+          "model_avg": 3.78,
+          "consensus_avg": 2.67,
+          "model_better": 3,
+          "equal": 6,
+          "consensus_better": 0
+        }
+      },
+      "Groq GPT-OSS 120B": {
+        "own": {
+          "matches": 16,
+          "points": 36,
+          "avg": 2.25
+        },
+        "on_no_consensus_matches": {
+          "matches": 3,
+          "points": 0,
+          "avg": 0.0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 13,
+          "model_points": 36,
+          "consensus_points": 36,
+          "model_avg": 2.77,
+          "consensus_avg": 2.77,
+          "model_better": 1,
+          "equal": 11,
+          "consensus_better": 1
+        }
+      }
+    }
+  },
+  "3": {
+    "season": "2026/27",
+    "matchday": 3,
+    "status": "FINAL",
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "schema_version": 1,
+    "rows": [
+      {
+        "match_id": "575359",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 4,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": 8
+        }
+      },
+      {
+        "match_id": "575361",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": 4,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575362",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": null,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575363",
+        "consensus": 6,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": 6,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 6,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575364",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575365",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575366",
+        "consensus": 4,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": 4,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575367",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575368",
+        "consensus": null,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575370",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575371",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 6,
+          "Cloudflare Clef-omni": 4,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575372",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575373",
+        "consensus": 4,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 4,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 4,
+          "Groq GPT-OSS 120B": 4
+        }
+      },
+      {
+        "match_id": "575374",
+        "consensus": 8,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 8,
+          "Cloudflare Clef-omni": 8,
+          "Cohere Command A+": 8,
+          "Groq GPT-OSS 120B": 6
+        }
+      },
+      {
+        "match_id": "575375",
+        "consensus": 0,
+        "consensus_has_score": true,
+        "models": {
+          "Gemini 3.6 Flash": 0,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 0,
+          "Groq GPT-OSS 120B": 0
+        }
+      },
+      {
+        "match_id": "575376",
+        "consensus": 0,
+        "consensus_has_score": false,
+        "models": {
+          "Gemini 3.6 Flash": null,
+          "Mistral Small Latest": null,
+          "Groq Qwen 3.6 27B": null,
+          "Groq Qwen 3.8 27B": 0,
+          "Cloudflare Clef-omni": 0,
+          "Cohere Command A+": 6,
+          "Groq GPT-OSS 120B": 0
+        }
+      }
+    ],
+    "matches": 16,
+    "consensus": {
+      "matches": 14,
+      "points": 42,
+      "avg": 3.0,
+      "with_score": {
+        "matches": 7,
+        "points": 18,
+        "avg": 2.57
+      },
+      "outcome_only_max4": {
+        "matches": 7,
+        "points": 24,
+        "avg": 3.43
+      },
+      "no_consensus_matches": 2
+    },
+    "models": {
+      "Gemini 3.6 Flash": {
+        "own": {
+          "matches": 5,
+          "points": 18,
+          "avg": 3.6
+        },
+        "on_no_consensus_matches": {
+          "matches": 0,
+          "points": 0,
+          "avg": 0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 5,
+          "model_points": 18,
+          "consensus_points": 18,
+          "model_avg": 3.6,
+          "consensus_avg": 3.6,
+          "model_better": 0,
+          "equal": 5,
+          "consensus_better": 0
+        }
+      },
+      "Groq Qwen 3.8 27B": {
+        "own": {
+          "matches": 16,
+          "points": 44,
+          "avg": 2.75
+        },
+        "on_no_consensus_matches": {
+          "matches": 2,
+          "points": 0,
+          "avg": 0.0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 14,
+          "model_points": 44,
+          "consensus_points": 42,
+          "model_avg": 3.14,
+          "consensus_avg": 3.0,
+          "model_better": 1,
+          "equal": 13,
+          "consensus_better": 0
+        }
+      },
+      "Cloudflare Clef-omni": {
+        "own": {
+          "matches": 16,
+          "points": 36,
+          "avg": 2.25
+        },
+        "on_no_consensus_matches": {
+          "matches": 2,
+          "points": 0,
+          "avg": 0.0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 14,
+          "model_points": 36,
+          "consensus_points": 42,
+          "model_avg": 2.57,
+          "consensus_avg": 3.0,
+          "model_better": 0,
+          "equal": 12,
+          "consensus_better": 2
+        }
+      },
+      "Cohere Command A+": {
+        "own": {
+          "matches": 14,
+          "points": 54,
+          "avg": 3.86
+        },
+        "on_no_consensus_matches": {
+          "matches": 2,
+          "points": 8,
+          "avg": 4.0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 12,
+          "model_points": 46,
+          "consensus_points": 38,
+          "model_avg": 3.83,
+          "consensus_avg": 3.17,
+          "model_better": 2,
+          "equal": 10,
+          "consensus_better": 0
+        }
+      },
+      "Groq GPT-OSS 120B": {
+        "own": {
+          "matches": 16,
+          "points": 46,
+          "avg": 2.88
+        },
+        "on_no_consensus_matches": {
+          "matches": 2,
+          "points": 8,
+          "avg": 4.0
+        },
+        "pairwise_vs_consensus": {
+          "common_matches": 14,
+          "model_points": 38,
+          "consensus_points": 42,
+          "model_avg": 2.71,
+          "consensus_avg": 3.0,
+          "model_better": 1,
+          "equal": 11,
+          "consensus_better": 2
+        }
+      }
+    }
+  }
+}

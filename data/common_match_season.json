@@ -1,0 +1,161 @@
+{
+  "season": "2026/27",
+  "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+  "schema_version": 1,
+  "finalized_matchdays": [
+    "1",
+    "2",
+    "3"
+  ],
+  "matches": 49,
+  "consensus": {
+    "matches": 40,
+    "points": 124,
+    "avg": 3.1,
+    "with_score": {
+      "matches": 23,
+      "points": 72,
+      "avg": 3.13
+    },
+    "outcome_only_max4": {
+      "matches": 17,
+      "points": 52,
+      "avg": 3.06
+    },
+    "no_consensus_matches": 9
+  },
+  "models": {
+    "Gemini 3.6 Flash": {
+      "own": {
+        "matches": 15,
+        "points": 58,
+        "avg": 3.87
+      },
+      "on_no_consensus_matches": {
+        "matches": 2,
+        "points": 8,
+        "avg": 4.0
+      },
+      "pairwise_vs_consensus": {
+        "common_matches": 13,
+        "model_points": 50,
+        "consensus_points": 46,
+        "model_avg": 3.85,
+        "consensus_avg": 3.54,
+        "model_better": 1,
+        "equal": 12,
+        "consensus_better": 0
+      }
+    },
+    "Groq Qwen 3.6 27B": {
+      "own": {
+        "matches": 16,
+        "points": 60,
+        "avg": 3.75
+      },
+      "on_no_consensus_matches": {
+        "matches": 3,
+        "points": 10,
+        "avg": 3.33
+      },
+      "pairwise_vs_consensus": {
+        "common_matches": 13,
+        "model_points": 50,
+        "consensus_points": 46,
+        "model_avg": 3.85,
+        "consensus_avg": 3.54,
+        "model_better": 1,
+        "equal": 12,
+        "consensus_better": 0
+      }
+    },
+    "Groq Qwen 3.8 27B": {
+      "own": {
+        "matches": 33,
+        "points": 92,
+        "avg": 2.79
+      },
+      "on_no_consensus_matches": {
+        "matches": 6,
+        "points": 10,
+        "avg": 1.67
+      },
+      "pairwise_vs_consensus": {
+        "common_matches": 27,
+        "model_points": 82,
+        "consensus_points": 78,
+        "model_avg": 3.04,
+        "consensus_avg": 2.89,
+        "model_better": 2,
+        "equal": 25,
+        "consensus_better": 0
+      }
+    },
+    "Cloudflare Clef-omni": {
+      "own": {
+        "matches": 33,
+        "points": 70,
+        "avg": 2.12
+      },
+      "on_no_consensus_matches": {
+        "matches": 6,
+        "points": 10,
+        "avg": 1.67
+      },
+      "pairwise_vs_consensus": {
+        "common_matches": 27,
+        "model_points": 60,
+        "consensus_points": 78,
+        "model_avg": 2.22,
+        "consensus_avg": 2.89,
+        "model_better": 1,
+        "equal": 21,
+        "consensus_better": 5
+      }
+    },
+    "Cohere Command A+": {
+      "own": {
+        "matches": 41,
+        "points": 140,
+        "avg": 3.41
+      },
+      "on_no_consensus_matches": {
+        "matches": 7,
+        "points": 12,
+        "avg": 1.71
+      },
+      "pairwise_vs_consensus": {
+        "common_matches": 34,
+        "model_points": 128,
+        "consensus_points": 108,
+        "model_avg": 3.76,
+        "consensus_avg": 3.18,
+        "model_better": 6,
+        "equal": 28,
+        "consensus_better": 0
+      }
+    },
+    "Groq GPT-OSS 120B": {
+      "own": {
+        "matches": 48,
+        "points": 140,
+        "avg": 2.92
+      },
+      "on_no_consensus_matches": {
+        "matches": 8,
+        "points": 12,
+        "avg": 1.5
+      },
+      "pairwise_vs_consensus": {
+        "common_matches": 40,
+        "model_points": 128,
+        "consensus_points": 124,
+        "model_avg": 3.2,
+        "consensus_avg": 3.1,
+        "model_better": 4,
+        "equal": 33,
+        "consensus_better": 3
+      }
+    }
+  }
+}
