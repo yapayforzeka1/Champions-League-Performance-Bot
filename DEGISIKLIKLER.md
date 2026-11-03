@@ -15,3 +15,15 @@
 
 Testler: 70 mevcut + 17 yeni = 87, hepsi geçiyor. Eski FINAL arşivleri ve PNG'ler değiştirilmedi.
 Not: 2 ve 3'ün asıl kaynağı tahmin reposundadır; burada yalnızca tespit/uyarı eklendi.
+
+---
+
+# Düzeltme turu 2 — maç bazlı arşiv ve taban çizgisi
+
+| Ne | Dosyalar |
+|---|---|
+| Maç bazlı model tahmini arşivi (resmî istatistiklerle doğrulamalı, FINAL'lere dokunmaz) | `match_prediction_archive.py` (yeni) |
+| 1–3. hafta geri doldurma (görsellerden okunmuş, her istatistikle doğrulanmış) | `reconstruct_png_predictions.py` (yeni), `data/kicktipp_match_predictions.json` (yeni) |
+| Kilitli taban çizgisi karşılaştırması, aynı maçlar, eşleştirilmiş fark + bootstrap, iç-örnek / dış-örnek ayrımı | `baseline_analysis.py` (yeni), `data/baseline_comparison.json`, `reports/baseline_comparison.md` |
+| Workflow: arşiv ve taban çizgisi adımları (hata verse de teslimatı durdurmaz) | `.github/workflows/performance_bot.yml` |
+| 15 yeni test (toplam 102) | `tests/test_round2_archive_baseline.py` |
