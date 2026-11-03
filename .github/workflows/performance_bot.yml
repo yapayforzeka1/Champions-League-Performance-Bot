@@ -106,6 +106,34 @@ jobs:
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
+      # Read-only like-for-like consensus vs model comparison. Independent of the
+      # official FINAL and Telegram flow; a failure here never blocks delivery.
+      - name: Prepare common-match comparison (no AI / no Telegram)
+        id: common
+        continue-on-error: true
+        env:
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          TELEGRAM_ENABLED: "false"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+          EXPECTED_UCL_LEAGUE_MATCHES: "18"
+        run: python common_match_report.py
+
+      - name: Save common-match comparison
+        if: ${{ steps.common.outcome == 'success' }}
+        run: |
+          for f in data/common_match_comparison.json data/common_match_season.json reports/common_match_comparison.md; do
+            if [ -f "$f" ]; then git add -- "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive common-match consensus comparison separately"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
       # An UNCERTAIN receipt must be committed remotely BEFORE any sendPhoto.
       # If delivery or the final git push fails, later runs never auto-resend.
       - name: Reserve current-run deliveries
