@@ -106,6 +106,52 @@ jobs:
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
+      # Per-match model predictions of every FINAL week (integrity-checked against the
+      # official FINAL statistics). Read-only for official files; never blocks delivery.
+      - name: Archive per-match model predictions (no AI / no Telegram)
+        id: matchpred
+        continue-on-error: true
+        env:
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          TELEGRAM_ENABLED: "false"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+          EXPECTED_UCL_LEAGUE_MATCHES: "18"
+        run: python match_prediction_archive.py
+
+      - name: Save per-match prediction archive
+        if: ${{ steps.matchpred.outcome == 'success' }}
+        run: |
+          if [ -f data/kicktipp_match_predictions.json ]; then git add -- data/kicktipp_match_predictions.json; fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive per-match model predictions separately"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      # Internal baseline comparison (not sent to Telegram). Pure computation on the archive.
+      - name: Build internal baseline comparison
+        id: baseline
+        continue-on-error: true
+        env:
+          TELEGRAM_ENABLED: "false"
+          SEASON: "2026/27"
+        run: python baseline_analysis.py
+
+      - name: Save internal baseline comparison
+        if: ${{ steps.baseline.outcome == 'success' }}
+        run: |
+          for f in data/baseline_comparison.json reports/baseline_comparison.md; do
+            if [ -f "$f" ]; then git add -- "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Update internal baseline comparison"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
       # Read-only like-for-like consensus vs model comparison. Independent of the
       # official FINAL and Telegram flow; a failure here never blocks delivery.
       - name: Prepare common-match comparison (no AI / no Telegram)
