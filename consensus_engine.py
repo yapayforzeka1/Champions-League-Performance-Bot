@@ -5,8 +5,6 @@ from typing import Any
 
 from config import MIN_CONSENSUS_AI
 
-MODES = {"NORMAL", "OUTCOME_COMMON_SCORE_SPLIT", "NO_COMMON"}
-
 
 def _strict_majority(counts: Counter[str], total: int) -> tuple[str | None, int]:
     if total <= 0 or not counts:

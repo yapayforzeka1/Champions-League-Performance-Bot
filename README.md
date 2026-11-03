@@ -25,7 +25,7 @@ Telegram gönderimi üç ayrı komuta ayrılmıştır:
 
 GitHub'a rezervasyon kaydı yazılamazsa Telegram gönderimine geçilmez. Telegram veya son GitHub kaydı hata verirse `UNCERTAIN` durumundaki raporlar **otomatik yeniden gönderilmez**, manuel inceleme gerekir. Bu, bazı iletilerin teknik hata nedeniyle hiç gitmemiş olmasına rağmen otomatik yeniden gönderilememesi anlamına gelebilir; mükerrer gönderimi önlemek için bilinçli güvenlik tercihidir.
 
-`data/kicktipp_delivery_locks.json` dosyası, kullanıcının daha önce Telegram'da aldığını doğruladığı **1. ve 2. hafta raporları** için tek seferlik tekrar-gönderim kilididir. Bu dosya mutlaka kodla birlikte GitHub'a yüklenmelidir. Geçmiş FINAl'ler, yayımlanmış ortak kararlar, AI tahminleri ve önceki PNG raporları değişmez. Yeni rapor için ayrıca açık onay ve veri doğrulaması gerekir.
+`data/kicktipp_delivery_locks.json` dosyası, kullanıcının daha önce Telegram'da aldığını doğruladığı **1. ve 2. hafta raporları** için tek seferlik tekrar-gönderim kilididir. Bu dosya mutlaka kodla birlikte GitHub'a yüklenmelidir. Geçmiş FINAL'ler, yayımlanmış ortak kararlar, AI tahminleri ve önceki PNG raporları değişmez. Yeni rapor için ayrıca açık onay ve veri doğrulaması gerekir.
 
 ## Görsellerin kaydı
 
@@ -60,3 +60,11 @@ python -m unittest discover -s tests -v
 ## Tek aktif puanlama ve tarihî FINAL güvenliği
 
 Aktif puanlar `data/kicktipp_weekly_reports.json` ve `data/kicktipp_season_performance.json` içinde 8/6/4/0 olarak tutulur. Eski `data/weekly_reports.json`, `data/season_performance.json` ve önceki rapor görselleri tarihî delil olarak değiştirilmez. Birinci maç haftası eski FINAL ise 90 dakika skoru güncel sağlayıcıdan teyit edildikten sonra yeni standarda göre hesaplanır, Telegram'a tekrar gönderilmez. İkinci hafta ve sonrası ancak maç günü tüm sonuçları netleşince FINAL olur. Eksik maçlardan sahte FINAL üretilmez; kaynak tahminlere dokunulmaz.
+
+## Operasyonel uyarılar ve ek analizler (tamamı yalnızca-okuma / log amaçlı)
+
+- **Düşük kapsama uyarısı:** Yeni bir FINAL hazırlanırken aktif bir modelin geçerli tahmin oranı `LOW_COVERAGE_WARN_PCT` (varsayılan %50) altındaysa Actions günlüğünde `Low AI coverage` uyarısı çıkar. Puanlara dokunmaz; asıl düzeltme tahmin repo tarafında yapılır (model adı, kota, yeniden deneme).
+- **Kanıt zaman payı uyarısı:** Deneysel kanıt commit'i vuruştan `MIN_PROVENANCE_LEAD_MINUTES` (varsayılan 20 dk) daha geç atılmışsa `Thin provenance margin` uyarısı çıkar. Yeni deneysel haftalarda `provenance.lead_minutes` alanı saklanır. Çözüm tahmin repo workflow'unda dosyayı daha erken commit etmektir.
+- **Konsensüs vs model (aynı maçlar):** `python common_match_report.py` resmî FINAL'lere dokunmadan `data/common_match_comparison.json`, `data/common_match_season.json` ve `reports/common_match_comparison.md` üretir. Her model, konsensüsün oluştuğu aynı maçlarda kıyaslanır; skor uzlaşması olmayan (en çok 4 puan) konsensüs maçları ayrı gösterilir. Daha önce yazılmış hafta bir daha hesaplanmaz.
+- **Eleme turları:** `result_provider` yalnızca `LEAGUE_STAGE` (ve eşdeğeri) maçlarını matchday olarak gruplar. PLAYOFFS/LAST_16 gibi turların küçük matchday numaraları lig haftalarına karışmaz. Eleme turu raporlaması ayrıca tasarlanmalıdır.
+- **Görseller:** Tarih/saat sağlayıcı fikstüründen alınır ve Türkiye saatine (UTC+3) çevrilir; model renkleri sabittir. Eski PNG'ler değiştirilmez.

@@ -1,0 +1,12 @@
+{
+  "1": {
+    "weekly": "SENT",
+    "season": "SENT",
+    "basis": "Historical FINAL and user-confirmed prior Telegram delivery; do not resend automatically"
+  },
+  "2": {
+    "weekly": "SENT",
+    "season": "SENT",
+    "basis": "User-confirmed Telegram week-2 and season report received before archive git push failure (2026-10-15); do not resend automatically"
+  }
+}

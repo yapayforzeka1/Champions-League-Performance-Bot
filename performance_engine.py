@@ -5,7 +5,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Any
 
-from config import MODEL_ORDER, SEASON, TERMINAL_STATUSES
+from config import ACTIVE_MODEL_ORDER, LOW_COVERAGE_WARN_PCT, MODEL_ORDER, SEASON, TERMINAL_STATUSES
 
 
 def actual_outcome(home: int, away: int) -> str:
@@ -423,3 +423,24 @@ def build_season_snapshot(weekly_reports: dict[str, Any]) -> dict[str, Any]:
     consensus["point_efficiency_pct"] = round(consensus["points"] / (consensus["matches"] * 8) * 100, 1) if consensus["matches"] else 0
     consensus["coverage_pct"] = round(consensus["matches"] / consensus["evaluated_matches"] * 100, 1) if consensus["evaluated_matches"] else 0
     return {"season": SEASON, "finalized_matchdays": sorted((key for key, report in weekly_reports.items() if report.get("status") == "FINAL"), key=int), "models": totals, "consensus": consensus}
+
+
+def low_coverage_models(stats: dict[str, Any], threshold: float | None = None) -> list[dict[str, Any]]:
+    """Diagnose active models whose valid-prediction coverage is poor.
+
+    Log-only helper: it never alters points, coverage or any archived value. A
+    low coverage is an upstream (prediction repo / API quota) problem, not a
+    zero-point result.
+    """
+    limit = LOW_COVERAGE_WARN_PCT if threshold is None else threshold
+    found = []
+    for model in ACTIVE_MODEL_ORDER:
+        item = (stats.get("models") or {}).get(model) or {}
+        opportunities = int(item.get("prediction_opportunities") or 0)
+        if not opportunities:
+            continue
+        ok = int(item.get("successful_predictions") or 0)
+        pct = round(100 * ok / opportunities, 1)
+        if pct < limit:
+            found.append({"model": model, "successful": ok, "opportunities": opportunities, "coverage_pct": pct})
+    return found

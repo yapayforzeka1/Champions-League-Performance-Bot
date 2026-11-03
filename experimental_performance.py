@@ -315,3 +315,18 @@ def build_experimental_season(weeks: dict[str, dict], *, season: str = SEASON) -
         dst['avg_valid_ai_count'] = round(dst['used_ai_sum'] / n, 2) if n else 0
     return {'season': season, 'scoring_rule': SCORING_RULE, 'scope': 'PROSPECTIVE_ONLY',
             'finalized_matchdays': sorted(weeks, key=int), 'methods': totals}
+
+
+def thin_provenance_margins(report: dict, minimum_minutes: float) -> list[dict]:
+    """List verified matches whose proof commit landed close to kickoff.
+
+    Diagnostic only. A late source commit would make a match unprovable, so a
+    short margin is an early warning for the prediction repo workflow.
+    """
+    thin = []
+    for method, stats in (report.get('methods') or {}).items():
+        for match_id, proof in (stats.get('provenance') or {}).items():
+            lead = proof.get('lead_minutes') if isinstance(proof, dict) else None
+            if isinstance(lead, (int, float)) and lead < minimum_minutes:
+                thin.append({'method': method, 'match_id': match_id, 'lead_minutes': lead})
+    return thin

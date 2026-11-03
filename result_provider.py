@@ -6,7 +6,7 @@ from typing import Any
 
 import requests
 
-from config import COMPETITION_CODE, FOOTBALL_DATA_API_KEY, FOOTBALL_DATA_BASE_URL, REQUEST_TIMEOUT
+from config import COMPETITION_CODE, FOOTBALL_DATA_API_KEY, FOOTBALL_DATA_BASE_URL, LEAGUE_STAGES, REQUEST_TIMEOUT
 
 
 class ResultProviderError(RuntimeError):
@@ -44,7 +44,14 @@ class FootballDataResultProvider:
 
     def get_matches_by_matchday(self) -> dict[int, list[dict[str, Any]]]:
         result: dict[int, list[dict[str, Any]]] = {}
+        skipped = 0
         for match in self.get_all_matches():
+            # Knockout rounds are not league matchdays: grouping them by the
+            # bare `matchday` number could contaminate a league-phase report.
+            stage = str(match.get("stage") or "").upper()
+            if stage and stage not in LEAGUE_STAGES:
+                skipped += 1
+                continue
             md = match.get("matchday")
             if md is None:
                 continue
@@ -55,6 +62,8 @@ class FootballDataResultProvider:
             result.setdefault(md_int, []).append(match)
         for rows in result.values():
             rows.sort(key=lambda m: str(m.get("utcDate", "")))
+        if skipped:
+            print(f"ℹ️ {skipped} knockout-stage fixtures ignored (league-phase reporting only)")
         return result
 
     def get_match_status_map(self) -> dict[str, dict[str, Any]]:

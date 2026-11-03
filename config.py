@@ -13,7 +13,6 @@ FOOTBALL_DATA_BASE_URL = "https://api.football-data.org/v4"
 COMPETITION_CODE = os.getenv("COMPETITION_CODE", "CL")
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "30"))
 MIN_CONSENSUS_AI = int(os.getenv("MIN_CONSENSUS_AI", "3"))
-REPORT_DELAY_MINUTES = int(os.getenv("REPORT_DELAY_MINUTES", "60"))
 
 ANALYSIS_TELEGRAM_BOT_TOKEN = os.getenv("ANALYSIS_TELEGRAM_BOT_TOKEN", "")
 ANALYSIS_TELEGRAM_CHAT_ID = os.getenv("ANALYSIS_TELEGRAM_CHAT_ID", "")
@@ -23,7 +22,15 @@ DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
 REPORT_DIR = Path(os.getenv("REPORT_DIR", "reports"))
 WEEKLY_REPORTS_FILE = DATA_DIR / "kicktipp_weekly_reports.json"
 SEASON_PERFORMANCE_FILE = DATA_DIR / "kicktipp_season_performance.json"
-PERFORMANCE_STATE_FILE = DATA_DIR / "performance_state.json"
+
+# football-data.org `stage` values that belong to the 18-match league phase.
+# Knockout fixtures (PLAYOFFS, LAST_16, ...) reuse small matchday numbers and
+# must never be merged into a league-phase matchday report.
+LEAGUE_STAGES = {"LEAGUE_STAGE", "REGULAR_SEASON", "GROUP_STAGE"}
+
+# Operational warning thresholds (log-only; never change scores).
+LOW_COVERAGE_WARN_PCT = float(os.getenv("LOW_COVERAGE_WARN_PCT", "50"))
+MIN_PROVENANCE_LEAD_MINUTES = int(os.getenv("MIN_PROVENANCE_LEAD_MINUTES", "20"))
 
 TERMINAL_STATUSES = {
     "FINISHED",

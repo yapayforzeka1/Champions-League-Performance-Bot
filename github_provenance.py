@@ -120,6 +120,7 @@ class GitHubPreKickoffEvidence:
                 return {'verified': False, 'reason': 'COMMITTED_VOTE_HASH_MISMATCH'}
             return {'verified': True, 'reason': 'PREKICKOFF_GITHUB_SNAPSHOT',
                     'commit_sha': sha, 'commit_date': committed_at.isoformat(),
+                    'lead_minutes': round((kickoff_dt - committed_at).total_seconds() / 60, 1),
                     'source_experiment_sha256': stable_hash(experiment)}
         except (requests.RequestException, KeyError, ValueError, TypeError) as exc:
             return {'verified': False, 'reason': 'PROVENANCE_LOOKUP_FAILED',

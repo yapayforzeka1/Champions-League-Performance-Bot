@@ -1,0 +1,180 @@
+name: Champions League Performance Bot
+
+on:
+  schedule:
+    - cron: "30 1 * * *"   # Her gün 04:30 Türkiye; yalnızca sonuç kontrolü, AI çağrısı yok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: performance-reports
+  cancel-in-progress: false
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      # Only staged JSON and rendered images are produced here: no Telegram.
+      - name: Prepare verified reports (no Telegram)
+        id: prepare
+        env:
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          TELEGRAM_ENABLED: "false"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+          EXPECTED_UCL_LEAGUE_MATCHES: "18"
+          REQUIRE_DELIVERY_LOCKS: "true"
+          PERFORMANCE_RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: python performance_bot.py prepare
+
+      - name: Configure archive committer
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Save verified performance archives BEFORE delivery
+        run: |
+          for f in data/kicktipp_weekly_reports.json data/kicktipp_season_performance.json; do
+            if [ -f "$f" ]; then git add -- "$f"; fi
+          done
+          for f in reports/kicktipp_*.png; do
+            if [ -f "$f" ]; then git add -f -- "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive verified Kicktipp reports before delivery"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      # Read-only comparison, independent of official FINAL and Telegram delivery.
+      # A temporary provenance failure keeps the experimental week retryable.
+      # Experimental failures must not interrupt official FINAL/Telegram delivery.
+      - name: Prepare experimental performance (no AI / no Telegram)
+        id: experiments
+        continue-on-error: true
+        env:
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          TELEGRAM_ENABLED: "false"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+          EXPECTED_UCL_LEAGUE_MATCHES: "18"
+        run: python experimental_runner.py
+
+      # continue-on-error keeps the official report alive. Make the failure
+      # visible as a warning and in the workflow's run summary.
+      - name: Flag experimental evaluation failure
+        if: ${{ steps.experiments.outcome == 'failure' }}
+        run: |
+          echo '::warning title=Experimental performance needs review::Experimental evaluation failed or is waiting for GitHub provenance. Official reporting continues; no experimental FINAL was saved for pending weeks.'
+          echo '### ⚠️ Experimental performance evaluation needs review' >> "$GITHUB_STEP_SUMMARY"
+          echo 'See the **Prepare experimental performance** logs for the affected week, match, and reason. Pending weeks will be retried on the next eligible run. Official FINAL and Telegram delivery are unaffected.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save separate experimental analyses
+        if: ${{ steps.experiments.outcome == 'success' }}
+        run: |
+          for f in data/experimental_weekly_reports.json data/experimental_season_performance.json reports/experimental_performance.md; do
+            if [ -f "$f" ]; then git add -- "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive prospective experimental performance separately"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      # Read-only like-for-like consensus vs model comparison. Independent of the
+      # official FINAL and Telegram flow; a failure here never blocks delivery.
+      - name: Prepare common-match comparison (no AI / no Telegram)
+        id: common
+        continue-on-error: true
+        env:
+          PREDICTION_REPO: ${{ vars.PREDICTION_REPO || 'yapayforzeka1/Haftalik-Mac-Tahmini' }}
+          PREDICTION_BRANCH: main
+          PREDICTION_FILE: match_predictions.json
+          PREDICTION_REPO_TOKEN: ${{ secrets.PREDICTION_REPO_TOKEN }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          TELEGRAM_ENABLED: "false"
+          SEASON: "2026/27"
+          COMPETITION_CODE: "CL"
+          EXPECTED_UCL_LEAGUE_MATCHES: "18"
+        run: python common_match_report.py
+
+      - name: Save common-match comparison
+        if: ${{ steps.common.outcome == 'success' }}
+        run: |
+          for f in data/common_match_comparison.json data/common_match_season.json reports/common_match_comparison.md; do
+            if [ -f "$f" ]; then git add -- "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive common-match consensus comparison separately"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      # An UNCERTAIN receipt must be committed remotely BEFORE any sendPhoto.
+      # If delivery or the final git push fails, later runs never auto-resend.
+      - name: Reserve current-run deliveries
+        env:
+          PERFORMANCE_RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: python performance_bot.py reserve
+
+      - name: Persist delivery reservations BEFORE Telegram
+        run: |
+          if [ -f data/kicktipp_weekly_reports.json ]; then git add -- data/kicktipp_weekly_reports.json; fi
+          if [ -f data/kicktipp_delivery_batch.json ]; then
+            git add -- data/kicktipp_delivery_batch.json
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Reserve Telegram receipts before sending"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Deliver only newly reserved Telegram reports
+        id: deliver
+        env:
+          ANALYSIS_TELEGRAM_BOT_TOKEN: ${{ secrets.ANALYSIS_TELEGRAM_BOT_TOKEN }}
+          ANALYSIS_TELEGRAM_CHAT_ID: ${{ secrets.ANALYSIS_TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: "true"
+          PERFORMANCE_RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: python performance_bot.py deliver
+
+      - name: Save Telegram delivery receipts
+        if: ${{ always() && steps.deliver.outcome != 'skipped' && steps.deliver.outcome != '' }}
+        run: |
+          if [ -f data/kicktipp_weekly_reports.json ]; then git add -- data/kicktipp_weekly_reports.json; fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Save confirmed Telegram receipts"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: performance-recovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            data/
+            reports/kicktipp_*.png
+          retention-days: 7

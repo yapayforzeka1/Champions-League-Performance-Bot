@@ -7,8 +7,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from config import DATA_DIR, REPORT_DIR, SEASON, WEEKLY_REPORTS_FILE
-from experimental_performance import METHODS, build_experimental_season, build_experimental_week
+from config import DATA_DIR, MIN_PROVENANCE_LEAD_MINUTES, REPORT_DIR, SEASON, WEEKLY_REPORTS_FILE
+from experimental_performance import METHODS, build_experimental_season, build_experimental_week, thin_provenance_margins
 from github_provenance import GitHubPreKickoffEvidence
 from performance_bot import _load_json, _save_json
 from performance_engine import matchday_resolution, merge_latest_results
@@ -103,6 +103,13 @@ def prepare_experimental_reports() -> int:
             continue
         existing[key] = report
         new += 1
+        thin = thin_provenance_margins(report, MIN_PROVENANCE_LEAD_MINUTES)
+        if thin:
+            ids = sorted({item['match_id'] for item in thin})
+            print('::warning title=Thin provenance margin::'
+                  f'Matchday {md}: {len(ids)} match(es) had the proof commit less than '
+                  f'{MIN_PROVENANCE_LEAD_MINUTES} min before kickoff ({", ".join(ids[:6])}). '
+                  'Commit the prediction file earlier in the prediction repo workflow.')
         counts = ', '.join(f'{method}: {report["methods"][method]["valid_predictions"]}' for method in METHODS)
         print(f'🧪 Experimental matchday {md} FINAL staged ({counts}); no Telegram.')
     if not new:

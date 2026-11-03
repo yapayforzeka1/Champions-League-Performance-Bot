@@ -5,7 +5,7 @@ already graded snapshot/records and never calls an AI or football API.
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +18,18 @@ BG=(4,17,39); PANEL=(7,27,57); PANEL2=(10,34,70); LINE=(20,126,210)
 WHITE=(244,247,252); MUTED=(166,184,207); CYAN=(49,177,255); GOLD=(231,180,70)
 GREEN=(48,207,137); RED=(255,79,83); ORANGE=(255,166,58); PURPLE=(180,93,255)
 MODEL_COLORS=[CYAN,ORANGE,RED,PURPLE,(93,224,165)]
+# A model keeps the same colour every week, even if the active roster changes.
+MODEL_COLOR_BY_NAME={
+    "Gemini 3.6 Flash":CYAN, "Groq Qwen 3.8 27B":ORANGE, "Cohere Command A+":RED,
+    "Groq GPT-OSS 120B":PURPLE, "Cloudflare Clef-omni":(93,224,165),
+    "Mistral Small Latest":(140,150,170), "Groq Qwen 3.6 27B":(255,205,90),
+}
+# Turkey has used a fixed UTC+3 offset (no DST) since 2016.
+TURKEY_TZ=timezone(timedelta(hours=3))
+
+
+def _model_color(name:str, fallback_index:int=0):
+    return MODEL_COLOR_BY_NAME.get(name, MODEL_COLORS[fallback_index%len(MODEL_COLORS)])
 
 
 def _font(size:int,bold:bool=False):
@@ -84,11 +96,14 @@ def _record_team(record,key):
 
 
 def _record_time(record):
-    raw=record.get("utcDate") or record.get("utc_date") or record.get("kickoff") or record.get("date")
+    # The prediction archive stores kickoff as `match_utc`; the provider uses `utcDate`.
+    raw=(record.get("utcDate") or record.get("match_utc") or record.get("utc_date")
+         or record.get("kickoff") or record.get("date"))
     if not raw: return "—"
     try:
         dt=datetime.fromisoformat(str(raw).replace("Z","+00:00"))
-        return dt.strftime("%d.%m\n%H:%M")
+        if dt.tzinfo is None: dt=dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(TURKEY_TZ).strftime("%d.%m\n%H:%M")  # header says SAAT TS
     except Exception: return str(raw)[:16]
 
 
@@ -190,7 +205,7 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
     for cw,label in zip(base_cols,headers):
         d.rectangle((x,y,x+cw,y+table_head),fill=PANEL,outline=LINE,width=1); _center(d,(x,y,x+cw,y+table_head),label,11,True,MUTED); x+=cw
     for gi,g in enumerate(groups):
-        color=GREEN if g=="__CONSENSUS__" else MODEL_COLORS[gi%len(MODEL_COLORS)]
+        color=GREEN if g=="__CONSENSUS__" else _model_color(g,gi)
         label="KONSENSÜS" if g=="__CONSENSUS__" else MODEL_SHORT.get(g,g)
         d.rectangle((x,y,x+group_w,y+table_head),fill=PANEL,outline=color,width=1)
         _center(d,(x,y,x+group_w,y+28),label,12,True,color)
@@ -243,7 +258,7 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
     yy=y0+42
     for i,r in enumerate(summary_rows):
         d.line((32,yy,w-32,yy),fill=(18,69,111),width=1)
-        color=GREEN if r["short"]=="KONSENSÜS" else MODEL_COLORS[i%len(MODEL_COLORS)]
+        color=GREEN if r["short"]=="KONSENSÜS" else _model_color(r["name"],i)
         _text(d,(44,yy+24),r["short"],12,True,color,"lm")
         dist=r["dist"]; values=[dist.get("8",0),dist.get("6",0),dist.get("4",0),dist.get("0",0),f"{r['successful']}/{r['opportunities']}",r["successful"],r["points"]]
         centers=[226,334,442,550,661,765,870]
@@ -324,7 +339,7 @@ def render_season_image(season: dict[str, Any]) -> Path:
     for i, row in enumerate(rows):
         d.rounded_rectangle((30, y, w - 30, y + 52), radius=10,
                             fill=PANEL if i % 2 == 0 else PANEL2)
-        color = GREEN if row["short"] == "KONSENSÜS" else MODEL_COLORS[i % len(MODEL_COLORS)]
+        color = GREEN if row["short"] == "KONSENSÜS" else _model_color(row["name"], i)
         _text(d, (55, y + 17), row["short"], 14, True, color)
         _text(d, (334, y + 17), row["points"], 14, True, WHITE)
         _text(d, (505, y + 17), " / ".join(str(row["dist"].get(k, 0)) for k in ("8", "6", "4", "0")), 14, True, WHITE)

@@ -7,7 +7,8 @@ import os
 from pathlib import Path
 
 from config import SEASON, TELEGRAM_ENABLED, DATA_DIR, SEASON_PERFORMANCE_FILE, WEEKLY_REPORTS_FILE
-from performance_engine import _provider_regular_score, archived_consensus, build_season_snapshot, build_weekly_snapshot, matchday_resolution, merge_latest_results
+from performance_engine import (_provider_regular_score, archived_consensus, build_season_snapshot, build_weekly_snapshot,
+                                low_coverage_models, matchday_resolution, merge_latest_results)
 from result_provider import FootballDataResultProvider, ResultProviderError
 from source_loader import SourceLoadError, load_prediction_archive
 from telegram_report import send_photo
@@ -39,6 +40,13 @@ def _prepare_render_records(snapshot: dict, predictions: dict) -> dict:
         record = predictions.get(str(row["match_id"]))
         if record:
             display_record = copy.deepcopy(record)
+            # Kickoff comes from the verified fixture row, not from the source
+            # archive's differently named field (which left the date column blank).
+            if row.get("utcDate"):
+                display_record["utcDate"] = row["utcDate"]
+            for side in ("home", "away"):
+                if not display_record.get(side) and row.get(side):
+                    display_record[side] = row[side]
             # Render the original published pre-match decision, never a post-hoc vote.
             display_record["consensus"] = copy.deepcopy(archived_consensus(record))
             rows.append(display_record)
@@ -153,6 +161,10 @@ def prepare_reports() -> int:
                 continue
 
         snapshot = build_weekly_snapshot(graded, matchday, resolution)
+        for item in low_coverage_models(snapshot["stats"]):
+            print(f"::warning title=Low AI coverage::Matchday {matchday}: {item['model']} produced "
+                  f"{item['successful']}/{item['opportunities']} valid predictions "
+                  f"(%{item['coverage_pct']}). Check prediction repo model/API/quota; not scored as 0.")
         if legacy_final:
             snapshot["migrated_from_legacy_final"] = True
         # A confirmed historic Telegram receipt is authoritative even if
