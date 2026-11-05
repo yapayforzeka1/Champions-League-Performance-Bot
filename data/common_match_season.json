@@ -5,46 +5,47 @@
   "finalized_matchdays": [
     "1",
     "2",
-    "3"
+    "3",
+    "4"
   ],
-  "matches": 49,
+  "matches": 65,
   "consensus": {
-    "matches": 40,
-    "points": 124,
-    "avg": 3.1,
+    "matches": 54,
+    "points": 170,
+    "avg": 3.15,
     "with_score": {
+      "matches": 31,
+      "points": 98,
+      "avg": 3.16
+    },
+    "outcome_only_max4": {
       "matches": 23,
       "points": 72,
       "avg": 3.13
     },
-    "outcome_only_max4": {
-      "matches": 17,
-      "points": 52,
-      "avg": 3.06
-    },
-    "no_consensus_matches": 9
+    "no_consensus_matches": 11
   },
   "models": {
     "Gemini 3.6 Flash": {
       "own": {
-        "matches": 15,
-        "points": 58,
-        "avg": 3.87
+        "matches": 27,
+        "points": 106,
+        "avg": 3.93
       },
       "on_no_consensus_matches": {
-        "matches": 2,
-        "points": 8,
+        "matches": 3,
+        "points": 12,
         "avg": 4.0
       },
       "pairwise_vs_consensus": {
-        "common_matches": 13,
-        "model_points": 50,
-        "consensus_points": 46,
-        "model_avg": 3.85,
-        "consensus_avg": 3.54,
-        "model_better": 1,
-        "equal": 12,
-        "consensus_better": 0
+        "common_matches": 24,
+        "model_points": 94,
+        "consensus_points": 92,
+        "model_avg": 3.92,
+        "consensus_avg": 3.83,
+        "model_better": 2,
+        "equal": 21,
+        "consensus_better": 1
       }
     },
     "Groq Qwen 3.6 27B": {
@@ -71,90 +72,90 @@
     },
     "Groq Qwen 3.8 27B": {
       "own": {
-        "matches": 33,
-        "points": 92,
-        "avg": 2.79
+        "matches": 49,
+        "points": 148,
+        "avg": 3.02
       },
       "on_no_consensus_matches": {
-        "matches": 6,
-        "points": 10,
-        "avg": 1.67
+        "matches": 8,
+        "points": 18,
+        "avg": 2.25
       },
       "pairwise_vs_consensus": {
-        "common_matches": 27,
-        "model_points": 82,
-        "consensus_points": 78,
-        "model_avg": 3.04,
-        "consensus_avg": 2.89,
-        "model_better": 2,
-        "equal": 25,
+        "common_matches": 41,
+        "model_points": 130,
+        "consensus_points": 124,
+        "model_avg": 3.17,
+        "consensus_avg": 3.02,
+        "model_better": 3,
+        "equal": 38,
         "consensus_better": 0
       }
     },
     "Cloudflare Clef-omni": {
       "own": {
-        "matches": 33,
-        "points": 70,
-        "avg": 2.12
+        "matches": 49,
+        "points": 118,
+        "avg": 2.41
       },
       "on_no_consensus_matches": {
-        "matches": 6,
+        "matches": 8,
         "points": 10,
-        "avg": 1.67
+        "avg": 1.25
       },
       "pairwise_vs_consensus": {
-        "common_matches": 27,
-        "model_points": 60,
-        "consensus_points": 78,
-        "model_avg": 2.22,
-        "consensus_avg": 2.89,
-        "model_better": 1,
-        "equal": 21,
-        "consensus_better": 5
+        "common_matches": 41,
+        "model_points": 108,
+        "consensus_points": 124,
+        "model_avg": 2.63,
+        "consensus_avg": 3.02,
+        "model_better": 3,
+        "equal": 31,
+        "consensus_better": 7
       }
     },
     "Cohere Command A+": {
       "own": {
-        "matches": 41,
-        "points": 140,
-        "avg": 3.41
+        "matches": 55,
+        "points": 176,
+        "avg": 3.2
       },
       "on_no_consensus_matches": {
-        "matches": 7,
-        "points": 12,
-        "avg": 1.71
+        "matches": 9,
+        "points": 24,
+        "avg": 2.67
       },
       "pairwise_vs_consensus": {
-        "common_matches": 34,
-        "model_points": 128,
-        "consensus_points": 108,
-        "model_avg": 3.76,
-        "consensus_avg": 3.18,
+        "common_matches": 46,
+        "model_points": 152,
+        "consensus_points": 146,
+        "model_avg": 3.3,
+        "consensus_avg": 3.17,
         "model_better": 6,
-        "equal": 28,
-        "consensus_better": 0
+        "equal": 37,
+        "consensus_better": 3
       }
     },
     "Groq GPT-OSS 120B": {
       "own": {
-        "matches": 48,
-        "points": 140,
-        "avg": 2.92
+        "matches": 64,
+        "points": 194,
+        "avg": 3.03
       },
       "on_no_consensus_matches": {
-        "matches": 8,
+        "matches": 10,
         "points": 12,
-        "avg": 1.5
+        "avg": 1.2
       },
       "pairwise_vs_consensus": {
-        "common_matches": 40,
-        "model_points": 128,
-        "consensus_points": 124,
-        "model_avg": 3.2,
-        "consensus_avg": 3.1,
-        "model_better": 4,
-        "equal": 33,
-        "consensus_better": 3
+        "common_matches": 54,
+        "model_points": 182,
+        "consensus_points": 170,
+        "model_avg": 3.37,
+        "consensus_avg": 3.15,
+        "model_better": 6,
+        "equal": 44,
+        "consensus_better": 4
       }
     }
   }
