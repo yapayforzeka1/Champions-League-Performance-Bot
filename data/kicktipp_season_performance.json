@@ -3,31 +3,33 @@
   "finalized_matchdays": [
     "1",
     "2",
-    "3"
+    "3",
+    "4"
   ],
   "models": {
     "Gemini 3.6 Flash": {
-      "matchdays": 3,
-      "points": 58,
-      "successful_predictions": 15,
-      "failed_predictions": 34,
-      "prediction_opportunities": 49,
+      "matchdays": 4,
+      "points": 106,
+      "successful_predictions": 27,
+      "failed_predictions": 38,
+      "prediction_opportunities": 65,
       "exact": 3,
-      "outcome": 11,
-      "avg": 3.87,
-      "coverage_pct": 30.6,
-      "outcome_pct": 73.3,
-      "point_efficiency_pct": 48.3,
+      "outcome": 22,
+      "avg": 3.93,
+      "coverage_pct": 41.5,
+      "outcome_pct": 81.5,
+      "point_efficiency_pct": 49.1,
       "point_distribution": {
         "8": 3,
-        "6": 1,
-        "4": 7,
-        "0": 4
+        "6": 3,
+        "4": 16,
+        "0": 5
       },
       "week_points": {
         "1": 40,
         "2": 0,
-        "3": 18
+        "3": 18,
+        "4": 48
       }
     },
     "Mistral Small Latest": {
@@ -51,7 +53,8 @@
       "week_points": {
         "1": 0,
         "2": 0,
-        "3": 0
+        "3": 0,
+        "4": 0
       }
     },
     "Groq Qwen 3.6 27B": {
@@ -75,129 +78,135 @@
       "week_points": {
         "1": 60,
         "2": 0,
-        "3": 0
+        "3": 0,
+        "4": 0
       }
     },
     "Groq Qwen 3.8 27B": {
-      "matchdays": 2,
-      "points": 92,
-      "successful_predictions": 33,
+      "matchdays": 3,
+      "points": 148,
+      "successful_predictions": 49,
       "failed_predictions": 0,
-      "prediction_opportunities": 33,
-      "exact": 1,
-      "outcome": 19,
-      "avg": 2.79,
+      "prediction_opportunities": 49,
+      "exact": 2,
+      "outcome": 31,
+      "avg": 3.02,
       "coverage_pct": 100.0,
-      "outcome_pct": 57.6,
-      "point_efficiency_pct": 34.8,
+      "outcome_pct": 63.3,
+      "point_efficiency_pct": 37.8,
       "point_distribution": {
-        "8": 1,
-        "6": 6,
-        "4": 12,
-        "0": 14
-      },
-      "week_points": {
-        "1": 0,
-        "2": 48,
-        "3": 44
-      }
-    },
-    "Cloudflare Clef-omni": {
-      "matchdays": 2,
-      "points": 70,
-      "successful_predictions": 33,
-      "failed_predictions": 0,
-      "prediction_opportunities": 33,
-      "exact": 1,
-      "outcome": 15,
-      "avg": 2.12,
-      "coverage_pct": 100.0,
-      "outcome_pct": 45.5,
-      "point_efficiency_pct": 26.5,
-      "point_distribution": {
-        "8": 1,
-        "6": 3,
-        "4": 11,
+        "8": 2,
+        "6": 8,
+        "4": 21,
         "0": 18
       },
       "week_points": {
         "1": 0,
+        "2": 48,
+        "3": 44,
+        "4": 56
+      }
+    },
+    "Cloudflare Clef-omni": {
+      "matchdays": 3,
+      "points": 118,
+      "successful_predictions": 49,
+      "failed_predictions": 0,
+      "prediction_opportunities": 49,
+      "exact": 3,
+      "outcome": 25,
+      "avg": 2.41,
+      "coverage_pct": 100.0,
+      "outcome_pct": 51.0,
+      "point_efficiency_pct": 30.1,
+      "point_distribution": {
+        "8": 3,
+        "6": 3,
+        "4": 19,
+        "0": 24
+      },
+      "week_points": {
+        "1": 0,
         "2": 34,
-        "3": 36
+        "3": 36,
+        "4": 48
       }
     },
     "Cohere Command A+": {
-      "matchdays": 3,
-      "points": 140,
-      "successful_predictions": 41,
-      "failed_predictions": 8,
-      "prediction_opportunities": 49,
-      "exact": 3,
-      "outcome": 28,
-      "avg": 3.41,
-      "coverage_pct": 83.7,
-      "outcome_pct": 68.3,
-      "point_efficiency_pct": 42.7,
+      "matchdays": 4,
+      "points": 176,
+      "successful_predictions": 55,
+      "failed_predictions": 10,
+      "prediction_opportunities": 65,
+      "exact": 4,
+      "outcome": 36,
+      "avg": 3.2,
+      "coverage_pct": 84.6,
+      "outcome_pct": 65.5,
+      "point_efficiency_pct": 40.0,
       "point_distribution": {
-        "8": 3,
+        "8": 4,
         "6": 8,
-        "4": 17,
-        "0": 13
+        "4": 24,
+        "0": 19
       },
       "week_points": {
         "1": 48,
         "2": 38,
-        "3": 54
+        "3": 54,
+        "4": 36
       }
     },
     "Groq GPT-OSS 120B": {
-      "matchdays": 3,
-      "points": 140,
-      "successful_predictions": 48,
+      "matchdays": 4,
+      "points": 194,
+      "successful_predictions": 64,
       "failed_predictions": 1,
-      "prediction_opportunities": 49,
-      "exact": 3,
-      "outcome": 29,
-      "avg": 2.92,
-      "coverage_pct": 98.0,
-      "outcome_pct": 60.4,
-      "point_efficiency_pct": 36.5,
+      "prediction_opportunities": 65,
+      "exact": 5,
+      "outcome": 40,
+      "avg": 3.03,
+      "coverage_pct": 98.5,
+      "outcome_pct": 62.5,
+      "point_efficiency_pct": 37.9,
       "point_distribution": {
-        "8": 3,
-        "6": 6,
-        "4": 20,
-        "0": 19
+        "8": 5,
+        "6": 7,
+        "4": 28,
+        "0": 24
       },
       "week_points": {
         "1": 58,
         "2": 36,
-        "3": 46
+        "3": 46,
+        "4": 54
       }
     }
   },
   "consensus": {
-    "matchdays": 3,
-    "evaluated_matches": 54,
-    "matches": 40,
-    "points": 124,
+    "matchdays": 4,
+    "evaluated_matches": 72,
+    "matches": 54,
+    "points": 170,
     "exact": 3,
-    "outcome": 26,
-    "no_consensus": 14,
-    "score_split": 17,
-    "avg": 3.1,
+    "outcome": 37,
+    "no_consensus": 18,
+    "score_split": 23,
+    "avg": 3.15,
     "point_distribution": {
       "8": 3,
-      "6": 4,
-      "4": 19,
-      "0": 14
+      "6": 5,
+      "4": 29,
+      "0": 17
     },
-    "outcome_pct": 65.0,
-    "point_efficiency_pct": 38.8,
-    "coverage_pct": 74.1,
+    "outcome_pct": 68.5,
+    "point_efficiency_pct": 39.4,
+    "coverage_pct": 75.0,
     "week_points": {
       "1": 46,
       "2": 36,
-      "3": 42
+      "3": 42,
+      "4": 46
     }
   }
 }
