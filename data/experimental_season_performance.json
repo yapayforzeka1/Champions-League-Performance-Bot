@@ -3,109 +3,112 @@
   "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
   "scope": "PROSPECTIVE_ONLY",
   "finalized_matchdays": [
-    "3"
+    "3",
+    "4"
   ],
   "methods": {
     "al_score_average_v1": {
       "method": "al_score_average_v1",
       "label": "AL Skor Ortalaması",
       "version": 1,
-      "opportunities": 16,
-      "valid_predictions": 16,
-      "missing_predictions": 0,
-      "outcome": 9,
-      "exact": 1,
-      "points": 42,
-      "avg": 2.62,
-      "coverage_pct": 100.0,
-      "outcome_pct": 56.2,
-      "exact_pct": 6.2,
-      "point_efficiency_pct": 32.8,
+      "opportunities": 32,
+      "valid_predictions": 25,
+      "missing_predictions": 7,
+      "outcome": 16,
+      "exact": 2,
+      "points": 74,
+      "avg": 2.96,
+      "coverage_pct": 78.1,
+      "outcome_pct": 64.0,
+      "exact_pct": 8.0,
+      "point_efficiency_pct": 37.0,
       "point_distribution": {
-        "8": 1,
+        "8": 2,
         "6": 1,
-        "4": 7,
-        "0": 7
+        "4": 13,
+        "0": 9
       },
-      "failure_reasons": {},
+      "failure_reasons": {
+        "SOURCE_VOTES_HASH_MISMATCH": 7
+      },
       "models_used_counts": {
-        "4": 11,
-        "5": 4,
+        "4": 16,
+        "5": 8,
         "3": 1
       },
-      "used_ai_sum": 67,
-      "avg_valid_ai_count": 4.19,
+      "used_ai_sum": 107,
+      "avg_valid_ai_count": 4.28,
       "provenance": {},
       "head_to_head": {
         "Gemini 3.6 Flash": {
-          "common_matches": 5,
-          "experimental_points": 18,
-          "comparison_points": 18,
-          "experimental_better": 0,
-          "equal": 5,
+          "common_matches": 11,
+          "experimental_points": 42,
+          "comparison_points": 38,
+          "experimental_better": 1,
+          "equal": 10,
           "comparison_better": 0,
-          "experimental_outcome": 4,
-          "comparison_outcome": 4
+          "experimental_outcome": 10,
+          "comparison_outcome": 9
         },
         "Groq Qwen 3.8 27B": {
-          "common_matches": 16,
-          "experimental_points": 42,
-          "comparison_points": 44,
+          "common_matches": 25,
+          "experimental_points": 74,
+          "comparison_points": 76,
           "experimental_better": 0,
-          "equal": 15,
+          "equal": 24,
           "comparison_better": 1,
-          "experimental_outcome": 9,
-          "comparison_outcome": 9
+          "experimental_outcome": 16,
+          "comparison_outcome": 16
         },
         "Groq GPT-OSS 120B": {
-          "common_matches": 16,
-          "experimental_points": 42,
-          "comparison_points": 46,
-          "experimental_better": 2,
-          "equal": 11,
-          "comparison_better": 3,
-          "experimental_outcome": 9,
-          "comparison_outcome": 10
+          "common_matches": 25,
+          "experimental_points": 74,
+          "comparison_points": 82,
+          "experimental_better": 3,
+          "equal": 17,
+          "comparison_better": 5,
+          "experimental_outcome": 16,
+          "comparison_outcome": 17
         },
         "Cloudflare Clef-omni": {
-          "common_matches": 16,
-          "experimental_points": 42,
-          "comparison_points": 36,
-          "experimental_better": 2,
-          "equal": 14,
-          "comparison_better": 0,
-          "experimental_outcome": 9,
-          "comparison_outcome": 8
+          "common_matches": 25,
+          "experimental_points": 74,
+          "comparison_points": 64,
+          "experimental_better": 3,
+          "equal": 21,
+          "comparison_better": 1,
+          "experimental_outcome": 16,
+          "comparison_outcome": 14
         },
         "Ortak karar": {
-          "common_matches": 14,
-          "experimental_points": 42,
-          "comparison_points": 42,
+          "common_matches": 22,
+          "experimental_points": 66,
+          "comparison_points": 66,
           "experimental_better": 0,
-          "equal": 14,
+          "equal": 22,
           "comparison_better": 0,
-          "experimental_outcome": 9,
-          "comparison_outcome": 9
+          "experimental_outcome": 15,
+          "comparison_outcome": 15
         },
         "Cohere Command A+": {
-          "common_matches": 14,
-          "experimental_points": 38,
-          "comparison_points": 54,
-          "experimental_better": 0,
-          "equal": 10,
+          "common_matches": 21,
+          "experimental_points": 62,
+          "comparison_points": 74,
+          "experimental_better": 1,
+          "equal": 16,
           "comparison_better": 4,
-          "experimental_outcome": 8,
-          "comparison_outcome": 11
+          "experimental_outcome": 13,
+          "comparison_outcome": 15
         },
         "En Sık AL Skoru": {
-          "common_matches": 14,
-          "experimental_points": 38,
-          "comparison_points": 46,
+          "common_matches": 20,
+          "experimental_points": 54,
+          "comparison_points": 66,
           "experimental_better": 0,
-          "equal": 12,
-          "comparison_better": 2,
-          "experimental_outcome": 8,
-          "comparison_outcome": 10
+          "equal": 17,
+          "comparison_better": 3,
+          "experimental_outcome": 12,
+          "comparison_outcome": 14
         }
       },
       "valid_match_ids": [
@@ -124,7 +127,16 @@
         "575373",
         "575374",
         "575375",
-        "575376"
+        "575376",
+        "575379",
+        "575380",
+        "575381",
+        "575383",
+        "575385",
+        "575386",
+        "575389",
+        "575390",
+        "575391"
       ],
       "match_evaluations": {
         "575359": {
@@ -270,6 +282,87 @@
           "exact": false,
           "created_at": "2026-10-21T18:31:15.315127+00:00",
           "source_votes_sha256": "1a762bd70b0d87af6283a1654cdf5595b55acd76097e75c0065023d4d0c1a6d8"
+        },
+        "575379": {
+          "predicted_score": "1-2",
+          "actual_score": "0-3",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-03T19:02:14.881331+00:00",
+          "source_votes_sha256": "184172b817896774d113deeef57bf2e563ec888c0684d72bdd9b25d14c379886"
+        },
+        "575380": {
+          "predicted_score": "2-1",
+          "actual_score": "3-0",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-03T19:02:39.430635+00:00",
+          "source_votes_sha256": "5ec8bf99a4e6ec23cf91480f5c121096c5f622bc93ac14ccd12eeef673e3fb04"
+        },
+        "575381": {
+          "predicted_score": "1-2",
+          "actual_score": "0-2",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-03T19:04:05.843832+00:00",
+          "source_votes_sha256": "f0370aa44e77e6d6064898749f8870df5212728d5fe45d6a7cdda05af3e8da86"
+        },
+        "575383": {
+          "predicted_score": "0-2",
+          "actual_score": "3-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-03T19:32:06.225517+00:00",
+          "source_votes_sha256": "8a6ca557251c0ac36b786f3a67350cee4847c3a8729e155e7709b022e38c6087"
+        },
+        "575385": {
+          "predicted_score": "2-1",
+          "actual_score": "4-0",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-03T19:05:18.954391+00:00",
+          "source_votes_sha256": "355c12bff685b8c7e65aa91da13a0dcca4afd63c708e5ea0800fdc274637ddae"
+        },
+        "575386": {
+          "predicted_score": "0-3",
+          "actual_score": "2-3",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-04T17:16:30.767710+00:00",
+          "source_votes_sha256": "5f09268bfd4118af774087dee2df4f11b32f3f6ebe7b64344541303def2fe7e9"
+        },
+        "575389": {
+          "predicted_score": "0-2",
+          "actual_score": "1-2",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-04T19:31:21.463595+00:00",
+          "source_votes_sha256": "b1d4900dead98a9b9d7836c63dcc229d4406515e035f2f07fbd574f57f261ee5"
+        },
+        "575390": {
+          "predicted_score": "2-1",
+          "actual_score": "1-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-04T19:02:45.986906+00:00",
+          "source_votes_sha256": "1e435d306fb115a3ba726598f12e8c63ce2d7e043872d62e14eaa3ee339d7edd"
+        },
+        "575391": {
+          "predicted_score": "2-1",
+          "actual_score": "2-1",
+          "points": 8,
+          "outcome_correct": true,
+          "exact": true,
+          "created_at": "2026-11-04T19:32:18.628614+00:00",
+          "source_votes_sha256": "5a373dc38fa9bb5e9bf6f06aa01e99e6315f0ce013c163ad71fdbf2af4c16177"
         }
       }
     },
@@ -277,105 +370,106 @@
       "method": "al_most_frequent_score_v1",
       "label": "En Sık AL Skoru",
       "version": 1,
-      "opportunities": 16,
-      "valid_predictions": 14,
-      "missing_predictions": 2,
-      "outcome": 10,
-      "exact": 1,
-      "points": 46,
-      "avg": 3.29,
-      "coverage_pct": 87.5,
-      "outcome_pct": 71.4,
-      "exact_pct": 7.1,
-      "point_efficiency_pct": 41.1,
+      "opportunities": 32,
+      "valid_predictions": 20,
+      "missing_predictions": 12,
+      "outcome": 14,
+      "exact": 2,
+      "points": 66,
+      "avg": 3.3,
+      "coverage_pct": 62.5,
+      "outcome_pct": 70.0,
+      "exact_pct": 10.0,
+      "point_efficiency_pct": 41.2,
       "point_distribution": {
-        "8": 1,
+        "8": 2,
         "6": 1,
-        "4": 8,
-        "0": 4
+        "4": 11,
+        "0": 6
       },
       "failure_reasons": {
-        "TIED_TOP_SCORES": 1,
-        "NO_REPEATED_SCORE": 1
+        "TIED_TOP_SCORES": 4,
+        "NO_REPEATED_SCORE": 1,
+        "SOURCE_VOTES_HASH_MISMATCH": 7
       },
       "models_used_counts": {
-        "4": 9,
-        "5": 4,
+        "4": 13,
+        "5": 6,
         "3": 1
       },
-      "used_ai_sum": 59,
-      "avg_valid_ai_count": 4.21,
+      "used_ai_sum": 85,
+      "avg_valid_ai_count": 4.25,
       "provenance": {},
       "head_to_head": {
         "Gemini 3.6 Flash": {
-          "common_matches": 5,
-          "experimental_points": 18,
-          "comparison_points": 18,
-          "experimental_better": 0,
-          "equal": 5,
-          "comparison_better": 0,
-          "experimental_outcome": 4,
-          "comparison_outcome": 4
-        },
-        "Groq Qwen 3.8 27B": {
-          "common_matches": 14,
-          "experimental_points": 46,
-          "comparison_points": 38,
-          "experimental_better": 2,
-          "equal": 12,
-          "comparison_better": 0,
-          "experimental_outcome": 10,
-          "comparison_outcome": 8
-        },
-        "Groq GPT-OSS 120B": {
-          "common_matches": 14,
-          "experimental_points": 46,
-          "comparison_points": 42,
-          "experimental_better": 2,
-          "equal": 11,
-          "comparison_better": 1,
-          "experimental_outcome": 10,
-          "comparison_outcome": 9
-        },
-        "Cloudflare Clef-omni": {
-          "common_matches": 14,
-          "experimental_points": 46,
-          "comparison_points": 32,
-          "experimental_better": 4,
-          "equal": 10,
-          "comparison_better": 0,
-          "experimental_outcome": 10,
-          "comparison_outcome": 7
-        },
-        "Ortak karar": {
-          "common_matches": 12,
+          "common_matches": 9,
           "experimental_points": 38,
-          "comparison_points": 38,
-          "experimental_better": 0,
-          "equal": 12,
+          "comparison_points": 30,
+          "experimental_better": 1,
+          "equal": 8,
           "comparison_better": 0,
           "experimental_outcome": 8,
-          "comparison_outcome": 8
+          "comparison_outcome": 7
+        },
+        "Groq Qwen 3.8 27B": {
+          "common_matches": 20,
+          "experimental_points": 66,
+          "comparison_points": 54,
+          "experimental_better": 3,
+          "equal": 17,
+          "comparison_better": 0,
+          "experimental_outcome": 14,
+          "comparison_outcome": 12
+        },
+        "Groq GPT-OSS 120B": {
+          "common_matches": 20,
+          "experimental_points": 66,
+          "comparison_points": 70,
+          "experimental_better": 2,
+          "equal": 16,
+          "comparison_better": 2,
+          "experimental_outcome": 14,
+          "comparison_outcome": 14
+        },
+        "Cloudflare Clef-omni": {
+          "common_matches": 20,
+          "experimental_points": 66,
+          "comparison_points": 52,
+          "experimental_better": 4,
+          "equal": 16,
+          "comparison_better": 0,
+          "experimental_outcome": 14,
+          "comparison_outcome": 11
+        },
+        "Ortak karar": {
+          "common_matches": 18,
+          "experimental_points": 58,
+          "comparison_points": 54,
+          "experimental_better": 1,
+          "equal": 17,
+          "comparison_better": 0,
+          "experimental_outcome": 12,
+          "comparison_outcome": 12
         },
         "Cohere Command A+": {
-          "common_matches": 12,
-          "experimental_points": 42,
-          "comparison_points": 42,
-          "experimental_better": 0,
-          "equal": 12,
+          "common_matches": 16,
+          "experimental_points": 50,
+          "comparison_points": 46,
+          "experimental_better": 1,
+          "equal": 15,
           "comparison_better": 0,
-          "experimental_outcome": 9,
-          "comparison_outcome": 9
+          "experimental_outcome": 11,
+          "comparison_outcome": 10
         },
         "AL Skor Ortalaması": {
-          "common_matches": 14,
-          "experimental_points": 46,
-          "comparison_points": 38,
-          "experimental_better": 2,
-          "equal": 12,
+          "common_matches": 20,
+          "experimental_points": 66,
+          "comparison_points": 54,
+          "experimental_better": 3,
+          "equal": 17,
           "comparison_better": 0,
-          "experimental_outcome": 10,
-          "comparison_outcome": 8
+          "experimental_outcome": 14,
+          "comparison_outcome": 12
         }
       },
       "valid_match_ids": [
@@ -392,7 +486,13 @@
         "575372",
         "575373",
         "575374",
-        "575375"
+        "575375",
+        "575379",
+        "575380",
+        "575381",
+        "575383",
+        "575389",
+        "575390"
       ],
       "match_evaluations": {
         "575359": {
@@ -520,6 +620,60 @@
           "exact": false,
           "created_at": "2026-10-21T18:01:59.436242+00:00",
           "source_votes_sha256": "ddecee2d35dd6d321d48a2837fc1052c9801ef177c7809a346cadbcaaf441ea8"
+        },
+        "575379": {
+          "predicted_score": "1-2",
+          "actual_score": "0-3",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-03T19:02:14.881331+00:00",
+          "source_votes_sha256": "184172b817896774d113deeef57bf2e563ec888c0684d72bdd9b25d14c379886"
+        },
+        "575380": {
+          "predicted_score": "2-1",
+          "actual_score": "3-0",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-03T19:02:39.430635+00:00",
+          "source_votes_sha256": "5ec8bf99a4e6ec23cf91480f5c121096c5f622bc93ac14ccd12eeef673e3fb04"
+        },
+        "575381": {
+          "predicted_score": "0-2",
+          "actual_score": "0-2",
+          "points": 8,
+          "outcome_correct": true,
+          "exact": true,
+          "created_at": "2026-11-03T19:04:05.843832+00:00",
+          "source_votes_sha256": "f0370aa44e77e6d6064898749f8870df5212728d5fe45d6a7cdda05af3e8da86"
+        },
+        "575383": {
+          "predicted_score": "0-2",
+          "actual_score": "3-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-03T19:32:06.225517+00:00",
+          "source_votes_sha256": "8a6ca557251c0ac36b786f3a67350cee4847c3a8729e155e7709b022e38c6087"
+        },
+        "575389": {
+          "predicted_score": "0-2",
+          "actual_score": "1-2",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-04T19:31:21.463595+00:00",
+          "source_votes_sha256": "b1d4900dead98a9b9d7836c63dcc229d4406515e035f2f07fbd574f57f261ee5"
+        },
+        "575390": {
+          "predicted_score": "2-1",
+          "actual_score": "1-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-04T19:02:45.986906+00:00",
+          "source_votes_sha256": "1e435d306fb115a3ba726598f12e8c63ce2d7e043872d62e14eaa3ee339d7edd"
         }
       }
     }

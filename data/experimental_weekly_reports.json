@@ -714,5 +714,496 @@
         }
       }
     }
+  },
+  "4": {
+    "season": "2026/27",
+    "matchday": 4,
+    "status": "FINAL",
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "schema_version": 1,
+    "scope": "PROSPECTIVE_ONLY",
+    "total_fixtures": 18,
+    "policy_excluded": 2,
+    "excluded_match_ids": [
+      "575378",
+      "575387"
+    ],
+    "opportunities": 16,
+    "methods": {
+      "al_score_average_v1": {
+        "method": "al_score_average_v1",
+        "label": "AL Skor Ortalaması",
+        "version": 1,
+        "opportunities": 16,
+        "valid_predictions": 9,
+        "missing_predictions": 7,
+        "outcome": 7,
+        "exact": 1,
+        "points": 32,
+        "avg": 3.56,
+        "coverage_pct": 56.2,
+        "outcome_pct": 77.8,
+        "exact_pct": 11.1,
+        "point_efficiency_pct": 44.4,
+        "point_distribution": {
+          "8": 1,
+          "6": 0,
+          "4": 6,
+          "0": 2
+        },
+        "failure_reasons": {
+          "SOURCE_VOTES_HASH_MISMATCH": 7
+        },
+        "models_used_counts": {
+          "5": 4,
+          "4": 5
+        },
+        "used_ai_sum": 40,
+        "avg_valid_ai_count": 4.44,
+        "provenance": {
+          "575379": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "944425e5a420ec6bc75c8e74b272b033e9fda8297e9a67fa798b685301adb625"
+          },
+          "575380": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "d1babe39dcdfc2eee8aa6edc575db53b87fd5fc3799740e559023cf1b65d319b"
+          },
+          "575381": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "86920094ce19b7f765f3c5126c4aa85d4eef604b949f67188ee0c05b0c18cda5"
+          },
+          "575383": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "c1a62fc8488b3ca5be8433c1d1770056f9f51e41dad24d711ad8e37d4390ac17"
+          },
+          "575385": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "1234ae9dd72595459d41b0030dbc789e507ba95176c8f6ca505e72b5baef9a4f"
+          },
+          "575386": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "acf97fa84ea87268db409263d51e919115a40d18",
+            "commit_date": "2026-11-04T17:16:57+00:00",
+            "lead_minutes": 28.1,
+            "source_experiment_sha256": "7a73df51733ad9455e5efddf791e71dbf35f12cc27ec77d7d25181ed742acd43"
+          },
+          "575389": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "0b28eb1fecf278ac47de6c6b51e038991889255d",
+            "commit_date": "2026-11-04T19:51:12+00:00",
+            "lead_minutes": 8.8,
+            "source_experiment_sha256": "6f75e57af3b1751545b93b1d730782197047205e59b88cbe911fae883199e9d9"
+          },
+          "575390": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "0b28eb1fecf278ac47de6c6b51e038991889255d",
+            "commit_date": "2026-11-04T19:51:12+00:00",
+            "lead_minutes": 8.8,
+            "source_experiment_sha256": "55d9c6d5e974a26b45806ac262f6d8d1a73163e60d6ceef4bc186ed63586bc66"
+          },
+          "575391": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "0b28eb1fecf278ac47de6c6b51e038991889255d",
+            "commit_date": "2026-11-04T19:51:12+00:00",
+            "lead_minutes": 8.8,
+            "source_experiment_sha256": "c2f8647ec5457af51c80000e215920aebf8487defee8cddaf9d6f06386ac71c7"
+          }
+        },
+        "head_to_head": {
+          "Gemini 3.6 Flash": {
+            "common_matches": 6,
+            "experimental_points": 24,
+            "comparison_points": 20,
+            "experimental_better": 1,
+            "equal": 5,
+            "comparison_better": 0,
+            "experimental_outcome": 6,
+            "comparison_outcome": 5
+          },
+          "Groq Qwen 3.8 27B": {
+            "common_matches": 9,
+            "experimental_points": 32,
+            "comparison_points": 32,
+            "experimental_better": 0,
+            "equal": 9,
+            "comparison_better": 0,
+            "experimental_outcome": 7,
+            "comparison_outcome": 7
+          },
+          "Cohere Command A+": {
+            "common_matches": 7,
+            "experimental_points": 24,
+            "comparison_points": 20,
+            "experimental_better": 1,
+            "equal": 6,
+            "comparison_better": 0,
+            "experimental_outcome": 5,
+            "comparison_outcome": 4
+          },
+          "Groq GPT-OSS 120B": {
+            "common_matches": 9,
+            "experimental_points": 32,
+            "comparison_points": 36,
+            "experimental_better": 1,
+            "equal": 6,
+            "comparison_better": 2,
+            "experimental_outcome": 7,
+            "comparison_outcome": 7
+          },
+          "Cloudflare Clef-omni": {
+            "common_matches": 9,
+            "experimental_points": 32,
+            "comparison_points": 28,
+            "experimental_better": 1,
+            "equal": 7,
+            "comparison_better": 1,
+            "experimental_outcome": 7,
+            "comparison_outcome": 6
+          },
+          "Ortak karar": {
+            "common_matches": 8,
+            "experimental_points": 24,
+            "comparison_points": 24,
+            "experimental_better": 0,
+            "equal": 8,
+            "comparison_better": 0,
+            "experimental_outcome": 6,
+            "comparison_outcome": 6
+          },
+          "En Sık AL Skoru": {
+            "common_matches": 6,
+            "experimental_points": 16,
+            "comparison_points": 20,
+            "experimental_better": 0,
+            "equal": 5,
+            "comparison_better": 1,
+            "experimental_outcome": 4,
+            "comparison_outcome": 4
+          }
+        },
+        "valid_match_ids": [
+          "575379",
+          "575380",
+          "575381",
+          "575383",
+          "575385",
+          "575386",
+          "575389",
+          "575390",
+          "575391"
+        ],
+        "match_evaluations": {
+          "575379": {
+            "predicted_score": "1-2",
+            "actual_score": "0-3",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-03T19:02:14.881331+00:00",
+            "source_votes_sha256": "184172b817896774d113deeef57bf2e563ec888c0684d72bdd9b25d14c379886"
+          },
+          "575380": {
+            "predicted_score": "2-1",
+            "actual_score": "3-0",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-03T19:02:39.430635+00:00",
+            "source_votes_sha256": "5ec8bf99a4e6ec23cf91480f5c121096c5f622bc93ac14ccd12eeef673e3fb04"
+          },
+          "575381": {
+            "predicted_score": "1-2",
+            "actual_score": "0-2",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-03T19:04:05.843832+00:00",
+            "source_votes_sha256": "f0370aa44e77e6d6064898749f8870df5212728d5fe45d6a7cdda05af3e8da86"
+          },
+          "575383": {
+            "predicted_score": "0-2",
+            "actual_score": "3-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-03T19:32:06.225517+00:00",
+            "source_votes_sha256": "8a6ca557251c0ac36b786f3a67350cee4847c3a8729e155e7709b022e38c6087"
+          },
+          "575385": {
+            "predicted_score": "2-1",
+            "actual_score": "4-0",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-03T19:05:18.954391+00:00",
+            "source_votes_sha256": "355c12bff685b8c7e65aa91da13a0dcca4afd63c708e5ea0800fdc274637ddae"
+          },
+          "575386": {
+            "predicted_score": "0-3",
+            "actual_score": "2-3",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-04T17:16:30.767710+00:00",
+            "source_votes_sha256": "5f09268bfd4118af774087dee2df4f11b32f3f6ebe7b64344541303def2fe7e9"
+          },
+          "575389": {
+            "predicted_score": "0-2",
+            "actual_score": "1-2",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-04T19:31:21.463595+00:00",
+            "source_votes_sha256": "b1d4900dead98a9b9d7836c63dcc229d4406515e035f2f07fbd574f57f261ee5"
+          },
+          "575390": {
+            "predicted_score": "2-1",
+            "actual_score": "1-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-04T19:02:45.986906+00:00",
+            "source_votes_sha256": "1e435d306fb115a3ba726598f12e8c63ce2d7e043872d62e14eaa3ee339d7edd"
+          },
+          "575391": {
+            "predicted_score": "2-1",
+            "actual_score": "2-1",
+            "points": 8,
+            "outcome_correct": true,
+            "exact": true,
+            "created_at": "2026-11-04T19:32:18.628614+00:00",
+            "source_votes_sha256": "5a373dc38fa9bb5e9bf6f06aa01e99e6315f0ce013c163ad71fdbf2af4c16177"
+          }
+        }
+      },
+      "al_most_frequent_score_v1": {
+        "method": "al_most_frequent_score_v1",
+        "label": "En Sık AL Skoru",
+        "version": 1,
+        "opportunities": 16,
+        "valid_predictions": 6,
+        "missing_predictions": 10,
+        "outcome": 4,
+        "exact": 1,
+        "points": 20,
+        "avg": 3.33,
+        "coverage_pct": 37.5,
+        "outcome_pct": 66.7,
+        "exact_pct": 16.7,
+        "point_efficiency_pct": 41.7,
+        "point_distribution": {
+          "8": 1,
+          "6": 0,
+          "4": 3,
+          "0": 2
+        },
+        "failure_reasons": {
+          "SOURCE_VOTES_HASH_MISMATCH": 7,
+          "TIED_TOP_SCORES": 3
+        },
+        "models_used_counts": {
+          "5": 2,
+          "4": 4
+        },
+        "used_ai_sum": 26,
+        "avg_valid_ai_count": 4.33,
+        "provenance": {
+          "575379": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "944425e5a420ec6bc75c8e74b272b033e9fda8297e9a67fa798b685301adb625"
+          },
+          "575380": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "d1babe39dcdfc2eee8aa6edc575db53b87fd5fc3799740e559023cf1b65d319b"
+          },
+          "575381": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "86920094ce19b7f765f3c5126c4aa85d4eef604b949f67188ee0c05b0c18cda5"
+          },
+          "575383": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8ae8b9e70f9eeaddbc213d1367bedb41f0900d33",
+            "commit_date": "2026-11-03T19:46:13+00:00",
+            "lead_minutes": 13.8,
+            "source_experiment_sha256": "c1a62fc8488b3ca5be8433c1d1770056f9f51e41dad24d711ad8e37d4390ac17"
+          },
+          "575389": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "0b28eb1fecf278ac47de6c6b51e038991889255d",
+            "commit_date": "2026-11-04T19:51:12+00:00",
+            "lead_minutes": 8.8,
+            "source_experiment_sha256": "6f75e57af3b1751545b93b1d730782197047205e59b88cbe911fae883199e9d9"
+          },
+          "575390": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "0b28eb1fecf278ac47de6c6b51e038991889255d",
+            "commit_date": "2026-11-04T19:51:12+00:00",
+            "lead_minutes": 8.8,
+            "source_experiment_sha256": "55d9c6d5e974a26b45806ac262f6d8d1a73163e60d6ceef4bc186ed63586bc66"
+          }
+        },
+        "head_to_head": {
+          "Gemini 3.6 Flash": {
+            "common_matches": 4,
+            "experimental_points": 20,
+            "comparison_points": 12,
+            "experimental_better": 1,
+            "equal": 3,
+            "comparison_better": 0,
+            "experimental_outcome": 4,
+            "comparison_outcome": 3
+          },
+          "Groq Qwen 3.8 27B": {
+            "common_matches": 6,
+            "experimental_points": 20,
+            "comparison_points": 16,
+            "experimental_better": 1,
+            "equal": 5,
+            "comparison_better": 0,
+            "experimental_outcome": 4,
+            "comparison_outcome": 4
+          },
+          "Cohere Command A+": {
+            "common_matches": 4,
+            "experimental_points": 8,
+            "comparison_points": 4,
+            "experimental_better": 1,
+            "equal": 3,
+            "comparison_better": 0,
+            "experimental_outcome": 2,
+            "comparison_outcome": 1
+          },
+          "Groq GPT-OSS 120B": {
+            "common_matches": 6,
+            "experimental_points": 20,
+            "comparison_points": 28,
+            "experimental_better": 0,
+            "equal": 5,
+            "comparison_better": 1,
+            "experimental_outcome": 4,
+            "comparison_outcome": 5
+          },
+          "Cloudflare Clef-omni": {
+            "common_matches": 6,
+            "experimental_points": 20,
+            "comparison_points": 20,
+            "experimental_better": 0,
+            "equal": 6,
+            "comparison_better": 0,
+            "experimental_outcome": 4,
+            "comparison_outcome": 4
+          },
+          "Ortak karar": {
+            "common_matches": 6,
+            "experimental_points": 20,
+            "comparison_points": 16,
+            "experimental_better": 1,
+            "equal": 5,
+            "comparison_better": 0,
+            "experimental_outcome": 4,
+            "comparison_outcome": 4
+          },
+          "AL Skor Ortalaması": {
+            "common_matches": 6,
+            "experimental_points": 20,
+            "comparison_points": 16,
+            "experimental_better": 1,
+            "equal": 5,
+            "comparison_better": 0,
+            "experimental_outcome": 4,
+            "comparison_outcome": 4
+          }
+        },
+        "valid_match_ids": [
+          "575379",
+          "575380",
+          "575381",
+          "575383",
+          "575389",
+          "575390"
+        ],
+        "match_evaluations": {
+          "575379": {
+            "predicted_score": "1-2",
+            "actual_score": "0-3",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-03T19:02:14.881331+00:00",
+            "source_votes_sha256": "184172b817896774d113deeef57bf2e563ec888c0684d72bdd9b25d14c379886"
+          },
+          "575380": {
+            "predicted_score": "2-1",
+            "actual_score": "3-0",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-03T19:02:39.430635+00:00",
+            "source_votes_sha256": "5ec8bf99a4e6ec23cf91480f5c121096c5f622bc93ac14ccd12eeef673e3fb04"
+          },
+          "575381": {
+            "predicted_score": "0-2",
+            "actual_score": "0-2",
+            "points": 8,
+            "outcome_correct": true,
+            "exact": true,
+            "created_at": "2026-11-03T19:04:05.843832+00:00",
+            "source_votes_sha256": "f0370aa44e77e6d6064898749f8870df5212728d5fe45d6a7cdda05af3e8da86"
+          },
+          "575383": {
+            "predicted_score": "0-2",
+            "actual_score": "3-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-03T19:32:06.225517+00:00",
+            "source_votes_sha256": "8a6ca557251c0ac36b786f3a67350cee4847c3a8729e155e7709b022e38c6087"
+          },
+          "575389": {
+            "predicted_score": "0-2",
+            "actual_score": "1-2",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-04T19:31:21.463595+00:00",
+            "source_votes_sha256": "b1d4900dead98a9b9d7836c63dcc229d4406515e035f2f07fbd574f57f261ee5"
+          },
+          "575390": {
+            "predicted_score": "2-1",
+            "actual_score": "1-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-04T19:02:45.986906+00:00",
+            "source_votes_sha256": "1e435d306fb115a3ba726598f12e8c63ce2d7e043872d62e14eaa3ee339d7edd"
+          }
+        }
+      }
+    }
   }
 }
