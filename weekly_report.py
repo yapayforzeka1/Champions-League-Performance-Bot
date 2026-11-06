@@ -20,6 +20,7 @@ GREEN=(48,207,137); RED=(255,79,83); ORANGE=(255,166,58); PURPLE=(180,93,255)
 MODEL_COLORS=[CYAN,ORANGE,RED,PURPLE,(93,224,165)]
 # A model keeps the same colour every week, even if the active roster changes.
 MODEL_COLOR_BY_NAME={
+    "Gemini 3.5 Flash-Lite":CYAN,
     "Gemini 3.6 Flash":CYAN, "Groq Qwen 3.8 27B":ORANGE, "Cohere Command A+":RED,
     "Groq GPT-OSS 120B":PURPLE, "Cloudflare Clef-omni":(93,224,165),
     "Mistral Small Latest":(140,150,170), "Groq Qwen 3.6 27B":(255,205,90),
@@ -112,11 +113,17 @@ def _vote_type(points):
 
 
 def _display_models(records):
-    """Only current ALs that appear in the matchday, including failed votes."""
-    return [m for m in ACTIVE_MODEL_ORDER if any(
+    """Keep the two Gemini generations separate when present in report data."""
+    return [m for m in _report_model_order() if any(
         any(_model_identity(v) == m for v in (r.get("ai_votes") or []))
         for r in records
     )]
+
+
+def _report_model_order():
+    # Historical Gemini points stay visible alongside the new model, rather
+    # than being transferred to it. Other retired providers retain their rule.
+    return list(dict.fromkeys([*ACTIVE_MODEL_ORDER, 'Gemini 3.6 Flash']))
 
 
 def _model_row(name, stats):
@@ -150,7 +157,7 @@ def _consensus_row(stats):
 
 
 def _summary_rows(stats):
-    rows = [_model_row(m, (stats.get("models") or {})[m]) for m in ACTIVE_MODEL_ORDER
+    rows = [_model_row(m, (stats.get("models") or {})[m]) for m in _report_model_order()
             if m in (stats.get("models") or {}) and
             (int(stats["models"][m].get("successful_predictions") or 0) +
              int(stats["models"][m].get("failed_predictions") or 0)) > 0]
@@ -300,7 +307,7 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
     for line in _wrap(d,eval_text,font,pw-40)[:7]: d.text((left+2*(pw+gap)+20,py),line,font=font,fill=WHITE); py+=19
     _text(d,(left+2*(pw+gap)+pw-20,y+bottom_h-34),"Sercan • Futbol • Veri • Analiz • Tahmin",10,True,GOLD,"ra")
 
-    _text(d,(20,h-43),"Not: Eski AL sürümleri yalnızca performans arşivinde korunur.",10,False,MUTED)
+    _text(d,(20,h-43),"Not: Gemini sürümleri ayrı değerlendirilir; geçmiş puanlar aktarılmaz.",10,False,MUTED)
     _text(d,(20,h-22),f"UEFA CHAMPIONS LEAGUE  |  {snapshot.get('season') or SEASON}",10,True,MUTED)
     _text(d,(w//2,h-22),"FOOTBALL. DATA. INTELLIGENCE. BETTER PREDICTIONS.",9,False,MUTED,"ma")
     _text(d,(w-20,h-22),"MORE THAN A GAME",10,True,MUTED,"ra")
@@ -310,7 +317,7 @@ def render_weekly_image(snapshot:dict[str,Any])->Path:
 def render_season_image(season: dict[str, Any]) -> Path:
     """Season image: outcome accuracy is NOT the same as point efficiency."""
     rows = []
-    for model in ACTIVE_MODEL_ORDER:
+    for model in _report_model_order():
         stats = (season.get("models") or {}).get(model)
         if stats and int(stats.get("successful_predictions") or 0) + int(stats.get("failed_predictions") or 0) > 0:
             rows.append(_model_row(model, stats))

@@ -42,6 +42,7 @@ TERMINAL_STATUSES = {
 
 MODEL_ORDER = [
     "Gemini 3.6 Flash",
+    "Gemini 3.5 Flash-Lite",
     "Mistral Small Latest",
     "Groq Qwen 3.6 27B",
     "Groq Qwen 3.8 27B",
@@ -51,7 +52,8 @@ MODEL_ORDER = [
 ]
 
 MODEL_SHORT = {
-    "Gemini 3.6 Flash": "GEMINI",
+    "Gemini 3.6 Flash": "GEM 3.6",
+    "Gemini 3.5 Flash-Lite": "GEM 3.5L",
     "Mistral Small Latest": "MISTRAL",
     "Groq Qwen 3.6 27B": "QWEN 3.6",
     "Groq Qwen 3.8 27B": "QWEN 3.8",
@@ -60,13 +62,13 @@ MODEL_SHORT = {
     "Groq GPT-OSS 120B": "GPT-OSS",
 }
 
-# Reporting roster: retain retired models in archives and historical statistics,
-# but never show them as current competitors on future report images.
+# Current competitors; historical Gemini rows remain separately visible when
+# report data contains them, without transferring points to the active version.
 ACTIVE_MODEL_ORDER = [
-    "Gemini 3.6 Flash",
+    "Gemini 3.5 Flash-Lite",
     "Groq Qwen 3.8 27B",
     "Cohere Command A+",
     "Groq GPT-OSS 120B",
     "Cloudflare Clef-omni",
 ]
-RETIRED_MODEL_ORDER = ["Mistral Small Latest", "Groq Qwen 3.6 27B"]
+RETIRED_MODEL_ORDER = ["Gemini 3.6 Flash", "Mistral Small Latest", "Groq Qwen 3.6 27B"]

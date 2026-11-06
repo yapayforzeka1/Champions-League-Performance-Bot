@@ -244,6 +244,10 @@ def _model_identity(vote: dict[str, Any]) -> str | None:
     """
     result = vote.get("result")
     model_id = str(result.get("model_id") or "") if isinstance(result, dict) else ""
+    if model_id == "gemini-3.5-flash-lite":
+        return "Gemini 3.5 Flash-Lite"
+    if model_id == "gemini-3.6-flash":
+        return "Gemini 3.6 Flash"
     if model_id == "qwen/qwen3.8-27b":
         return "Groq Qwen 3.8 27B"
     if model_id == "qwen/qwen3.6-27b":
