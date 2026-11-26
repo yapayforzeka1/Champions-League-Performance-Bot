@@ -45,38 +45,41 @@ Tüm maçlarda sabit tahmin ortalamaları: home_1_0 3.06, home_2_1 2.98
 | Cohere Command A+ | 41 | 3.41 | 3.32 | +0.10 | [-0.10; +0.34] |
 | Groq GPT-OSS 120B | 48 | 2.92 | 2.96 | -0.04 | [-0.25; +0.17] |
 
-## Dış-örnek (adil test) — 16 maç
+## Dış-örnek (adil test) — 32 maç
 
-Tüm maçlarda sabit tahmin ortalamaları: home_1_0 1.75, home_2_1 1.88
+Tüm maçlarda sabit tahmin ortalamaları: home_1_0 2.06, home_2_1 2.06
 
 ### Referans: `home_1_0`
 
 | Model | Maç | Ort. | Referans ort. | Fark | %95 aralık |
 |---|---:|---:|---:|---:|---:|
 | Gemini 3.6 Flash | 12 | 4.00 | 1.33 | +2.67 | [+1.33; +4.00] |
-| Groq Qwen 3.8 27B | 16 | 3.50 | 1.75 | +1.75 | [+0.00; +3.25] |
-| Cloudflare Clef-omni | 16 | 3.00 | 1.75 | +1.25 | [-0.88; +3.25] |
-| Cohere Command A+ | 14 | 2.57 | 2.00 | +0.57 | [-0.71; +1.86] |
-| Groq GPT-OSS 120B | 16 | 3.38 | 1.75 | +1.62 | [-0.62; +3.75] |
-| Konsensüs | 14 | 3.29 | 1.29 | +2.00 | [+0.29; +3.43] |
+| Gemini 3.5 Flash-Lite | 11 | 4.00 | 2.73 | +1.27 | [-1.45; +3.64] |
+| Groq Qwen 3.8 27B | 32 | 3.50 | 2.06 | +1.44 | [+0.06; +2.69] |
+| Cloudflare Clef-omni | 32 | 3.00 | 2.06 | +0.94 | [-0.56; +2.38] |
+| Cohere Command A+ | 30 | 2.53 | 2.20 | +0.33 | [-0.67; +1.27] |
+| Groq GPT-OSS 120B | 30 | 3.40 | 1.87 | +1.53 | [+0.07; +3.00] |
+| Konsensüs | 29 | 3.17 | 1.66 | +1.52 | [+0.28; +2.69] |
 
 ### Referans: `home_2_1`
 
 | Model | Maç | Ort. | Referans ort. | Fark | %95 aralık |
 |---|---:|---:|---:|---:|---:|
 | Gemini 3.6 Flash | 12 | 4.00 | 1.33 | +2.67 | [+1.33; +4.00] |
-| Groq Qwen 3.8 27B | 16 | 3.50 | 1.88 | +1.62 | [-0.12; +3.25] |
-| Cloudflare Clef-omni | 16 | 3.00 | 1.88 | +1.12 | [-1.12; +3.25] |
-| Cohere Command A+ | 14 | 2.57 | 2.14 | +0.43 | [-0.86; +1.71] |
-| Groq GPT-OSS 120B | 16 | 3.38 | 1.88 | +1.50 | [-0.88; +3.75] |
-| Konsensüs | 14 | 3.29 | 1.29 | +2.00 | [+0.29; +3.43] |
+| Gemini 3.5 Flash-Lite | 11 | 4.00 | 2.73 | +1.27 | [-1.27; +3.64] |
+| Groq Qwen 3.8 27B | 32 | 3.50 | 2.06 | +1.44 | [+0.06; +2.75] |
+| Cloudflare Clef-omni | 32 | 3.00 | 2.06 | +0.94 | [-0.62; +2.38] |
+| Cohere Command A+ | 30 | 2.53 | 2.20 | +0.33 | [-0.67; +1.27] |
+| Groq GPT-OSS 120B | 30 | 3.40 | 1.80 | +1.60 | [+0.07; +3.07] |
+| Konsensüs | 29 | 3.17 | 1.66 | +1.52 | [+0.28; +2.69] |
 
 ### Referans: `fixed_margin_2_1`
 
 | Model | Maç | Ort. | Referans ort. | Fark | %95 aralık |
 |---|---:|---:|---:|---:|---:|
 | Gemini 3.6 Flash | 12 | 4.00 | 4.50 | -0.50 | [-1.17; +0.00] |
-| Groq Qwen 3.8 27B | 16 | 3.50 | 3.88 | -0.38 | [-1.00; +0.00] |
-| Cloudflare Clef-omni | 16 | 3.00 | 3.12 | -0.12 | [-0.88; +0.62] |
-| Cohere Command A+ | 14 | 2.57 | 2.71 | -0.14 | [-0.43; +0.00] |
-| Groq GPT-OSS 120B | 16 | 3.38 | 3.62 | -0.25 | [-1.00; +0.50] |
+| Gemini 3.5 Flash-Lite | 11 | 4.00 | 3.27 | +0.73 | [+0.00; +1.82] |
+| Groq Qwen 3.8 27B | 32 | 3.50 | 3.38 | +0.12 | [-0.31; +0.62] |
+| Cloudflare Clef-omni | 32 | 3.00 | 3.00 | +0.00 | [-0.50; +0.50] |
+| Cohere Command A+ | 30 | 2.53 | 2.67 | -0.13 | [-0.33; +0.00] |
+| Groq GPT-OSS 120B | 30 | 3.40 | 3.47 | -0.07 | [-0.60; +0.47] |

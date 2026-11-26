@@ -13,16 +13,18 @@
     "1",
     "2",
     "3",
-    "4"
+    "4",
+    "5"
   ],
   "sources": {
     "1": "NATIVE_PREDICTION_ARCHIVE",
     "2": "NATIVE_PREDICTION_ARCHIVE",
     "3": "NATIVE_PREDICTION_ARCHIVE",
-    "4": "NATIVE_PREDICTION_ARCHIVE"
+    "4": "NATIVE_PREDICTION_ARCHIVE",
+    "5": "NATIVE_PREDICTION_ARCHIVE"
   },
   "all": {
-    "matches": 65,
+    "matches": 81,
     "models": {
       "Gemini 3.6 Flash": {
         "matches": 27,
@@ -71,6 +73,58 @@
               "ci95": [
                 -0.81,
                 0.22
+              ]
+            }
+          }
+        }
+      },
+      "Gemini 3.5 Flash-Lite": {
+        "matches": 11,
+        "points": 44,
+        "avg": 4.0,
+        "vs": {
+          "home_1_0": {
+            "reference_avg": 2.73,
+            "model_minus_reference": {
+              "matches": 11,
+              "mean": 1.27,
+              "better": 6,
+              "equal": 3,
+              "worse": 2,
+              "se": 1.41,
+              "ci95": [
+                -1.45,
+                3.64
+              ]
+            }
+          },
+          "home_2_1": {
+            "reference_avg": 2.73,
+            "model_minus_reference": {
+              "matches": 11,
+              "mean": 1.27,
+              "better": 6,
+              "equal": 3,
+              "worse": 2,
+              "se": 1.41,
+              "ci95": [
+                -1.27,
+                3.64
+              ]
+            }
+          },
+          "fixed_margin_2_1": {
+            "reference_avg": 3.27,
+            "model_minus_reference": {
+              "matches": 11,
+              "mean": 0.73,
+              "better": 2,
+              "equal": 9,
+              "worse": 0,
+              "se": 0.49,
+              "ci95": [
+                0.0,
+                1.82
               ]
             }
           }
@@ -129,208 +183,208 @@
         }
       },
       "Groq Qwen 3.8 27B": {
-        "matches": 49,
-        "points": 148,
-        "avg": 3.02,
+        "matches": 65,
+        "points": 204,
+        "avg": 3.14,
         "vs": {
           "home_1_0": {
-            "reference_avg": 2.69,
+            "reference_avg": 2.62,
             "model_minus_reference": {
-              "matches": 49,
-              "mean": 0.33,
-              "better": 16,
-              "equal": 21,
-              "worse": 12,
-              "se": 0.49,
+              "matches": 65,
+              "mean": 0.52,
+              "better": 22,
+              "equal": 28,
+              "worse": 15,
+              "se": 0.46,
               "ci95": [
-                -0.69,
-                1.31
+                -0.37,
+                1.42
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 2.57,
+            "reference_avg": 2.49,
             "model_minus_reference": {
-              "matches": 49,
-              "mean": 0.45,
-              "better": 15,
-              "equal": 24,
-              "worse": 10,
-              "se": 0.46,
+              "matches": 65,
+              "mean": 0.65,
+              "better": 21,
+              "equal": 32,
+              "worse": 12,
+              "se": 0.43,
               "ci95": [
-                -0.49,
-                1.35
+                -0.18,
+                1.51
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 3.18,
+            "reference_avg": 3.11,
             "model_minus_reference": {
-              "matches": 49,
-              "mean": -0.16,
-              "better": 1,
-              "equal": 44,
+              "matches": 65,
+              "mean": 0.03,
+              "better": 4,
+              "equal": 57,
               "worse": 4,
               "se": 0.15,
               "ci95": [
-                -0.49,
-                0.12
+                -0.25,
+                0.31
               ]
             }
           }
         }
       },
       "Cloudflare Clef-omni": {
-        "matches": 49,
-        "points": 118,
-        "avg": 2.41,
+        "matches": 65,
+        "points": 166,
+        "avg": 2.55,
         "vs": {
           "home_1_0": {
-            "reference_avg": 2.69,
+            "reference_avg": 2.62,
             "model_minus_reference": {
-              "matches": 49,
-              "mean": -0.29,
-              "better": 15,
-              "equal": 14,
-              "worse": 20,
-              "se": 0.58,
+              "matches": 65,
+              "mean": -0.06,
+              "better": 20,
+              "equal": 22,
+              "worse": 23,
+              "se": 0.51,
               "ci95": [
-                -1.43,
-                0.86
+                -1.08,
+                0.89
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 2.57,
+            "reference_avg": 2.49,
             "model_minus_reference": {
-              "matches": 49,
-              "mean": -0.16,
-              "better": 15,
-              "equal": 15,
-              "worse": 19,
-              "se": 0.57,
+              "matches": 65,
+              "mean": 0.06,
+              "better": 20,
+              "equal": 23,
+              "worse": 22,
+              "se": 0.5,
               "ci95": [
-                -1.31,
-                0.94
+                -0.92,
+                0.98
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 2.57,
+            "reference_avg": 2.65,
             "model_minus_reference": {
-              "matches": 49,
-              "mean": -0.16,
-              "better": 4,
-              "equal": 37,
-              "worse": 8,
-              "se": 0.2,
+              "matches": 65,
+              "mean": -0.09,
+              "better": 6,
+              "equal": 49,
+              "worse": 10,
+              "se": 0.17,
               "ci95": [
-                -0.53,
-                0.24
+                -0.43,
+                0.25
               ]
             }
           }
         }
       },
       "Cohere Command A+": {
-        "matches": 55,
-        "points": 176,
-        "avg": 3.2,
+        "matches": 71,
+        "points": 216,
+        "avg": 3.04,
         "vs": {
           "home_1_0": {
-            "reference_avg": 3.09,
+            "reference_avg": 2.93,
             "model_minus_reference": {
-              "matches": 55,
+              "matches": 71,
               "mean": 0.11,
-              "better": 8,
-              "equal": 41,
-              "worse": 6,
-              "se": 0.22,
+              "better": 11,
+              "equal": 51,
+              "worse": 9,
+              "se": 0.23,
               "ci95": [
-                -0.33,
-                0.51
+                -0.34,
+                0.59
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 3.09,
+            "reference_avg": 2.9,
             "model_minus_reference": {
-              "matches": 55,
-              "mean": 0.11,
-              "better": 5,
-              "equal": 47,
-              "worse": 3,
-              "se": 0.2,
+              "matches": 71,
+              "mean": 0.14,
+              "better": 8,
+              "equal": 58,
+              "worse": 5,
+              "se": 0.23,
               "ci95": [
-                -0.29,
-                0.51
+                -0.31,
+                0.59
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 3.16,
+            "reference_avg": 3.04,
             "model_minus_reference": {
-              "matches": 55,
-              "mean": 0.04,
+              "matches": 71,
+              "mean": 0.0,
               "better": 2,
-              "equal": 51,
-              "worse": 2,
-              "se": 0.1,
+              "equal": 66,
+              "worse": 3,
+              "se": 0.08,
               "ci95": [
-                -0.15,
-                0.22
+                -0.14,
+                0.17
               ]
             }
           }
         }
       },
       "Groq GPT-OSS 120B": {
-        "matches": 64,
-        "points": 194,
-        "avg": 3.03,
+        "matches": 78,
+        "points": 242,
+        "avg": 3.1,
         "vs": {
           "home_1_0": {
-            "reference_avg": 2.78,
+            "reference_avg": 2.64,
             "model_minus_reference": {
-              "matches": 64,
-              "mean": 0.25,
-              "better": 18,
-              "equal": 32,
-              "worse": 14,
-              "se": 0.44,
+              "matches": 78,
+              "mean": 0.46,
+              "better": 23,
+              "equal": 38,
+              "worse": 17,
+              "se": 0.41,
               "ci95": [
-                -0.59,
-                1.09
+                -0.36,
+                1.26
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 2.75,
+            "reference_avg": 2.56,
             "model_minus_reference": {
-              "matches": 64,
-              "mean": 0.28,
-              "better": 16,
-              "equal": 34,
-              "worse": 14,
-              "se": 0.43,
+              "matches": 78,
+              "mean": 0.54,
+              "better": 21,
+              "equal": 41,
+              "worse": 16,
+              "se": 0.39,
               "ci95": [
-                -0.5,
-                1.12
+                -0.23,
+                1.31
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 3.12,
+            "reference_avg": 3.15,
             "model_minus_reference": {
-              "matches": 64,
-              "mean": -0.09,
-              "better": 4,
-              "equal": 53,
-              "worse": 7,
+              "matches": 78,
+              "mean": -0.05,
+              "better": 6,
+              "equal": 63,
+              "worse": 9,
               "se": 0.13,
               "ci95": [
-                -0.34,
-                0.16
+                -0.31,
+                0.21
               ]
             }
           }
@@ -338,41 +392,41 @@
       }
     },
     "baselines_on_all_matches": {
-      "home_1_0": 2.74,
-      "home_2_1": 2.71
+      "home_1_0": 2.67,
+      "home_2_1": 2.62
     },
     "consensus": {
-      "matches": 54,
-      "points": 170,
-      "avg": 3.15,
+      "matches": 69,
+      "points": 216,
+      "avg": 3.13,
       "vs": {
         "home_1_0": {
-          "reference_avg": 2.81,
+          "reference_avg": 2.64,
           "model_minus_reference": {
-            "matches": 54,
-            "mean": 0.33,
-            "better": 15,
-            "equal": 30,
-            "worse": 9,
-            "se": 0.4,
+            "matches": 69,
+            "mean": 0.49,
+            "better": 20,
+            "equal": 38,
+            "worse": 11,
+            "se": 0.37,
             "ci95": [
-              -0.44,
-              1.11
+              -0.26,
+              1.19
             ]
           }
         },
         "home_2_1": {
-          "reference_avg": 2.74,
+          "reference_avg": 2.58,
           "model_minus_reference": {
-            "matches": 54,
-            "mean": 0.41,
-            "better": 13,
-            "equal": 33,
-            "worse": 8,
-            "se": 0.36,
+            "matches": 69,
+            "mean": 0.55,
+            "better": 18,
+            "equal": 41,
+            "worse": 10,
+            "se": 0.35,
             "ci95": [
-              -0.33,
-              1.11
+              -0.14,
+              1.22
             ]
           }
         }
@@ -738,7 +792,7 @@
     }
   },
   "out_of_sample": {
-    "matches": 16,
+    "matches": 32,
     "models": {
       "Gemini 3.6 Flash": {
         "matches": 12,
@@ -792,156 +846,208 @@
           }
         }
       },
-      "Groq Qwen 3.8 27B": {
-        "matches": 16,
-        "points": 56,
-        "avg": 3.5,
+      "Gemini 3.5 Flash-Lite": {
+        "matches": 11,
+        "points": 44,
+        "avg": 4.0,
         "vs": {
           "home_1_0": {
-            "reference_avg": 1.75,
+            "reference_avg": 2.73,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": 1.75,
-              "better": 9,
-              "equal": 5,
+              "matches": 11,
+              "mean": 1.27,
+              "better": 6,
+              "equal": 3,
               "worse": 2,
-              "se": 0.85,
+              "se": 1.41,
               "ci95": [
-                0.0,
-                3.25
+                -1.45,
+                3.64
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 1.88,
+            "reference_avg": 2.73,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": 1.62,
-              "better": 8,
-              "equal": 6,
+              "matches": 11,
+              "mean": 1.27,
+              "better": 6,
+              "equal": 3,
               "worse": 2,
-              "se": 0.86,
+              "se": 1.41,
               "ci95": [
-                -0.12,
-                3.25
+                -1.27,
+                3.64
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 3.88,
+            "reference_avg": 3.27,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": -0.38,
-              "better": 0,
-              "equal": 14,
-              "worse": 2,
-              "se": 0.27,
+              "matches": 11,
+              "mean": 0.73,
+              "better": 2,
+              "equal": 9,
+              "worse": 0,
+              "se": 0.49,
               "ci95": [
-                -1.0,
-                0.0
+                0.0,
+                1.82
               ]
             }
           }
         }
       },
-      "Cloudflare Clef-omni": {
-        "matches": 16,
-        "points": 48,
-        "avg": 3.0,
+      "Groq Qwen 3.8 27B": {
+        "matches": 32,
+        "points": 112,
+        "avg": 3.5,
         "vs": {
           "home_1_0": {
-            "reference_avg": 1.75,
+            "reference_avg": 2.06,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": 1.25,
-              "better": 8,
-              "equal": 4,
-              "worse": 4,
-              "se": 1.12,
+              "matches": 32,
+              "mean": 1.44,
+              "better": 15,
+              "equal": 12,
+              "worse": 5,
+              "se": 0.69,
               "ci95": [
-                -0.88,
-                3.25
+                0.06,
+                2.69
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 1.88,
+            "reference_avg": 2.06,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": 1.12,
-              "better": 8,
-              "equal": 4,
+              "matches": 32,
+              "mean": 1.44,
+              "better": 14,
+              "equal": 14,
               "worse": 4,
-              "se": 1.18,
+              "se": 0.68,
               "ci95": [
-                -1.12,
-                3.25
+                0.06,
+                2.75
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 3.12,
+            "reference_avg": 3.38,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": -0.12,
-              "better": 2,
-              "equal": 11,
-              "worse": 3,
-              "se": 0.43,
+              "matches": 32,
+              "mean": 0.12,
+              "better": 3,
+              "equal": 27,
+              "worse": 2,
+              "se": 0.24,
               "ci95": [
-                -0.88,
+                -0.31,
                 0.62
               ]
             }
           }
         }
       },
-      "Cohere Command A+": {
-        "matches": 14,
-        "points": 36,
-        "avg": 2.57,
+      "Cloudflare Clef-omni": {
+        "matches": 32,
+        "points": 96,
+        "avg": 3.0,
         "vs": {
           "home_1_0": {
-            "reference_avg": 2.0,
+            "reference_avg": 2.06,
             "model_minus_reference": {
-              "matches": 14,
-              "mean": 0.57,
-              "better": 4,
-              "equal": 9,
-              "worse": 1,
-              "se": 0.68,
+              "matches": 32,
+              "mean": 0.94,
+              "better": 13,
+              "equal": 12,
+              "worse": 7,
+              "se": 0.77,
               "ci95": [
-                -0.71,
-                1.86
+                -0.56,
+                2.38
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 2.14,
+            "reference_avg": 2.06,
             "model_minus_reference": {
-              "matches": 14,
-              "mean": 0.43,
-              "better": 3,
-              "equal": 10,
-              "worse": 1,
-              "se": 0.67,
+              "matches": 32,
+              "mean": 0.94,
+              "better": 13,
+              "equal": 12,
+              "worse": 7,
+              "se": 0.78,
               "ci95": [
-                -0.86,
-                1.71
+                -0.62,
+                2.38
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 2.71,
+            "reference_avg": 3.0,
             "model_minus_reference": {
-              "matches": 14,
-              "mean": -0.14,
-              "better": 0,
-              "equal": 13,
-              "worse": 1,
-              "se": 0.14,
+              "matches": 32,
+              "mean": 0.0,
+              "better": 4,
+              "equal": 23,
+              "worse": 5,
+              "se": 0.27,
               "ci95": [
-                -0.43,
+                -0.5,
+                0.5
+              ]
+            }
+          }
+        }
+      },
+      "Cohere Command A+": {
+        "matches": 30,
+        "points": 76,
+        "avg": 2.53,
+        "vs": {
+          "home_1_0": {
+            "reference_avg": 2.2,
+            "model_minus_reference": {
+              "matches": 30,
+              "mean": 0.33,
+              "better": 7,
+              "equal": 19,
+              "worse": 4,
+              "se": 0.49,
+              "ci95": [
+                -0.67,
+                1.27
+              ]
+            }
+          },
+          "home_2_1": {
+            "reference_avg": 2.2,
+            "model_minus_reference": {
+              "matches": 30,
+              "mean": 0.33,
+              "better": 6,
+              "equal": 21,
+              "worse": 3,
+              "se": 0.5,
+              "ci95": [
+                -0.67,
+                1.27
+              ]
+            }
+          },
+          "fixed_margin_2_1": {
+            "reference_avg": 2.67,
+            "model_minus_reference": {
+              "matches": 30,
+              "mean": -0.13,
+              "better": 0,
+              "equal": 28,
+              "worse": 2,
+              "se": 0.09,
+              "ci95": [
+                -0.33,
                 0.0
               ]
             }
@@ -949,52 +1055,52 @@
         }
       },
       "Groq GPT-OSS 120B": {
-        "matches": 16,
-        "points": 54,
-        "avg": 3.38,
+        "matches": 30,
+        "points": 102,
+        "avg": 3.4,
         "vs": {
           "home_1_0": {
-            "reference_avg": 1.75,
+            "reference_avg": 1.87,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": 1.62,
-              "better": 9,
-              "equal": 3,
-              "worse": 4,
-              "se": 1.16,
+              "matches": 30,
+              "mean": 1.53,
+              "better": 14,
+              "equal": 9,
+              "worse": 7,
+              "se": 0.78,
               "ci95": [
-                -0.62,
-                3.75
+                0.07,
+                3.0
               ]
             }
           },
           "home_2_1": {
-            "reference_avg": 1.88,
+            "reference_avg": 1.8,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": 1.5,
-              "better": 9,
-              "equal": 3,
-              "worse": 4,
-              "se": 1.22,
+              "matches": 30,
+              "mean": 1.6,
+              "better": 14,
+              "equal": 10,
+              "worse": 6,
+              "se": 0.78,
               "ci95": [
-                -0.88,
-                3.75
+                0.07,
+                3.07
               ]
             }
           },
           "fixed_margin_2_1": {
-            "reference_avg": 3.62,
+            "reference_avg": 3.47,
             "model_minus_reference": {
-              "matches": 16,
-              "mean": -0.25,
-              "better": 1,
-              "equal": 12,
-              "worse": 3,
-              "se": 0.4,
+              "matches": 30,
+              "mean": -0.07,
+              "better": 3,
+              "equal": 22,
+              "worse": 5,
+              "se": 0.28,
               "ci95": [
-                -1.0,
-                0.5
+                -0.6,
+                0.47
               ]
             }
           }
@@ -1002,41 +1108,41 @@
       }
     },
     "baselines_on_all_matches": {
-      "home_1_0": 1.75,
-      "home_2_1": 1.88
+      "home_1_0": 2.06,
+      "home_2_1": 2.06
     },
     "consensus": {
-      "matches": 14,
-      "points": 46,
-      "avg": 3.29,
+      "matches": 29,
+      "points": 92,
+      "avg": 3.17,
       "vs": {
         "home_1_0": {
-          "reference_avg": 1.29,
+          "reference_avg": 1.66,
           "model_minus_reference": {
-            "matches": 14,
-            "mean": 2.0,
-            "better": 8,
-            "equal": 5,
-            "worse": 1,
-            "se": 0.84,
+            "matches": 29,
+            "mean": 1.52,
+            "better": 13,
+            "equal": 13,
+            "worse": 3,
+            "se": 0.63,
             "ci95": [
-              0.29,
-              3.43
+              0.28,
+              2.69
             ]
           }
         },
         "home_2_1": {
-          "reference_avg": 1.29,
+          "reference_avg": 1.66,
           "model_minus_reference": {
-            "matches": 14,
-            "mean": 2.0,
-            "better": 8,
-            "equal": 5,
-            "worse": 1,
-            "se": 0.84,
+            "matches": 29,
+            "mean": 1.52,
+            "better": 13,
+            "equal": 13,
+            "worse": 3,
+            "se": 0.64,
             "ci95": [
-              0.29,
-              3.43
+              0.28,
+              2.69
             ]
           }
         }
