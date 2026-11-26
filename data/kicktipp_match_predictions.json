@@ -2204,5 +2204,582 @@
         }
       }
     ]
+  },
+  "5": {
+    "season": "2026/27",
+    "matchday": 5,
+    "status": "FINAL",
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "schema_version": 1,
+    "source": "NATIVE_PREDICTION_ARCHIVE",
+    "matches": [
+      {
+        "match_id": "575396",
+        "home": "FK Bodø/Glimt",
+        "away": "LASK Linz",
+        "utcDate": "2026-11-24T17:45:00Z",
+        "actual": {
+          "home": 1,
+          "away": 0
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "1-1",
+            "points": 0
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "1-2",
+            "points": 0
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 6
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "2-1",
+            "points": 6
+          },
+          "Cloudflare Clef-omni": {
+            "score": "1-1",
+            "points": 0
+          }
+        },
+        "consensus": null
+      },
+      {
+        "match_id": "575397",
+        "home": "Real Madrid CF",
+        "away": "PSV",
+        "utcDate": "2026-11-24T20:00:00Z",
+        "actual": {
+          "home": 5,
+          "away": 1
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "3-1",
+            "points": 4
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Cloudflare Clef-omni": {
+            "score": "4-2",
+            "points": 4
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": "2-1",
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575398",
+        "home": "Manchester City FC",
+        "away": "SSC Napoli",
+        "utcDate": "2026-11-24T20:00:00Z",
+        "actual": {
+          "home": 2,
+          "away": 2
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "1-1",
+            "points": 6
+          },
+          "Cloudflare Clef-omni": {
+            "score": "3-1",
+            "points": 0
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": "2-1",
+          "points": 0
+        }
+      },
+      {
+        "match_id": "575399",
+        "home": "Arsenal FC",
+        "away": "Borussia Dortmund",
+        "utcDate": "2026-11-24T20:00:00Z",
+        "actual": {
+          "home": 1,
+          "away": 1
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": null,
+          "Groq Qwen 3.8 27B": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Cloudflare Clef-omni": {
+            "score": "1-0",
+            "points": 0
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": "2-1",
+          "points": 0
+        }
+      },
+      {
+        "match_id": "575400",
+        "home": "Feyenoord Rotterdam",
+        "away": "FC Porto",
+        "utcDate": "2026-11-24T20:00:00Z",
+        "actual": {
+          "home": 0,
+          "away": 1
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "1-2",
+            "points": 6
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "1-2",
+            "points": 6
+          },
+          "Cohere Command A+": {
+            "score": "1-2",
+            "points": 6
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "0-2",
+            "points": 4
+          },
+          "Cloudflare Clef-omni": {
+            "score": "0-2",
+            "points": 4
+          }
+        },
+        "consensus": {
+          "outcome": "AWAY",
+          "score": "1-2",
+          "points": 6
+        }
+      },
+      {
+        "match_id": "575401",
+        "home": "ŠK Slovan Bratislava",
+        "away": "Real Betis Balompié",
+        "utcDate": "2026-11-24T20:00:00Z",
+        "actual": {
+          "home": 0,
+          "away": 2
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": null,
+          "Groq Qwen 3.8 27B": {
+            "score": "0-2",
+            "points": 8
+          },
+          "Cohere Command A+": {
+            "score": "0-1",
+            "points": 4
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "0-2",
+            "points": 8
+          },
+          "Cloudflare Clef-omni": {
+            "score": "0-2",
+            "points": 8
+          }
+        },
+        "consensus": {
+          "outcome": "AWAY",
+          "score": "0-2",
+          "points": 8
+        }
+      },
+      {
+        "match_id": "575402",
+        "home": "RB Leipzig",
+        "away": "Racing Club de Lens",
+        "utcDate": "2026-11-24T20:00:00Z",
+        "actual": {
+          "home": 3,
+          "away": 1
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "3-1",
+            "points": 8
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "3-1",
+            "points": 8
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Groq GPT-OSS 120B": null,
+          "Cloudflare Clef-omni": {
+            "score": "4-1",
+            "points": 4
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": null,
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575403",
+        "home": "Como 1907",
+        "away": "PAE AEK",
+        "utcDate": "2026-11-24T20:00:00Z",
+        "actual": {
+          "home": 1,
+          "away": 0
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": null,
+          "Groq Qwen 3.8 27B": {
+            "score": "2-1",
+            "points": 6
+          },
+          "Cohere Command A+": {
+            "score": "2-0",
+            "points": 4
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "3-1",
+            "points": 4
+          },
+          "Cloudflare Clef-omni": {
+            "score": "4-1",
+            "points": 4
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": null,
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575404",
+        "home": "Sabah FK",
+        "away": "FC Barcelona",
+        "utcDate": "2026-11-25T17:45:00Z",
+        "actual": {
+          "home": 1,
+          "away": 4
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "1-3",
+            "points": 4
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "0-3",
+            "points": 6
+          },
+          "Cohere Command A+": {
+            "score": "1-2",
+            "points": 4
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "0-2",
+            "points": 4
+          },
+          "Cloudflare Clef-omni": {
+            "score": "0-3",
+            "points": 6
+          }
+        },
+        "consensus": {
+          "outcome": "AWAY",
+          "score": null,
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575405",
+        "home": "SK Slavia Praha",
+        "away": "Villarreal CF",
+        "utcDate": "2026-11-25T17:45:00Z",
+        "actual": {
+          "home": 0,
+          "away": 1
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "1-2",
+            "points": 6
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "1-2",
+            "points": 6
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "0-1",
+            "points": 8
+          },
+          "Cloudflare Clef-omni": {
+            "score": "0-0",
+            "points": 0
+          }
+        },
+        "consensus": {
+          "outcome": "AWAY",
+          "score": null,
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575406",
+        "home": "FC Internazionale Milano",
+        "away": "VfB Stuttgart",
+        "utcDate": "2026-11-25T20:00:00Z",
+        "actual": {
+          "home": 2,
+          "away": 0
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Cloudflare Clef-omni": {
+            "score": "2-1",
+            "points": 4
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": "2-1",
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575407",
+        "home": "Club Atlético de Madrid",
+        "away": "Viking FK",
+        "utcDate": "2026-11-25T20:00:00Z",
+        "actual": {
+          "home": 2,
+          "away": 0
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "2-0",
+            "points": 8
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 4
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "1-1",
+            "points": 0
+          },
+          "Cloudflare Clef-omni": {
+            "score": "1-0",
+            "points": 4
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": null,
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575408",
+        "home": "Paris Saint-Germain FC",
+        "away": "AS Roma",
+        "utcDate": "2026-11-25T20:00:00Z",
+        "actual": {
+          "home": 2,
+          "away": 2
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": null,
+          "Groq Qwen 3.8 27B": {
+            "score": "3-1",
+            "points": 0
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "3-1",
+            "points": 0
+          },
+          "Cloudflare Clef-omni": {
+            "score": "3-1",
+            "points": 0
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": "3-1",
+          "points": 0
+        }
+      },
+      {
+        "match_id": "575409",
+        "home": "Club Brugge KV",
+        "away": "Liverpool FC",
+        "utcDate": "2026-11-25T20:00:00Z",
+        "actual": {
+          "home": 0,
+          "away": 3
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "1-2",
+            "points": 4
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "1-2",
+            "points": 4
+          },
+          "Cohere Command A+": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Cloudflare Clef-omni": {
+            "score": "1-2",
+            "points": 4
+          }
+        },
+        "consensus": {
+          "outcome": "AWAY",
+          "score": "1-2",
+          "points": 4
+        }
+      },
+      {
+        "match_id": "575410",
+        "home": "Lille OSC",
+        "away": "FC Bayern München",
+        "utcDate": "2026-11-25T20:00:00Z",
+        "actual": {
+          "home": 2,
+          "away": 1
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": {
+            "score": "0-2",
+            "points": 0
+          },
+          "Groq Qwen 3.8 27B": {
+            "score": "0-2",
+            "points": 0
+          },
+          "Cohere Command A+": {
+            "score": "1-2",
+            "points": 0
+          },
+          "Groq GPT-OSS 120B": null,
+          "Cloudflare Clef-omni": {
+            "score": "0-2",
+            "points": 0
+          }
+        },
+        "consensus": {
+          "outcome": "AWAY",
+          "score": "0-2",
+          "points": 0
+        }
+      },
+      {
+        "match_id": "575411",
+        "home": "Sporting Clube de Portugal",
+        "away": "Manchester United FC",
+        "utcDate": "2026-11-25T20:00:00Z",
+        "actual": {
+          "home": 2,
+          "away": 2
+        },
+        "models": {
+          "Gemini 3.5 Flash-Lite": null,
+          "Groq Qwen 3.8 27B": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Cohere Command A+": {
+            "score": "2-0",
+            "points": 0
+          },
+          "Groq GPT-OSS 120B": {
+            "score": "2-1",
+            "points": 0
+          },
+          "Cloudflare Clef-omni": {
+            "score": "1-1",
+            "points": 6
+          }
+        },
+        "consensus": {
+          "outcome": "HOME",
+          "score": null,
+          "points": 0
+        }
+      }
+    ]
   }
 }
