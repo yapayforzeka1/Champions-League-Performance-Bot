@@ -4,40 +4,41 @@
   "scope": "PROSPECTIVE_ONLY",
   "finalized_matchdays": [
     "3",
-    "4"
+    "4",
+    "5"
   ],
   "methods": {
     "al_score_average_v1": {
       "method": "al_score_average_v1",
       "label": "AL Skor Ortalaması",
       "version": 1,
-      "opportunities": 32,
-      "valid_predictions": 25,
-      "missing_predictions": 7,
-      "outcome": 16,
+      "opportunities": 48,
+      "valid_predictions": 31,
+      "missing_predictions": 17,
+      "outcome": 17,
       "exact": 2,
-      "points": 74,
-      "avg": 2.96,
-      "coverage_pct": 78.1,
-      "outcome_pct": 64.0,
-      "exact_pct": 8.0,
-      "point_efficiency_pct": 37.0,
+      "points": 78,
+      "avg": 2.52,
+      "coverage_pct": 64.6,
+      "outcome_pct": 54.8,
+      "exact_pct": 6.5,
+      "point_efficiency_pct": 31.5,
       "point_distribution": {
         "8": 2,
         "6": 1,
-        "4": 13,
-        "0": 9
+        "4": 14,
+        "0": 14
       },
       "failure_reasons": {
-        "SOURCE_VOTES_HASH_MISMATCH": 7
+        "SOURCE_VOTES_HASH_MISMATCH": 17
       },
       "models_used_counts": {
-        "4": 16,
-        "5": 8,
+        "4": 20,
+        "5": 10,
         "3": 1
       },
-      "used_ai_sum": 107,
-      "avg_valid_ai_count": 4.28,
+      "used_ai_sum": 133,
+      "avg_valid_ai_count": 4.29,
       "provenance": {},
       "head_to_head": {
         "Gemini 3.6 Flash": {
@@ -51,64 +52,74 @@
           "comparison_outcome": 9
         },
         "Groq Qwen 3.8 27B": {
-          "common_matches": 25,
-          "experimental_points": 74,
-          "comparison_points": 76,
+          "common_matches": 31,
+          "experimental_points": 78,
+          "comparison_points": 88,
           "experimental_better": 0,
-          "equal": 24,
-          "comparison_better": 1,
-          "experimental_outcome": 16,
-          "comparison_outcome": 16
+          "equal": 28,
+          "comparison_better": 3,
+          "experimental_outcome": 17,
+          "comparison_outcome": 18
         },
         "Groq GPT-OSS 120B": {
-          "common_matches": 25,
-          "experimental_points": 74,
-          "comparison_points": 82,
+          "common_matches": 31,
+          "experimental_points": 78,
+          "comparison_points": 100,
           "experimental_better": 3,
-          "equal": 17,
-          "comparison_better": 5,
+          "equal": 21,
+          "comparison_better": 7,
+          "experimental_outcome": 17,
+          "comparison_outcome": 20
+        },
+        "Cloudflare Clef-omni": {
+          "common_matches": 31,
+          "experimental_points": 78,
+          "comparison_points": 74,
+          "experimental_better": 3,
+          "equal": 26,
+          "comparison_better": 2,
+          "experimental_outcome": 17,
+          "comparison_outcome": 16
+        },
+        "Ortak karar": {
+          "common_matches": 27,
+          "experimental_points": 70,
+          "comparison_points": 74,
+          "experimental_better": 0,
+          "equal": 26,
+          "comparison_better": 1,
           "experimental_outcome": 16,
           "comparison_outcome": 17
         },
-        "Cloudflare Clef-omni": {
-          "common_matches": 25,
-          "experimental_points": 74,
-          "comparison_points": 64,
-          "experimental_better": 3,
-          "equal": 21,
-          "comparison_better": 1,
-          "experimental_outcome": 16,
-          "comparison_outcome": 14
-        },
-        "Ortak karar": {
-          "common_matches": 22,
-          "experimental_points": 66,
-          "comparison_points": 66,
-          "experimental_better": 0,
-          "equal": 22,
-          "comparison_better": 0,
-          "experimental_outcome": 15,
-          "comparison_outcome": 15
-        },
         "Cohere Command A+": {
-          "common_matches": 21,
-          "experimental_points": 62,
-          "comparison_points": 74,
+          "common_matches": 27,
+          "experimental_points": 66,
+          "comparison_points": 84,
           "experimental_better": 1,
-          "equal": 16,
-          "comparison_better": 4,
-          "experimental_outcome": 13,
-          "comparison_outcome": 15
+          "equal": 21,
+          "comparison_better": 5,
+          "experimental_outcome": 14,
+          "comparison_outcome": 17
         },
         "En Sık AL Skoru": {
-          "common_matches": 20,
+          "common_matches": 24,
           "experimental_points": 54,
-          "comparison_points": 66,
+          "comparison_points": 72,
           "experimental_better": 0,
-          "equal": 17,
-          "comparison_better": 3,
+          "equal": 20,
+          "comparison_better": 4,
           "experimental_outcome": 12,
-          "comparison_outcome": 14
+          "comparison_outcome": 15
+        },
+        "Gemini 3.5 Flash-Lite": {
+          "common_matches": 2,
+          "experimental_points": 0,
+          "comparison_points": 6,
+          "experimental_better": 0,
+          "equal": 1,
+          "comparison_better": 1,
+          "experimental_outcome": 0,
+          "comparison_outcome": 1
         }
       },
       "valid_match_ids": [
@@ -136,7 +147,13 @@
         "575386",
         "575389",
         "575390",
-        "575391"
+        "575391",
+        "575396",
+        "575399",
+        "575403",
+        "575405",
+        "575408",
+        "575411"
       ],
       "match_evaluations": {
         "575359": {
@@ -363,6 +380,60 @@
           "exact": true,
           "created_at": "2026-11-04T19:32:18.628614+00:00",
           "source_votes_sha256": "5a373dc38fa9bb5e9bf6f06aa01e99e6315f0ce013c163ad71fdbf2af4c16177"
+        },
+        "575396": {
+          "predicted_score": "1-1",
+          "actual_score": "1-0",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-24T16:46:34.699545+00:00",
+          "source_votes_sha256": "28014baaf447193093faf4afd8336ab83dbbed761a38179f1a4331f96fd86df0"
+        },
+        "575399": {
+          "predicted_score": "2-1",
+          "actual_score": "1-1",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-24T19:07:54.580731+00:00",
+          "source_votes_sha256": "4c9b098efaf4cc1231c66fb5826bf31794984c9a0b22af451ac051f98bfa43d7"
+        },
+        "575403": {
+          "predicted_score": "3-1",
+          "actual_score": "1-0",
+          "points": 4,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-24T19:31:57.050917+00:00",
+          "source_votes_sha256": "ce8e8a8194c0b27f2f9591e6e2744cf0dd967b2985a1950c9413f903470e8ff7"
+        },
+        "575405": {
+          "predicted_score": "1-1",
+          "actual_score": "0-1",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-25T17:17:02.225895+00:00",
+          "source_votes_sha256": "c2c2d055ddf2ba8a198d158be651c515c74d37b325e9cbeaf39e775b9e162d64"
+        },
+        "575408": {
+          "predicted_score": "3-1",
+          "actual_score": "2-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-25T19:31:25.298223+00:00",
+          "source_votes_sha256": "84b0bdeeb06cd8cd34ce1e78f200df228547839389f774155d71eb8d8e6e545c"
+        },
+        "575411": {
+          "predicted_score": "2-1",
+          "actual_score": "2-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-25T19:04:59.673336+00:00",
+          "source_votes_sha256": "3da6ce741fbd4277c34123851416e980c333ec2ab48f52b353d5f35dfb694d27"
         }
       }
     },
@@ -370,34 +441,34 @@
       "method": "al_most_frequent_score_v1",
       "label": "En Sık AL Skoru",
       "version": 1,
-      "opportunities": 32,
-      "valid_predictions": 20,
-      "missing_predictions": 12,
-      "outcome": 14,
+      "opportunities": 48,
+      "valid_predictions": 24,
+      "missing_predictions": 24,
+      "outcome": 15,
       "exact": 2,
-      "points": 66,
-      "avg": 3.3,
-      "coverage_pct": 62.5,
-      "outcome_pct": 70.0,
-      "exact_pct": 10.0,
-      "point_efficiency_pct": 41.2,
+      "points": 72,
+      "avg": 3.0,
+      "coverage_pct": 50.0,
+      "outcome_pct": 62.5,
+      "exact_pct": 8.3,
+      "point_efficiency_pct": 37.5,
       "point_distribution": {
         "8": 2,
-        "6": 1,
+        "6": 2,
         "4": 11,
-        "0": 6
+        "0": 9
       },
       "failure_reasons": {
-        "TIED_TOP_SCORES": 4,
-        "NO_REPEATED_SCORE": 1,
-        "SOURCE_VOTES_HASH_MISMATCH": 7
+        "TIED_TOP_SCORES": 5,
+        "NO_REPEATED_SCORE": 2,
+        "SOURCE_VOTES_HASH_MISMATCH": 17
       },
       "models_used_counts": {
-        "4": 13,
-        "5": 6,
+        "4": 16,
+        "5": 7,
         "3": 1
       },
-      "used_ai_sum": 85,
+      "used_ai_sum": 102,
       "avg_valid_ai_count": 4.25,
       "provenance": {},
       "head_to_head": {
@@ -412,64 +483,74 @@
           "comparison_outcome": 7
         },
         "Groq Qwen 3.8 27B": {
-          "common_matches": 20,
-          "experimental_points": 66,
-          "comparison_points": 54,
+          "common_matches": 24,
+          "experimental_points": 72,
+          "comparison_points": 60,
           "experimental_better": 3,
-          "equal": 17,
+          "equal": 21,
           "comparison_better": 0,
-          "experimental_outcome": 14,
-          "comparison_outcome": 12
+          "experimental_outcome": 15,
+          "comparison_outcome": 13
         },
         "Groq GPT-OSS 120B": {
-          "common_matches": 20,
-          "experimental_points": 66,
-          "comparison_points": 70,
+          "common_matches": 24,
+          "experimental_points": 72,
+          "comparison_points": 78,
           "experimental_better": 2,
-          "equal": 16,
-          "comparison_better": 2,
-          "experimental_outcome": 14,
-          "comparison_outcome": 14
+          "equal": 19,
+          "comparison_better": 3,
+          "experimental_outcome": 15,
+          "comparison_outcome": 15
         },
         "Cloudflare Clef-omni": {
-          "common_matches": 20,
-          "experimental_points": 66,
-          "comparison_points": 52,
-          "experimental_better": 4,
-          "equal": 16,
-          "comparison_better": 0,
-          "experimental_outcome": 14,
-          "comparison_outcome": 11
-        },
-        "Ortak karar": {
-          "common_matches": 18,
-          "experimental_points": 58,
-          "comparison_points": 54,
-          "experimental_better": 1,
-          "equal": 17,
-          "comparison_better": 0,
-          "experimental_outcome": 12,
+          "common_matches": 24,
+          "experimental_points": 72,
+          "comparison_points": 58,
+          "experimental_better": 5,
+          "equal": 18,
+          "comparison_better": 1,
+          "experimental_outcome": 15,
           "comparison_outcome": 12
         },
-        "Cohere Command A+": {
-          "common_matches": 16,
-          "experimental_points": 50,
-          "comparison_points": 46,
-          "experimental_better": 1,
-          "equal": 15,
+        "Ortak karar": {
+          "common_matches": 22,
+          "experimental_points": 64,
+          "comparison_points": 58,
+          "experimental_better": 2,
+          "equal": 20,
           "comparison_better": 0,
-          "experimental_outcome": 11,
+          "experimental_outcome": 13,
+          "comparison_outcome": 13
+        },
+        "Cohere Command A+": {
+          "common_matches": 20,
+          "experimental_points": 56,
+          "comparison_points": 46,
+          "experimental_better": 2,
+          "equal": 18,
+          "comparison_better": 0,
+          "experimental_outcome": 12,
           "comparison_outcome": 10
         },
         "AL Skor Ortalaması": {
-          "common_matches": 20,
-          "experimental_points": 66,
+          "common_matches": 24,
+          "experimental_points": 72,
           "comparison_points": 54,
-          "experimental_better": 3,
-          "equal": 17,
+          "experimental_better": 4,
+          "equal": 20,
           "comparison_better": 0,
-          "experimental_outcome": 14,
+          "experimental_outcome": 15,
           "comparison_outcome": 12
+        },
+        "Gemini 3.5 Flash-Lite": {
+          "common_matches": 1,
+          "experimental_points": 6,
+          "comparison_points": 6,
+          "experimental_better": 0,
+          "equal": 1,
+          "comparison_better": 0,
+          "experimental_outcome": 1,
+          "comparison_outcome": 1
         }
       },
       "valid_match_ids": [
@@ -492,7 +573,11 @@
         "575381",
         "575383",
         "575389",
-        "575390"
+        "575390",
+        "575399",
+        "575405",
+        "575408",
+        "575411"
       ],
       "match_evaluations": {
         "575359": {
@@ -674,6 +759,42 @@
           "exact": false,
           "created_at": "2026-11-04T19:02:45.986906+00:00",
           "source_votes_sha256": "1e435d306fb115a3ba726598f12e8c63ce2d7e043872d62e14eaa3ee339d7edd"
+        },
+        "575399": {
+          "predicted_score": "2-1",
+          "actual_score": "1-1",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-24T19:07:54.580731+00:00",
+          "source_votes_sha256": "4c9b098efaf4cc1231c66fb5826bf31794984c9a0b22af451ac051f98bfa43d7"
+        },
+        "575405": {
+          "predicted_score": "1-2",
+          "actual_score": "0-1",
+          "points": 6,
+          "outcome_correct": true,
+          "exact": false,
+          "created_at": "2026-11-25T17:17:02.225895+00:00",
+          "source_votes_sha256": "c2c2d055ddf2ba8a198d158be651c515c74d37b325e9cbeaf39e775b9e162d64"
+        },
+        "575408": {
+          "predicted_score": "3-1",
+          "actual_score": "2-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-25T19:31:25.298223+00:00",
+          "source_votes_sha256": "84b0bdeeb06cd8cd34ce1e78f200df228547839389f774155d71eb8d8e6e545c"
+        },
+        "575411": {
+          "predicted_score": "2-1",
+          "actual_score": "2-2",
+          "points": 0,
+          "outcome_correct": false,
+          "exact": false,
+          "created_at": "2026-11-25T19:04:59.673336+00:00",
+          "source_votes_sha256": "3da6ce741fbd4277c34123851416e980c333ec2ab48f52b353d5f35dfb694d27"
         }
       }
     }

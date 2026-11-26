@@ -1205,5 +1205,412 @@
         }
       }
     }
+  },
+  "5": {
+    "season": "2026/27",
+    "matchday": 5,
+    "status": "FINAL",
+    "scoring_rule": "kicktipp:8-6-4-0:REGULAR_90:v1",
+    "schema_version": 1,
+    "scope": "PROSPECTIVE_ONLY",
+    "total_fixtures": 18,
+    "policy_excluded": 2,
+    "excluded_match_ids": [
+      "575395",
+      "575412"
+    ],
+    "opportunities": 16,
+    "methods": {
+      "al_score_average_v1": {
+        "method": "al_score_average_v1",
+        "label": "AL Skor Ortalaması",
+        "version": 1,
+        "opportunities": 16,
+        "valid_predictions": 6,
+        "missing_predictions": 10,
+        "outcome": 1,
+        "exact": 0,
+        "points": 4,
+        "avg": 0.67,
+        "coverage_pct": 37.5,
+        "outcome_pct": 16.7,
+        "exact_pct": 0.0,
+        "point_efficiency_pct": 8.3,
+        "point_distribution": {
+          "8": 0,
+          "6": 0,
+          "4": 1,
+          "0": 5
+        },
+        "failure_reasons": {
+          "SOURCE_VOTES_HASH_MISMATCH": 10
+        },
+        "models_used_counts": {
+          "5": 2,
+          "4": 4
+        },
+        "used_ai_sum": 26,
+        "avg_valid_ai_count": 4.33,
+        "provenance": {
+          "575396": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "57559eecccffc13012cc2c9b0bd24b9700d2e9ed",
+            "commit_date": "2026-11-24T16:46:38+00:00",
+            "lead_minutes": 58.4,
+            "source_experiment_sha256": "2b578f9190154abd4a75cfcb2b49e122611e56c53bf56a0d35efca04e4bcab83"
+          },
+          "575399": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "75d1c51912ec4971fa20443335e47fb83cdbc057",
+            "commit_date": "2026-11-24T19:46:16+00:00",
+            "lead_minutes": 13.7,
+            "source_experiment_sha256": "3c06e45b2902cb385ce521fd3cc53b0c24f21d0b488516648fc9b7f19ad7fa2f"
+          },
+          "575403": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "75d1c51912ec4971fa20443335e47fb83cdbc057",
+            "commit_date": "2026-11-24T19:46:16+00:00",
+            "lead_minutes": 13.7,
+            "source_experiment_sha256": "0297b0683b3cafcfb2b5d187cabde6ae2283a618cc1ae8f60ccc3213d0e7d464"
+          },
+          "575405": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8465f7ab5347456b0b1fb0219b99e96d6e27f589",
+            "commit_date": "2026-11-25T17:17:08+00:00",
+            "lead_minutes": 27.9,
+            "source_experiment_sha256": "0123eebcf01649084da83165d2cd9bc700c6bce6d4d8423bcb6f0252856d6953"
+          },
+          "575408": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "4586807943907a19b7ae207cea436f30db96b102",
+            "commit_date": "2026-11-25T19:51:46+00:00",
+            "lead_minutes": 8.2,
+            "source_experiment_sha256": "d9c53d2633108199eb45eb023508e96bef48bfc1200e0976cd51b407b895540e"
+          },
+          "575411": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "4586807943907a19b7ae207cea436f30db96b102",
+            "commit_date": "2026-11-25T19:51:46+00:00",
+            "lead_minutes": 8.2,
+            "source_experiment_sha256": "e193a5cdc6e36ae29d02773337dadf480e6204542b6974d403f6c73b84efc6e1"
+          }
+        },
+        "head_to_head": {
+          "Gemini 3.5 Flash-Lite": {
+            "common_matches": 2,
+            "experimental_points": 0,
+            "comparison_points": 6,
+            "experimental_better": 0,
+            "equal": 1,
+            "comparison_better": 1,
+            "experimental_outcome": 0,
+            "comparison_outcome": 1
+          },
+          "Groq Qwen 3.8 27B": {
+            "common_matches": 6,
+            "experimental_points": 4,
+            "comparison_points": 12,
+            "experimental_better": 0,
+            "equal": 4,
+            "comparison_better": 2,
+            "experimental_outcome": 1,
+            "comparison_outcome": 2
+          },
+          "Cohere Command A+": {
+            "common_matches": 6,
+            "experimental_points": 4,
+            "comparison_points": 10,
+            "experimental_better": 0,
+            "equal": 5,
+            "comparison_better": 1,
+            "experimental_outcome": 1,
+            "comparison_outcome": 2
+          },
+          "Groq GPT-OSS 120B": {
+            "common_matches": 6,
+            "experimental_points": 4,
+            "comparison_points": 18,
+            "experimental_better": 0,
+            "equal": 4,
+            "comparison_better": 2,
+            "experimental_outcome": 1,
+            "comparison_outcome": 3
+          },
+          "Cloudflare Clef-omni": {
+            "common_matches": 6,
+            "experimental_points": 4,
+            "comparison_points": 10,
+            "experimental_better": 0,
+            "equal": 5,
+            "comparison_better": 1,
+            "experimental_outcome": 1,
+            "comparison_outcome": 2
+          },
+          "Ortak karar": {
+            "common_matches": 5,
+            "experimental_points": 4,
+            "comparison_points": 8,
+            "experimental_better": 0,
+            "equal": 4,
+            "comparison_better": 1,
+            "experimental_outcome": 1,
+            "comparison_outcome": 2
+          },
+          "En Sık AL Skoru": {
+            "common_matches": 4,
+            "experimental_points": 0,
+            "comparison_points": 6,
+            "experimental_better": 0,
+            "equal": 3,
+            "comparison_better": 1,
+            "experimental_outcome": 0,
+            "comparison_outcome": 1
+          }
+        },
+        "valid_match_ids": [
+          "575396",
+          "575399",
+          "575403",
+          "575405",
+          "575408",
+          "575411"
+        ],
+        "match_evaluations": {
+          "575396": {
+            "predicted_score": "1-1",
+            "actual_score": "1-0",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-24T16:46:34.699545+00:00",
+            "source_votes_sha256": "28014baaf447193093faf4afd8336ab83dbbed761a38179f1a4331f96fd86df0"
+          },
+          "575399": {
+            "predicted_score": "2-1",
+            "actual_score": "1-1",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-24T19:07:54.580731+00:00",
+            "source_votes_sha256": "4c9b098efaf4cc1231c66fb5826bf31794984c9a0b22af451ac051f98bfa43d7"
+          },
+          "575403": {
+            "predicted_score": "3-1",
+            "actual_score": "1-0",
+            "points": 4,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-24T19:31:57.050917+00:00",
+            "source_votes_sha256": "ce8e8a8194c0b27f2f9591e6e2744cf0dd967b2985a1950c9413f903470e8ff7"
+          },
+          "575405": {
+            "predicted_score": "1-1",
+            "actual_score": "0-1",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-25T17:17:02.225895+00:00",
+            "source_votes_sha256": "c2c2d055ddf2ba8a198d158be651c515c74d37b325e9cbeaf39e775b9e162d64"
+          },
+          "575408": {
+            "predicted_score": "3-1",
+            "actual_score": "2-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-25T19:31:25.298223+00:00",
+            "source_votes_sha256": "84b0bdeeb06cd8cd34ce1e78f200df228547839389f774155d71eb8d8e6e545c"
+          },
+          "575411": {
+            "predicted_score": "2-1",
+            "actual_score": "2-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-25T19:04:59.673336+00:00",
+            "source_votes_sha256": "3da6ce741fbd4277c34123851416e980c333ec2ab48f52b353d5f35dfb694d27"
+          }
+        }
+      },
+      "al_most_frequent_score_v1": {
+        "method": "al_most_frequent_score_v1",
+        "label": "En Sık AL Skoru",
+        "version": 1,
+        "opportunities": 16,
+        "valid_predictions": 4,
+        "missing_predictions": 12,
+        "outcome": 1,
+        "exact": 0,
+        "points": 6,
+        "avg": 1.5,
+        "coverage_pct": 25.0,
+        "outcome_pct": 25.0,
+        "exact_pct": 0.0,
+        "point_efficiency_pct": 18.8,
+        "point_distribution": {
+          "8": 0,
+          "6": 1,
+          "4": 0,
+          "0": 3
+        },
+        "failure_reasons": {
+          "TIED_TOP_SCORES": 1,
+          "SOURCE_VOTES_HASH_MISMATCH": 10,
+          "NO_REPEATED_SCORE": 1
+        },
+        "models_used_counts": {
+          "4": 3,
+          "5": 1
+        },
+        "used_ai_sum": 17,
+        "avg_valid_ai_count": 4.25,
+        "provenance": {
+          "575399": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "75d1c51912ec4971fa20443335e47fb83cdbc057",
+            "commit_date": "2026-11-24T19:46:16+00:00",
+            "lead_minutes": 13.7,
+            "source_experiment_sha256": "3c06e45b2902cb385ce521fd3cc53b0c24f21d0b488516648fc9b7f19ad7fa2f"
+          },
+          "575405": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "8465f7ab5347456b0b1fb0219b99e96d6e27f589",
+            "commit_date": "2026-11-25T17:17:08+00:00",
+            "lead_minutes": 27.9,
+            "source_experiment_sha256": "0123eebcf01649084da83165d2cd9bc700c6bce6d4d8423bcb6f0252856d6953"
+          },
+          "575408": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "4586807943907a19b7ae207cea436f30db96b102",
+            "commit_date": "2026-11-25T19:51:46+00:00",
+            "lead_minutes": 8.2,
+            "source_experiment_sha256": "d9c53d2633108199eb45eb023508e96bef48bfc1200e0976cd51b407b895540e"
+          },
+          "575411": {
+            "reason": "PREKICKOFF_GITHUB_SNAPSHOT",
+            "commit_sha": "4586807943907a19b7ae207cea436f30db96b102",
+            "commit_date": "2026-11-25T19:51:46+00:00",
+            "lead_minutes": 8.2,
+            "source_experiment_sha256": "e193a5cdc6e36ae29d02773337dadf480e6204542b6974d403f6c73b84efc6e1"
+          }
+        },
+        "head_to_head": {
+          "Groq Qwen 3.8 27B": {
+            "common_matches": 4,
+            "experimental_points": 6,
+            "comparison_points": 6,
+            "experimental_better": 0,
+            "equal": 4,
+            "comparison_better": 0,
+            "experimental_outcome": 1,
+            "comparison_outcome": 1
+          },
+          "Cohere Command A+": {
+            "common_matches": 4,
+            "experimental_points": 6,
+            "comparison_points": 0,
+            "experimental_better": 1,
+            "equal": 3,
+            "comparison_better": 0,
+            "experimental_outcome": 1,
+            "comparison_outcome": 0
+          },
+          "Groq GPT-OSS 120B": {
+            "common_matches": 4,
+            "experimental_points": 6,
+            "comparison_points": 8,
+            "experimental_better": 0,
+            "equal": 3,
+            "comparison_better": 1,
+            "experimental_outcome": 1,
+            "comparison_outcome": 1
+          },
+          "Cloudflare Clef-omni": {
+            "common_matches": 4,
+            "experimental_points": 6,
+            "comparison_points": 6,
+            "experimental_better": 1,
+            "equal": 2,
+            "comparison_better": 1,
+            "experimental_outcome": 1,
+            "comparison_outcome": 1
+          },
+          "Ortak karar": {
+            "common_matches": 4,
+            "experimental_points": 6,
+            "comparison_points": 4,
+            "experimental_better": 1,
+            "equal": 3,
+            "comparison_better": 0,
+            "experimental_outcome": 1,
+            "comparison_outcome": 1
+          },
+          "Gemini 3.5 Flash-Lite": {
+            "common_matches": 1,
+            "experimental_points": 6,
+            "comparison_points": 6,
+            "experimental_better": 0,
+            "equal": 1,
+            "comparison_better": 0,
+            "experimental_outcome": 1,
+            "comparison_outcome": 1
+          },
+          "AL Skor Ortalaması": {
+            "common_matches": 4,
+            "experimental_points": 6,
+            "comparison_points": 0,
+            "experimental_better": 1,
+            "equal": 3,
+            "comparison_better": 0,
+            "experimental_outcome": 1,
+            "comparison_outcome": 0
+          }
+        },
+        "valid_match_ids": [
+          "575399",
+          "575405",
+          "575408",
+          "575411"
+        ],
+        "match_evaluations": {
+          "575399": {
+            "predicted_score": "2-1",
+            "actual_score": "1-1",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-24T19:07:54.580731+00:00",
+            "source_votes_sha256": "4c9b098efaf4cc1231c66fb5826bf31794984c9a0b22af451ac051f98bfa43d7"
+          },
+          "575405": {
+            "predicted_score": "1-2",
+            "actual_score": "0-1",
+            "points": 6,
+            "outcome_correct": true,
+            "exact": false,
+            "created_at": "2026-11-25T17:17:02.225895+00:00",
+            "source_votes_sha256": "c2c2d055ddf2ba8a198d158be651c515c74d37b325e9cbeaf39e775b9e162d64"
+          },
+          "575408": {
+            "predicted_score": "3-1",
+            "actual_score": "2-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-25T19:31:25.298223+00:00",
+            "source_votes_sha256": "84b0bdeeb06cd8cd34ce1e78f200df228547839389f774155d71eb8d8e6e545c"
+          },
+          "575411": {
+            "predicted_score": "2-1",
+            "actual_score": "2-2",
+            "points": 0,
+            "outcome_correct": false,
+            "exact": false,
+            "created_at": "2026-11-25T19:04:59.673336+00:00",
+            "source_votes_sha256": "3da6ce741fbd4277c34123851416e980c333ec2ab48f52b353d5f35dfb694d27"
+          }
+        }
+      }
+    }
   }
 }
