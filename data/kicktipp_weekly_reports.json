@@ -1933,8 +1933,8 @@
       }
     },
     "delivery": {
-      "weekly": "UNCERTAIN",
-      "season": "UNCERTAIN"
+      "weekly": "SENT",
+      "season": "SENT"
     },
     "prepared_run_key": "45763455996-1"
   }
